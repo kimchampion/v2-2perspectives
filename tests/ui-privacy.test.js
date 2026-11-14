@@ -89,16 +89,29 @@ test('comparison refuses to render either response before both submissions', () 
   const html = render('compare', privateSession());
   assert.match(html, /Responses are still private/);
   assert.doesNotMatch(html, /PRIVATE_/);
+  assert.doesNotMatch(html, /open-peeps|<svg/);
 });
 
-test('joint comparison shows the partner first and both submitted explanations', () => {
+test('both comparison views show each response with the correct avatar and put the partner first', () => {
   const state = privateSession();
   state.responses[1].submitted = true;
   state.status = 'revealed';
-  const html = render('compare', state, 0);
-  assert.ok(html.indexOf('PRIVATE_SKY_TEXT') < html.indexOf('PRIVATE_RIVER_TEXT'));
-  assert.match(html, /PRIVATE_RIVER_TEXT/);
-  assert.match(html, /PRIVATE_SKY_TEXT/);
+  const texts = ['PRIVATE_RIVER_TEXT', 'PRIVATE_SKY_TEXT'];
+  const expressions = ['happy', 'tired'];
+  for (const active of [0, 1]) {
+    const html = render('compare', state, active);
+    const partner = 1 - active;
+    assert.ok(html.indexOf(texts[partner]) < html.indexOf(texts[active]));
+    const partnerArticle = html.match(/<article\b[^>]*class="partner-response"[\s\S]*?<\/article>/)?.[0] || '';
+    const ownArticle = html.match(/<article\b[^>]*class="own-response"[\s\S]*?<\/article>/)?.[0] || '';
+    assert.ok(partnerArticle.includes(`expression/${expressions[partner]}.svg`));
+    assert.ok(!partnerArticle.includes(`expression/${expressions[active]}.svg`));
+    assert.ok(ownArticle.includes(`expression/${expressions[active]}.svg`));
+    assert.ok(!ownArticle.includes(`expression/${expressions[partner]}.svg`));
+    assert.ok(partnerArticle.includes(texts[partner]));
+    assert.ok(ownArticle.includes(texts[active]));
+    assert.match(ownArticle, />You</);
+  }
 });
 
 function emptyRevealedSession() {

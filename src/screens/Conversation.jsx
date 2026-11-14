@@ -6,7 +6,7 @@ import { canReveal, visibleResponses } from '../session.js';
 import SketchPad from '../SketchPad.jsx';
 import usePalette from '../usePalette.js';
 import { ResponseFeeling } from '../AvatarBuilder.jsx';
-import { AvatarIntro } from '../Avatar.jsx';
+import Avatar, { AvatarIntro } from '../Avatar.jsx';
 
 function Palette({ value, onChange }) {
   const { items, status, retry } = usePalette();
@@ -90,6 +90,13 @@ function ResponseText({ response, name }) {
   return <p className="preserve-lines">{text.trim() ? text : `${name} did not provide a response.`}</p>;
 }
 
+function ResponseAuthor({ participant, titleId, own = false }) {
+  return <div className="comparison-author">
+    <Avatar avatar={participant.avatar} flushBottom className="comparison-avatar" />
+    <h2 id={titleId} className="small-heading">{participant.name}’s response{own && <> <span className="you-label">You</span></>}</h2>
+  </div>;
+}
+
 function Comparison({ state, active, onNext }) {
   const responses = visibleResponses(state, 'compare', active);
   if (responses.length !== 2 || !canReveal(state)) return <PrivateGuard />;
@@ -99,8 +106,16 @@ function Comparison({ state, active, onNext }) {
   return <section className="compare-screen">
     <h1 className="display-heading">Compare</h1>
     <p className="compare-prompt">Read both responses. Notice where they differ and where they overlap.</p>
-    <article className="partner-response"><ResponseArtwork response={responses[partner]} name={partnerName} /><h2 className="small-heading">{partnerName}’s response</h2><ResponseText response={responses[partner]} name={partnerName} /></article>
-    <article className="own-response"><ResponseArtwork response={responses[active]} name={ownName} compact /><div><h2 className="small-heading">{ownName}’s response <span className="you-label">You</span></h2><ResponseText response={responses[active]} name={ownName} /></div></article>
+    <article className="partner-response" aria-labelledby="partner-response-title">
+      <ResponseAuthor participant={state.participants[partner]} titleId="partner-response-title" />
+      <ResponseArtwork response={responses[partner]} name={partnerName} />
+      <ResponseText response={responses[partner]} name={partnerName} />
+    </article>
+    <article className="own-response" aria-labelledby="own-response-title">
+      <ResponseAuthor participant={state.participants[active]} titleId="own-response-title" own />
+      <ResponseArtwork response={responses[active]} name={ownName} compact />
+      <ResponseText response={responses[active]} name={ownName} />
+    </article>
     <div className="screen-actions"><Action onClick={onNext}>Next</Action></div>
   </section>;
 }
