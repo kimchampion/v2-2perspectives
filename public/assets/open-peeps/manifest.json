@@ -1,0 +1,2718 @@
+{
+  "artist": "Pablo Stanley",
+  "collection": "Open Peeps",
+  "source": "https://www.openpeeps.com/",
+  "license": {
+    "name": "CC0 1.0 Universal",
+    "url": "https://creativecommons.org/publicdomain/zero/1.0/"
+  },
+  "archivePrefix": "Flat Assets/Separate Atoms/",
+  "composition": {
+    "width": 1136,
+    "height": 1533,
+    "viewBox": "0 0 1136 1533",
+    "source": "Flat Assets/Separate Atoms/a person/bust.svg",
+    "placements": {
+      "clothing": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "head": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "expression": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "facialHair": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "accessory": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      }
+    },
+    "layerOrder": [
+      "clothing",
+      "head",
+      "expression",
+      "facialHair",
+      "accessory"
+    ]
+  },
+  "renderTarget": "avatar-part",
+  "colors": {
+    "ink": "#1F1F1F",
+    "chestnut": "#5C4033",
+    "copper": "#91522E",
+    "silver": "#77706B"
+  },
+  "colorScope": "Black head ink, including combined outline and hair/headwear paths",
+  "accessoryNone": null,
+  "assets": [
+    {
+      "id": "short",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Short 1.svg",
+      "sourceSha256": "439c453d89bc30554f0895c54edf1e69f848c3122a930769f545f262525c4f46",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/short.svg",
+      "variants": {
+        "ink": "head/short-ink.svg",
+        "chestnut": "head/short-chestnut.svg",
+        "copper": "head/short-copper.svg",
+        "silver": "head/short-silver.svg"
+      }
+    },
+    {
+      "id": "afro",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Afro.svg",
+      "sourceSha256": "0cb2112cb26b488d071a4bd8650435940c214d7d4962735595b376c552ef4d3c",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/afro.svg",
+      "variants": {
+        "ink": "head/afro-ink.svg",
+        "chestnut": "head/afro-chestnut.svg",
+        "copper": "head/afro-copper.svg",
+        "silver": "head/afro-silver.svg"
+      }
+    },
+    {
+      "id": "long",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Long.svg",
+      "sourceSha256": "1799a3d4fa27181a398f22ad90c0a2edda6e3f439520c337e669b019f589ddce",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/long.svg",
+      "variants": {
+        "ink": "head/long-ink.svg",
+        "chestnut": "head/long-chestnut.svg",
+        "copper": "head/long-copper.svg",
+        "silver": "head/long-silver.svg"
+      }
+    },
+    {
+      "id": "shaved",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/No Hair 1.svg",
+      "sourceSha256": "6a0d86e35a6c7a1547571a9a8ff6a254da359e7ad731e0fd4497767f929576ec",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/shaved.svg",
+      "variants": {
+        "ink": "head/shaved-ink.svg",
+        "chestnut": "head/shaved-chestnut.svg",
+        "copper": "head/shaved-copper.svg",
+        "silver": "head/shaved-silver.svg"
+      }
+    },
+    {
+      "id": "hijab",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Hijab.svg",
+      "sourceSha256": "5242e563b03ebbe1b1782c3f617ef3f3e34ecf1769b21c57e788b9e166cc8464",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/hijab.svg",
+      "variants": {
+        "ink": "head/hijab-ink.svg",
+        "chestnut": "head/hijab-chestnut.svg",
+        "copper": "head/hijab-copper.svg",
+        "silver": "head/hijab-silver.svg"
+      }
+    },
+    {
+      "id": "turban",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Turban.svg",
+      "sourceSha256": "50d7673eacaffd9e5d37c7318b09ee3cd6e73c60fb97e5458f861a426245ba40",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/turban.svg",
+      "variants": {
+        "ink": "head/turban-ink.svg",
+        "chestnut": "head/turban-chestnut.svg",
+        "copper": "head/turban-copper.svg",
+        "silver": "head/turban-silver.svg"
+      }
+    },
+    {
+      "id": "bangs",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bangs.svg",
+      "sourceSha256": "3cbf6bc53a8d471e2561240f2ab3161c9bf056dd67b43814ea2a45a821f38f85",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bangs.svg",
+      "variants": {
+        "ink": "head/bangs-ink.svg",
+        "chestnut": "head/bangs-chestnut.svg",
+        "copper": "head/bangs-copper.svg",
+        "silver": "head/bangs-silver.svg"
+      }
+    },
+    {
+      "id": "bangs-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bangs 2.svg",
+      "sourceSha256": "23d328ed71b0d9dd8cf5ea4e0932b3cc92b95ab827607a0a9ebc53d1369df016",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bangs-2.svg",
+      "variants": {
+        "ink": "head/bangs-2-ink.svg",
+        "chestnut": "head/bangs-2-chestnut.svg",
+        "copper": "head/bangs-2-copper.svg",
+        "silver": "head/bangs-2-silver.svg"
+      }
+    },
+    {
+      "id": "bantu-knots",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bantu Knots.svg",
+      "sourceSha256": "d538ed539b70ba97bb186155dc1f15f6bfd67e979b5c1763a7193bf77e86647c",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bantu-knots.svg",
+      "variants": {
+        "ink": "head/bantu-knots-ink.svg",
+        "chestnut": "head/bantu-knots-chestnut.svg",
+        "copper": "head/bantu-knots-copper.svg",
+        "silver": "head/bantu-knots-silver.svg"
+      }
+    },
+    {
+      "id": "bear",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bear.svg",
+      "sourceSha256": "f893dab399feb7b51c9492ef6180d9f4cf170181dbd501ff850573c10de35641",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bear.svg",
+      "variants": {
+        "ink": "head/bear-ink.svg",
+        "chestnut": "head/bear-chestnut.svg",
+        "copper": "head/bear-copper.svg",
+        "silver": "head/bear-silver.svg"
+      }
+    },
+    {
+      "id": "bun",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bun.svg",
+      "sourceSha256": "55fa6825bc2a438c8e57b5d228377c7a5cd25d052c0e2a46a6e933acdb083e18",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bun.svg",
+      "variants": {
+        "ink": "head/bun-ink.svg",
+        "chestnut": "head/bun-chestnut.svg",
+        "copper": "head/bun-copper.svg",
+        "silver": "head/bun-silver.svg"
+      }
+    },
+    {
+      "id": "bun-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Bun 2.svg",
+      "sourceSha256": "d2cee9def8228715fc0aa632871643842a95a0b7feb6de6329560cc24d06f7ab",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/bun-2.svg",
+      "variants": {
+        "ink": "head/bun-2-ink.svg",
+        "chestnut": "head/bun-2-chestnut.svg",
+        "copper": "head/bun-2-copper.svg",
+        "silver": "head/bun-2-silver.svg"
+      }
+    },
+    {
+      "id": "buns",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Buns.svg",
+      "sourceSha256": "3e6e457834007c6c7451667c3a854607239eff39c0e408f968d3b2cd94b1c7ef",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/buns.svg",
+      "variants": {
+        "ink": "head/buns-ink.svg",
+        "chestnut": "head/buns-chestnut.svg",
+        "copper": "head/buns-copper.svg",
+        "silver": "head/buns-silver.svg"
+      }
+    },
+    {
+      "id": "cornrows",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Cornrows.svg",
+      "sourceSha256": "19f34b91cfe2d95772095bd197d762b07c826a90dd3e3ccda77c002ca8e5f4e7",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/cornrows.svg",
+      "variants": {
+        "ink": "head/cornrows-ink.svg",
+        "chestnut": "head/cornrows-chestnut.svg",
+        "copper": "head/cornrows-copper.svg",
+        "silver": "head/cornrows-silver.svg"
+      }
+    },
+    {
+      "id": "cornrows-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Cornrows 2.svg",
+      "sourceSha256": "ff130752dc6d054ac062198775f1defb9d0e6dbd7fc6193bf311735c0deaca3a",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/cornrows-2.svg",
+      "variants": {
+        "ink": "head/cornrows-2-ink.svg",
+        "chestnut": "head/cornrows-2-chestnut.svg",
+        "copper": "head/cornrows-2-copper.svg",
+        "silver": "head/cornrows-2-silver.svg"
+      }
+    },
+    {
+      "id": "flat-top",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Flat Top.svg",
+      "sourceSha256": "26f513bd7ed13d200aee6183615c65222eb289b4944e6ddf90eebfe41ae42a7f",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/flat-top.svg",
+      "variants": {
+        "ink": "head/flat-top-ink.svg",
+        "chestnut": "head/flat-top-chestnut.svg",
+        "copper": "head/flat-top-copper.svg",
+        "silver": "head/flat-top-silver.svg"
+      }
+    },
+    {
+      "id": "flat-top-long",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Flat Top Long.svg",
+      "sourceSha256": "9d082c22312c76370de16c4a617b6130c6f2f23c11f8d77731b5de532de05aba",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/flat-top-long.svg",
+      "variants": {
+        "ink": "head/flat-top-long-ink.svg",
+        "chestnut": "head/flat-top-long-chestnut.svg",
+        "copper": "head/flat-top-long-copper.svg",
+        "silver": "head/flat-top-long-silver.svg"
+      }
+    },
+    {
+      "id": "gray-bun",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Gray Bun.svg",
+      "sourceSha256": "0f6ab3f33d924750a7503b63da10c85b969649050badf8b7693be132b581e180",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/gray-bun.svg",
+      "variants": {
+        "ink": "head/gray-bun-ink.svg",
+        "chestnut": "head/gray-bun-chestnut.svg",
+        "copper": "head/gray-bun-copper.svg",
+        "silver": "head/gray-bun-silver.svg"
+      }
+    },
+    {
+      "id": "gray-medium",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Gray Medium.svg",
+      "sourceSha256": "67967c003ac0c81f546c5f8fde9cdd1dbed0d4445652a950a142a6ba3c44f743",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/gray-medium.svg",
+      "variants": {
+        "ink": "head/gray-medium-ink.svg",
+        "chestnut": "head/gray-medium-chestnut.svg",
+        "copper": "head/gray-medium-copper.svg",
+        "silver": "head/gray-medium-silver.svg"
+      }
+    },
+    {
+      "id": "gray-short",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Gray Short.svg",
+      "sourceSha256": "43d036026a78b7ff29b1b7d4665baaa99892cb422e0e742a54ac31a3102e7d2c",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/gray-short.svg",
+      "variants": {
+        "ink": "head/gray-short-ink.svg",
+        "chestnut": "head/gray-short-chestnut.svg",
+        "copper": "head/gray-short-copper.svg",
+        "silver": "head/gray-short-silver.svg"
+      }
+    },
+    {
+      "id": "long-afro",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Long Afro.svg",
+      "sourceSha256": "6827705111b9886debb0b26330abde2cde86878f2bb373fac6aad06856374d4f",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/long-afro.svg",
+      "variants": {
+        "ink": "head/long-afro-ink.svg",
+        "chestnut": "head/long-afro-chestnut.svg",
+        "copper": "head/long-afro-copper.svg",
+        "silver": "head/long-afro-silver.svg"
+      }
+    },
+    {
+      "id": "long-bangs",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Long Bangs.svg",
+      "sourceSha256": "c78193ee3280e39f0d6385b6bedbd690cd604874823d43c4d36682adbd2395e8",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/long-bangs.svg",
+      "variants": {
+        "ink": "head/long-bangs-ink.svg",
+        "chestnut": "head/long-bangs-chestnut.svg",
+        "copper": "head/long-bangs-copper.svg",
+        "silver": "head/long-bangs-silver.svg"
+      }
+    },
+    {
+      "id": "long-curly",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Long Curly.svg",
+      "sourceSha256": "1cd057b6b5678ee8aa970afed44dcbf021f838a24a582b7fba7d521561831f69",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/long-curly.svg",
+      "variants": {
+        "ink": "head/long-curly-ink.svg",
+        "chestnut": "head/long-curly-chestnut.svg",
+        "copper": "head/long-curly-copper.svg",
+        "silver": "head/long-curly-silver.svg"
+      }
+    },
+    {
+      "id": "medium-1",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium 1.svg",
+      "sourceSha256": "a771799a51373113137226e24963f7af5311dbdff20893abbd10479b616ae30a",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-1.svg",
+      "variants": {
+        "ink": "head/medium-1-ink.svg",
+        "chestnut": "head/medium-1-chestnut.svg",
+        "copper": "head/medium-1-copper.svg",
+        "silver": "head/medium-1-silver.svg"
+      }
+    },
+    {
+      "id": "medium-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium 2.svg",
+      "sourceSha256": "b9c25604b1a82cb86b5131137b9af9495d9009fb309a2c6c5a3f429d001d811d",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-2.svg",
+      "variants": {
+        "ink": "head/medium-2-ink.svg",
+        "chestnut": "head/medium-2-chestnut.svg",
+        "copper": "head/medium-2-copper.svg",
+        "silver": "head/medium-2-silver.svg"
+      }
+    },
+    {
+      "id": "medium-3",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium 3.svg",
+      "sourceSha256": "f0944e0680fd97d0f3e6003b4c629eccae231cd3ed0651f578956f185b8b576c",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-3.svg",
+      "variants": {
+        "ink": "head/medium-3-ink.svg",
+        "chestnut": "head/medium-3-chestnut.svg",
+        "copper": "head/medium-3-copper.svg",
+        "silver": "head/medium-3-silver.svg"
+      }
+    },
+    {
+      "id": "medium-bangs",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium Bangs.svg",
+      "sourceSha256": "6e1de538f6731e36aae3acc8f71917a85dc8604d56f1cb992d0f23f4e3ed3b63",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-bangs.svg",
+      "variants": {
+        "ink": "head/medium-bangs-ink.svg",
+        "chestnut": "head/medium-bangs-chestnut.svg",
+        "copper": "head/medium-bangs-copper.svg",
+        "silver": "head/medium-bangs-silver.svg"
+      }
+    },
+    {
+      "id": "medium-bangs-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium Bangs 2.svg",
+      "sourceSha256": "f4174114fcc7107265868f8f6fd02ac88b6a0d341c12373010bd64e0a432e97c",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-bangs-2.svg",
+      "variants": {
+        "ink": "head/medium-bangs-2-ink.svg",
+        "chestnut": "head/medium-bangs-2-chestnut.svg",
+        "copper": "head/medium-bangs-2-copper.svg",
+        "silver": "head/medium-bangs-2-silver.svg"
+      }
+    },
+    {
+      "id": "medium-bangs-3",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium Bangs 3.svg",
+      "sourceSha256": "84836fb9eda773b9f94453add0653b2858e1b761decc08f3b576b716cb7348d7",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-bangs-3.svg",
+      "variants": {
+        "ink": "head/medium-bangs-3-ink.svg",
+        "chestnut": "head/medium-bangs-3-chestnut.svg",
+        "copper": "head/medium-bangs-3-copper.svg",
+        "silver": "head/medium-bangs-3-silver.svg"
+      }
+    },
+    {
+      "id": "medium-straight",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Medium Straight.svg",
+      "sourceSha256": "b6f6fe4f8e00396c8444c92859da7246fc934eaf19c2fd69733f15b70d11f755",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/medium-straight.svg",
+      "variants": {
+        "ink": "head/medium-straight-ink.svg",
+        "chestnut": "head/medium-straight-chestnut.svg",
+        "copper": "head/medium-straight-copper.svg",
+        "silver": "head/medium-straight-silver.svg"
+      }
+    },
+    {
+      "id": "mohawk",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Mohawk.svg",
+      "sourceSha256": "9d728250b0ccf99e7492d2e9e1037eced6b5738bd3979cdbb54b105d8b20a3ce",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/mohawk.svg",
+      "variants": {
+        "ink": "head/mohawk-ink.svg",
+        "chestnut": "head/mohawk-chestnut.svg",
+        "copper": "head/mohawk-copper.svg",
+        "silver": "head/mohawk-silver.svg"
+      }
+    },
+    {
+      "id": "mohawk-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Mohawk 2.svg",
+      "sourceSha256": "1828d778e7a40b9f29cfc48307408387e3bed76b7076d36fd68dbb310709f748",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/mohawk-2.svg",
+      "variants": {
+        "ink": "head/mohawk-2-ink.svg",
+        "chestnut": "head/mohawk-2-chestnut.svg",
+        "copper": "head/mohawk-2-copper.svg",
+        "silver": "head/mohawk-2-silver.svg"
+      }
+    },
+    {
+      "id": "no-hair-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/No Hair 2.svg",
+      "sourceSha256": "3645f03da2a4f6041ee41ca5994f3a4fc39501082c8b02dfd993f1258550b626",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/no-hair-2.svg",
+      "variants": {
+        "ink": "head/no-hair-2-ink.svg",
+        "chestnut": "head/no-hair-2-chestnut.svg",
+        "copper": "head/no-hair-2-copper.svg",
+        "silver": "head/no-hair-2-silver.svg"
+      }
+    },
+    {
+      "id": "no-hair-3",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/No Hair 3.svg",
+      "sourceSha256": "945fcf37e66a40a38d7e5dc7cb1369c61e4136e4ce4d00a688300cd9dbe00b74",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/no-hair-3.svg",
+      "variants": {
+        "ink": "head/no-hair-3-ink.svg",
+        "chestnut": "head/no-hair-3-chestnut.svg",
+        "copper": "head/no-hair-3-copper.svg",
+        "silver": "head/no-hair-3-silver.svg"
+      }
+    },
+    {
+      "id": "pomp",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Pomp.svg",
+      "sourceSha256": "ac90cdd3898aabcb577a21d6f48379d7c238896f133393445d2f0f9f736dcd3a",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/pomp.svg",
+      "variants": {
+        "ink": "head/pomp-ink.svg",
+        "chestnut": "head/pomp-chestnut.svg",
+        "copper": "head/pomp-copper.svg",
+        "silver": "head/pomp-silver.svg"
+      }
+    },
+    {
+      "id": "shaved-1",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Shaved 1.svg",
+      "sourceSha256": "ac6c7dd6645e87bb8eb0d43cd0c9ec28dba2c0b8d3d5faea5acd8cc97314c4b9",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/shaved-1.svg",
+      "variants": {
+        "ink": "head/shaved-1-ink.svg",
+        "chestnut": "head/shaved-1-chestnut.svg",
+        "copper": "head/shaved-1-copper.svg",
+        "silver": "head/shaved-1-silver.svg"
+      }
+    },
+    {
+      "id": "shaved-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Shaved 2.svg",
+      "sourceSha256": "8580530b1465fa24414ec12b2b6d3da354468bad71b2c81a89093868969046ff",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/shaved-2.svg",
+      "variants": {
+        "ink": "head/shaved-2-ink.svg",
+        "chestnut": "head/shaved-2-chestnut.svg",
+        "copper": "head/shaved-2-copper.svg",
+        "silver": "head/shaved-2-silver.svg"
+      }
+    },
+    {
+      "id": "shaved-3",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Shaved 3.svg",
+      "sourceSha256": "54296888bf2d24e6a2aa9e26985dece63208edf94844478e65d180846016a883",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/shaved-3.svg",
+      "variants": {
+        "ink": "head/shaved-3-ink.svg",
+        "chestnut": "head/shaved-3-chestnut.svg",
+        "copper": "head/shaved-3-copper.svg",
+        "silver": "head/shaved-3-silver.svg"
+      }
+    },
+    {
+      "id": "short-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Short 2.svg",
+      "sourceSha256": "4834ef8814dca59b67056c9db6f41f01457db24f894b4bc0533608d602852246",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/short-2.svg",
+      "variants": {
+        "ink": "head/short-2-ink.svg",
+        "chestnut": "head/short-2-chestnut.svg",
+        "copper": "head/short-2-copper.svg",
+        "silver": "head/short-2-silver.svg"
+      }
+    },
+    {
+      "id": "short-3",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Short 3.svg",
+      "sourceSha256": "75915db01de0a0341e8274b3b63e1b1a8fff0565805e9d3dac8fca7d3084efba",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/short-3.svg",
+      "variants": {
+        "ink": "head/short-3-ink.svg",
+        "chestnut": "head/short-3-chestnut.svg",
+        "copper": "head/short-3-copper.svg",
+        "silver": "head/short-3-silver.svg"
+      }
+    },
+    {
+      "id": "short-4",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Short 4.svg",
+      "sourceSha256": "ed0f30b9cc2eb2d7729c525e306de48c3ab202375004c619f2f7b6d69f73891a",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/short-4.svg",
+      "variants": {
+        "ink": "head/short-4-ink.svg",
+        "chestnut": "head/short-4-chestnut.svg",
+        "copper": "head/short-4-copper.svg",
+        "silver": "head/short-4-silver.svg"
+      }
+    },
+    {
+      "id": "short-5",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Short 5.svg",
+      "sourceSha256": "303525e0f6303dcb58258c576faaab0b898cb43adb7f92501574e2710ab352ca",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/short-5.svg",
+      "variants": {
+        "ink": "head/short-5-ink.svg",
+        "chestnut": "head/short-5-chestnut.svg",
+        "copper": "head/short-5-copper.svg",
+        "silver": "head/short-5-silver.svg"
+      }
+    },
+    {
+      "id": "twists",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Twists.svg",
+      "sourceSha256": "c7f148d381b3c9301eb3669eef45ec6f4d0561f720f3bb63dd58d16a39f29493",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/twists.svg",
+      "variants": {
+        "ink": "head/twists-ink.svg",
+        "chestnut": "head/twists-chestnut.svg",
+        "copper": "head/twists-copper.svg",
+        "silver": "head/twists-silver.svg"
+      }
+    },
+    {
+      "id": "twists-2",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/Twists 2.svg",
+      "sourceSha256": "cdfb2751a3ac9a848ddf9cd84558613a9a888e02ba75ca45b2b7f7e55a4e0b46",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/twists-2.svg",
+      "variants": {
+        "ink": "head/twists-2-ink.svg",
+        "chestnut": "head/twists-2-chestnut.svg",
+        "copper": "head/twists-2-copper.svg",
+        "silver": "head/twists-2-silver.svg"
+      }
+    },
+    {
+      "id": "hat-beanie",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/hat-beanie.svg",
+      "sourceSha256": "71165ee6c8a7f91bb8e9f59f31ae8307a35db539e15b58c19c925e8941d6bd36",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/hat-beanie.svg",
+      "variants": {
+        "ink": "head/hat-beanie-ink.svg",
+        "chestnut": "head/hat-beanie-chestnut.svg",
+        "copper": "head/hat-beanie-copper.svg",
+        "silver": "head/hat-beanie-silver.svg"
+      }
+    },
+    {
+      "id": "hat-hip",
+      "category": "head",
+      "source": "Flat Assets/Separate Atoms/head/hat-hip.svg",
+      "sourceSha256": "7bc60d0e12bda5d2eecdb663ea6586e6232c7f6be772434d9d717086e660fd08",
+      "dimensions": {
+        "width": "473px",
+        "height": "567px",
+        "viewBox": "0 0 473 567"
+      },
+      "placement": {
+        "x": 372,
+        "y": 180,
+        "width": 473,
+        "height": 567
+      },
+      "original": "originals/head/hat-hip.svg",
+      "variants": {
+        "ink": "head/hat-hip-ink.svg",
+        "chestnut": "head/hat-hip-chestnut.svg",
+        "copper": "head/hat-hip-copper.svg",
+        "silver": "head/hat-hip-silver.svg"
+      }
+    },
+    {
+      "id": "tee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Tee 1.svg",
+      "sourceSha256": "12f8564076fa4455e632a0c2630e737e91739f11040d59d1d951ee99d9623c47",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/tee.svg"
+    },
+    {
+      "id": "hoodie",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Hoodie.svg",
+      "sourceSha256": "b5462b2b4be0338b0c4367e5eb0443a267237dc7d68f4dc0752b29cc3fba23e0",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/hoodie.svg"
+    },
+    {
+      "id": "sweater",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Sweater.svg",
+      "sourceSha256": "6af3edbbf8b6f665381070eb37be3a3228a5f7b51c91910168b6b2241e72fcad",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/sweater.svg"
+    },
+    {
+      "id": "blazer-black-tee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Blazer Black Tee.svg",
+      "sourceSha256": "c5389453af66dc8caf1c2f8df779c701b7055d2a3517069f4095ae9f63e095f4",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/blazer-black-tee.svg"
+    },
+    {
+      "id": "button-shirt-1",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Button Shirt 1.svg",
+      "sourceSha256": "85d1ec41a8e5c59065c92eb13fd32caefbaea02b625c5770eb098bf9bc2a02db",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/button-shirt-1.svg"
+    },
+    {
+      "id": "button-shirt-2",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Button Shirt 2.svg",
+      "sourceSha256": "6b785ee91ee6b950bd28ac4c584c851c4ad5417f8a2f7a5c9d0c66e01787f7a2",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/button-shirt-2.svg"
+    },
+    {
+      "id": "coffee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Coffee.svg",
+      "sourceSha256": "ad33a742acc768952e770fa52f918d22bfb067e9f911ed2b666abab4543dbc20",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/coffee.svg"
+    },
+    {
+      "id": "device",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Device.svg",
+      "sourceSha256": "50382236c4a1163c6a3541ba2a1bd08fb2775271640d385f047b42e5006598bc",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/device.svg"
+    },
+    {
+      "id": "dress",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Dress.svg",
+      "sourceSha256": "cc9f8d49c493d26fc7e54a704c1aab9817512a531c00c25996460b542fe6169c",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/dress.svg"
+    },
+    {
+      "id": "explaining",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Explaining.svg",
+      "sourceSha256": "981828ab45a717466ce35dc713c008981084de027e9134e0a2a32e52543f34d1",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/explaining.svg"
+    },
+    {
+      "id": "fur-jacket",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Fur Jacket.svg",
+      "sourceSha256": "21a2735315eb1cd7c1a5d1f9db16038d5debc6f4fecc608123e492ec782a04ee",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/fur-jacket.svg"
+    },
+    {
+      "id": "gaming",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Gaming.svg",
+      "sourceSha256": "b11fdd09f85a09ceedfbf49f0f30f880dd9580f98ff10b1e1e773e6f6e2d9f35",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/gaming.svg"
+    },
+    {
+      "id": "gym-shirt",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Gym Shirt.svg",
+      "sourceSha256": "9127c2cd739458da795cfb0fd417637bc35e8e34a5963d7fbf9bd94066c37006",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/gym-shirt.svg"
+    },
+    {
+      "id": "killer",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Killer.svg",
+      "sourceSha256": "cc7d04fc4f4fbbfd48ea6a9b66d7111bff2b2eede46986d8177796e1246f9bdd",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/killer.svg"
+    },
+    {
+      "id": "macbook",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Macbook.svg",
+      "sourceSha256": "4acd36e9cb49641c9ec09deecaee41710e83c3e7a71513d405694f7715a33f26",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/macbook.svg"
+    },
+    {
+      "id": "paper",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Paper.svg",
+      "sourceSha256": "52007e522459c38ee80d2e8fac553abeaa7698a6b8260b6d953279c58befd661",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/paper.svg"
+    },
+    {
+      "id": "pointing-up",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Pointing Up.svg",
+      "sourceSha256": "1cb09bfce96937f0667091ef07d3ad0f5072d8692078ac6d9e50b2d79be03eb7",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/pointing-up.svg"
+    },
+    {
+      "id": "polka-dot-jacket",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Polka Dot Jacket.svg",
+      "sourceSha256": "719d5e095a74d36cfc4f4a35e6759e2e2895bcdd773c27d245b16eb68ee2d77b",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/polka-dot-jacket.svg"
+    },
+    {
+      "id": "polo-and-sweater",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Polo and Sweater.svg",
+      "sourceSha256": "dc5ddc8ccdc12ab23165b61394813a870f38dc646947c31026bd4416f8cc9f2d",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/polo-and-sweater.svg"
+    },
+    {
+      "id": "shirt-and-coat",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Shirt and Coat.svg",
+      "sourceSha256": "efbe33792cfc8b16c3770aae51afc7d90c2073229ebb94c582be86b518ef2857",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/shirt-and-coat.svg"
+    },
+    {
+      "id": "sporty-tee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Sporty Tee.svg",
+      "sourceSha256": "2c0913e1f5fc3daf2803ee8d7f46460cbaf9c8cec7a713a87955b05a0208046c",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/sporty-tee.svg"
+    },
+    {
+      "id": "striped-pocket-tee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Striped Pocket Tee.svg",
+      "sourceSha256": "6b82503f82c4e6ae959ffbd17be796d4514e4e9803e575d3946fa9878ccb32f5",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/striped-pocket-tee.svg"
+    },
+    {
+      "id": "striped-tee",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Striped Tee.svg",
+      "sourceSha256": "59e9f18f191084364866c9e3687453b9ec7b1a34889c5b02909cd4c9b0ed2e7e",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/striped-tee.svg"
+    },
+    {
+      "id": "sweater-dots",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Sweater Dots.svg",
+      "sourceSha256": "65ee2474b708274cbcd7601aeed92144db2be22450098b2b84e42939f8f2bcba",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/sweater-dots.svg"
+    },
+    {
+      "id": "tee-2",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Tee 2.svg",
+      "sourceSha256": "5103c5b8d211b0337595855ac045f80bddba42a102f4994cdf124611e540bde7",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/tee-2.svg"
+    },
+    {
+      "id": "tee-arms-crossed",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Tee Arms Crossed.svg",
+      "sourceSha256": "28265c2e61dfaaea089c5734de55c58eea537b2c46488e8b1d6c4d0deb560566",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/tee-arms-crossed.svg"
+    },
+    {
+      "id": "tee-selena",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Tee Selena.svg",
+      "sourceSha256": "0fff49ca46c72ef380a77f103d6fb09e754c84a4d03b270e8bb365281b64c6c8",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/tee-selena.svg"
+    },
+    {
+      "id": "thunder-t-shirt",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Thunder T-Shirt.svg",
+      "sourceSha256": "ffa5d15c48c8437d9934cc59f5c9e69cf3ec7590d95f906232af93ae03e86557",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/thunder-t-shirt.svg"
+    },
+    {
+      "id": "turtleneck",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Turtleneck.svg",
+      "sourceSha256": "8ed6051552d05ee841585ddd3e410611a532e4d7309fc99e7cb55bf0394a3f1b",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/turtleneck.svg"
+    },
+    {
+      "id": "whatever",
+      "category": "clothing",
+      "source": "Flat Assets/Separate Atoms/body/Whatever.svg",
+      "sourceSha256": "45d395f66a5a6076051f37f6b2afeaf8cab0c7d2f184689130af1a5b970d765d",
+      "dimensions": {
+        "width": "818px",
+        "height": "733px",
+        "viewBox": "0 0 818 733"
+      },
+      "placement": {
+        "x": 147,
+        "y": 639,
+        "width": 818,
+        "height": 733
+      },
+      "path": "clothing/whatever.svg"
+    },
+    {
+      "id": "calm",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Calm.svg",
+      "sourceSha256": "9b655d01702a58379c4cfaec9c82901d2844d151ad2f643f8ec64f6923d9c8ea",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/calm.svg"
+    },
+    {
+      "id": "happy",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Smile.svg",
+      "sourceSha256": "b58792cfb55fcdbb02092c1ba6f81f647f79ade99748e7502d5787bca3887021",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/happy.svg"
+    },
+    {
+      "id": "sad",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Solemn.svg",
+      "sourceSha256": "ed69756af7be121c82fae0c50c68bb4a22a1684fed493c609be69ef3fd1afd35",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/sad.svg"
+    },
+    {
+      "id": "frustrated",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Very Angry.svg",
+      "sourceSha256": "86fb6f34e180d0bce1e896482063b6a7d47ff9e743bd08d4c920bc60884d5581",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/frustrated.svg"
+    },
+    {
+      "id": "unsure",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Concerned.svg",
+      "sourceSha256": "cd2bf7b81e7b63600491f54a5c2c0a6667dfd15d930ce04068170932d0fd9e3a",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/unsure.svg"
+    },
+    {
+      "id": "tired",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Tired.svg",
+      "sourceSha256": "422e60eb4e34a200214a108412434058e8420dce887075c029dfad7485e5a09b",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/tired.svg"
+    },
+    {
+      "id": "angry-with-fang",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Angry with Fang.svg",
+      "sourceSha256": "fdb9ca7c92964a2905ba19b3f6eeef171e18574a609857305afb83d30ca85290",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/angry-with-fang.svg"
+    },
+    {
+      "id": "awe",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Awe.svg",
+      "sourceSha256": "e9a0df6fb61933c9643360c41cb48a8ce71236005ba39fb6fd8ea083647e2bf5",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/awe.svg"
+    },
+    {
+      "id": "blank",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Blank.svg",
+      "sourceSha256": "fc7c1ee1f010f4f901f052a4e0d7a96de8df6cfc98f33bf9c324cb79e6d6cef9",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/blank.svg"
+    },
+    {
+      "id": "cheeky",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Cheeky.svg",
+      "sourceSha256": "7cf7d223ff197ca0219896b008a7713a67555966e8a2cee4ad2a663557cfcc90",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/cheeky.svg"
+    },
+    {
+      "id": "concerned-fear",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Concerned Fear.svg",
+      "sourceSha256": "dca2071ab6107ba101d00481e5b21909e182917546be230af4b8e8c5946441f1",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/concerned-fear.svg"
+    },
+    {
+      "id": "contempt",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Contempt.svg",
+      "sourceSha256": "f483163b1880b0470fd5ac0d6d8ce80afb5f77202026115d720bdf27d93a642c",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/contempt.svg"
+    },
+    {
+      "id": "cute",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Cute.svg",
+      "sourceSha256": "120feeb8cb6900f5a5a54c6948e5be527c46422506ec065020c8dec2fec425a6",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/cute.svg"
+    },
+    {
+      "id": "cyclops",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Cyclops.svg",
+      "sourceSha256": "9a73d7e0fd657f9cf5b58f94b770f109d11260bbcf217c966a1eaaa322792a05",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/cyclops.svg"
+    },
+    {
+      "id": "driven",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Driven.svg",
+      "sourceSha256": "ec9b2076ba51b408f4123cd2edcf7edba76ad379933a85f0c7f2ef47f8117ded",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/driven.svg"
+    },
+    {
+      "id": "eating-happy",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Eating Happy.svg",
+      "sourceSha256": "4dd13a5b3c2aa6aef98764572a0904302a82e0a2fb396429507e928bbf1943c5",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/eating-happy.svg"
+    },
+    {
+      "id": "explaining",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Explaining.svg",
+      "sourceSha256": "cf0890f9dd27e17ad8b2436157d95ec3b06cc41745e2c11791ee801e76e8a289",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/explaining.svg"
+    },
+    {
+      "id": "eyes-closed",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Eyes Closed.svg",
+      "sourceSha256": "42bf24b5a51b447ee9083941f8a66bb27fec0da92591ef8cb934040e322a3cac",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/eyes-closed.svg"
+    },
+    {
+      "id": "fear",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Fear.svg",
+      "sourceSha256": "9e06418343d7769acdd8c5187854fc4166b05fb47e0e696d73ee53f6fda643f1",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/fear.svg"
+    },
+    {
+      "id": "hectic",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Hectic.svg",
+      "sourceSha256": "9b16c50b116f04df4724265db6f672584e422376641fdea9f3d3a500aaa3e402",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/hectic.svg"
+    },
+    {
+      "id": "loving-grin-1",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Loving Grin 1.svg",
+      "sourceSha256": "2b88b867744fcd9e23303b8f45cdff7d336ed9f6275d90181b96d027795820a7",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/loving-grin-1.svg"
+    },
+    {
+      "id": "loving-grin-2",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Loving Grin 2.svg",
+      "sourceSha256": "1186aa78033cbbb0cc8c4db903d1d6ae7b8d1a340dd4bd04de9dd26d19f6c155",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/loving-grin-2.svg"
+    },
+    {
+      "id": "monster",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Monster.svg",
+      "sourceSha256": "dcc23bc8d70bb6c1379d091066e4aae4e5ec67b42bf6c5e015ea6a9a19fd896b",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/monster.svg"
+    },
+    {
+      "id": "old",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Old.svg",
+      "sourceSha256": "602f2df569e21d080792765cda8410f0f1415e011796774ab445171438e5c127",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/old.svg"
+    },
+    {
+      "id": "rage",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Rage.svg",
+      "sourceSha256": "d2a9b3d35cdebe3fe52b5218015ceeb32ac68f65483cc6da507b66fbdeb05e40",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/rage.svg"
+    },
+    {
+      "id": "serious",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Serious.svg",
+      "sourceSha256": "fbdd58cfb366f6c4e81013fcd6cf473ddc0e4c99ba63b6f257ed5932980bcee2",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/serious.svg"
+    },
+    {
+      "id": "smile-big",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Smile Big.svg",
+      "sourceSha256": "0cc39f24a4e2bdb1d4b3c84350b5121b49331c916772087516354696601c8134",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/smile-big.svg"
+    },
+    {
+      "id": "smile-lol",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Smile LOL.svg",
+      "sourceSha256": "fc7c77b22a92b047096d428ebbfbb448898c1acb33d8974a9f63afb102f47380",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/smile-lol.svg"
+    },
+    {
+      "id": "smile-teeth-gap",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Smile Teeth Gap.svg",
+      "sourceSha256": "83c0795533f366e930b845301debba35d2f774819b3ff0a2a797b49e7281e367",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/smile-teeth-gap.svg"
+    },
+    {
+      "id": "suspicious",
+      "category": "expression",
+      "source": "Flat Assets/Separate Atoms/face/Suspicious.svg",
+      "sourceSha256": "f3bd27e1446e77c65304293c7805ce05d465d7f730c3c1fbdefd5d979985902e",
+      "dimensions": {
+        "width": "289px",
+        "height": "293px",
+        "viewBox": "0 0 289 293"
+      },
+      "placement": {
+        "x": 531,
+        "y": 366,
+        "width": 289,
+        "height": 293
+      },
+      "path": "expression/suspicious.svg"
+    },
+    {
+      "id": "none",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/* None.svg",
+      "sourceSha256": "1d7dec26e6eff7c73149ac804d74b0db100c465362037b0fe1b3e085e6e76111",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/none.svg"
+    },
+    {
+      "id": "glasses",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Glasses.svg",
+      "sourceSha256": "a33bcfe05fc4ba2c3c765d12c8c0ce34acca0967e56509c7f8391252422c504a",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/glasses.svg"
+    },
+    {
+      "id": "sunglasses",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Sunglasses.svg",
+      "sourceSha256": "b0f216f526ab800b7bd6b1e5e2b319eccee1495f2a85c8dbb63180d5fa7aa677",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/sunglasses.svg"
+    },
+    {
+      "id": "eyepatch",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Eyepatch.svg",
+      "sourceSha256": "b5ba028d29031b9ffbbd58f9c4c2954e605a8eaea8a4c1cd9bbe6ccf83bc2578",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/eyepatch.svg"
+    },
+    {
+      "id": "glasses-2",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Glasses 2.svg",
+      "sourceSha256": "ab0750e2a3b67bde051ac22cd9d7b04e40d6f52b9593749b2341f7a619a9f407",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/glasses-2.svg"
+    },
+    {
+      "id": "glasses-3",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Glasses 3.svg",
+      "sourceSha256": "6c529151206b1e634b5ed590e21447bfa507d2858d45d5a4a3ccc9ab769fdbd3",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/glasses-3.svg"
+    },
+    {
+      "id": "glasses-4",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Glasses 4.svg",
+      "sourceSha256": "59d0220ab6410e7752392f3a8fc5d6bf8dfa5ba780d81384ab85afdc2c95d7df",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/glasses-4.svg"
+    },
+    {
+      "id": "glasses-5",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Glasses 5.svg",
+      "sourceSha256": "7686d4ccde429c44110372d8b30dfccc9c5b7ea700e6f0160cb8b8f3b89e626d",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/glasses-5.svg"
+    },
+    {
+      "id": "sunglasses-2",
+      "category": "accessory",
+      "source": "Flat Assets/Separate Atoms/accessories/Sunglasses 2.svg",
+      "sourceSha256": "b9069078cab3d63ce42861f59304c640f4af4e777901381d429cd511ce82b2dd",
+      "dimensions": {
+        "width": "392px",
+        "height": "138px",
+        "viewBox": "0 0 392 138"
+      },
+      "placement": {
+        "x": 419,
+        "y": 421,
+        "width": 392,
+        "height": 138
+      },
+      "path": "accessory/sunglasses-2.svg"
+    },
+    {
+      "id": "none",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/* None.svg",
+      "sourceSha256": "6e0a4ef48d3f010fa8190f86c100a4b4a7019a2315f71618cd724721c4f4c825",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/none.svg"
+    },
+    {
+      "id": "chin",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Chin.svg",
+      "sourceSha256": "b399936b618a6b02aa073d445dd6fa262f600bc77981a0df168a00735ef15659",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/chin.svg"
+    },
+    {
+      "id": "full",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Full.svg",
+      "sourceSha256": "a879d319c7afce5223bb2bf8b1cd725030ce870c9204d828958bb3aefe52ba0c",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/full.svg"
+    },
+    {
+      "id": "full-2",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Full 2.svg",
+      "sourceSha256": "98b8dc68dbf7cca3cf4cc78464283663fefd2755e23e7abd0ab54068c98141da",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/full-2.svg"
+    },
+    {
+      "id": "full-3",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Full 3.svg",
+      "sourceSha256": "fb8e6fd4b30d9b7d60eccbe6dfc9f9d7afacfb325f7ad43171fecb86d6af12d1",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/full-3.svg"
+    },
+    {
+      "id": "full-4",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Full 4.svg",
+      "sourceSha256": "0822493c34f368fc8a8063be760bd83af23de9cad22fc0eb883dd3ed910abcf7",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/full-4.svg"
+    },
+    {
+      "id": "goatee-1",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Goatee 1.svg",
+      "sourceSha256": "b26250cee13710ca48f411ffe8b07242ed255450dac39d173151358bf621e000",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/goatee-1.svg"
+    },
+    {
+      "id": "goatee-2",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Goatee 2.svg",
+      "sourceSha256": "46c8378df27f3ce88112a8fa5205bf9a6c2fbd112d498a65941700e622d2a4a2",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/goatee-2.svg"
+    },
+    {
+      "id": "moustache-1",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 1.svg",
+      "sourceSha256": "0602b921c33fb716828c383ed73e58e776a4050039f628f23149e61fa2fe5796",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-1.svg"
+    },
+    {
+      "id": "moustache-2",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 2.svg",
+      "sourceSha256": "3c7b862d60850932c97464de4b90ea566364194dde23b0abd8628e3958e20784",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-2.svg"
+    },
+    {
+      "id": "moustache-3",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 3.svg",
+      "sourceSha256": "4cca5ebce1ff11dff9c2377a9ffd9b81aac40129ada1bda72749ca8b4244aef7",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-3.svg"
+    },
+    {
+      "id": "moustache-4",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 4.svg",
+      "sourceSha256": "5622aac9650c9f33349542f734a46a7034de0d197a51dc75350ae56a5eca8c8b",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-4.svg"
+    },
+    {
+      "id": "moustache-5",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 5.svg",
+      "sourceSha256": "6161062675a46121744352dc7b91f9c3ccfb3b4ccc1907d980f8bbfe4a90f6b4",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-5.svg"
+    },
+    {
+      "id": "moustache-6",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 6.svg",
+      "sourceSha256": "256caffcfb0ffe25a7ec863e43d150229aa4575f82d99e441b70bf11a6803461",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-6.svg"
+    },
+    {
+      "id": "moustache-7",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 7.svg",
+      "sourceSha256": "7aca875c6c89425996dec7af6bed63ea8c9ce3d42d6d46a0e6a71947360b824e",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-7.svg"
+    },
+    {
+      "id": "moustache-8",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 8.svg",
+      "sourceSha256": "813434d4fe685d87aad93dc30e6dfe5fa4b38bdfb6b24624fa6330d0c8fe004a",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-8.svg"
+    },
+    {
+      "id": "moustache-9",
+      "category": "facialHair",
+      "source": "Flat Assets/Separate Atoms/facial-hair/Moustache 9.svg",
+      "sourceSha256": "784c252389fd0df264f52d56ca2cb3f9e007263f5e96206c374e532bc57c6f69",
+      "dimensions": {
+        "width": "280px",
+        "height": "230px",
+        "viewBox": "0 0 280 230"
+      },
+      "placement": {
+        "x": 494.999934,
+        "y": 517.999659,
+        "width": 280,
+        "height": 230
+      },
+      "path": "facial-hair/moustache-9.svg"
+    }
+  ]
+}
