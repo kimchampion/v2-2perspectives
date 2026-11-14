@@ -1,3 +1,5 @@
+import { publicAsset } from './public-assets.js';
+
 const options = {
   hair: [
     // Vector tops measured in the original bust coordinates, for the fitted preview.
@@ -178,7 +180,7 @@ export function avatarOptionLabel(field, value) {
 
 export function avatarLayers(values) {
   const avatar = createAvatar(values);
-  const root = '/assets/open-peeps/';
+  const root = publicAsset('assets/open-peeps/');
   const layers = [
     { key: 'clothing', href: `${root}clothing/${avatar.clothing}.svg`, x: 147, y: 639, width: 818, height: 733 },
     { key: 'hair', href: `${root}head/${avatar.hair}-${avatar.hairColor}.svg`, x: 372, y: 180, width: 473, height: 567 },

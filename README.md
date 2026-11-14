@@ -21,7 +21,15 @@ npm run build
 npm run preview
 ```
 
-Tests cover keyboard grid navigation and semantics, session validation, independent private drafts, submission locks, joint reveal, handoff rendering, reset/end, resume navigation, and the fixed-query ColorMind request. UI tests render the real grid and conversation components on the server; temporary compiled test output stays in ignored `test-results/`. The production build goes into ignored `dist/`.
+The production preview is at `http://127.0.0.1:4173/v2-2perspectives/`. Development stays at the root URL on port 5173.
+
+Tests cover production asset paths, keyboard grid navigation and semantics, session validation, independent private drafts, submission locks, joint reveal, handoff rendering, reset/end, resume navigation, and the fixed-query ColorMind request. UI tests render the real grid and conversation components on the server; temporary compiled test output stays in ignored `test-results/`. The production build goes into ignored `dist/`.
+
+## GitHub Pages
+
+Site URL: [kimchampion.github.io/v2-2perspectives](https://kimchampion.github.io/v2-2perspectives/).
+
+In repository Settings → Pages, set **Source** to **GitHub Actions**. The workflow in `.github/workflows/deploy-pages.yml` uses Node 24, runs `npm ci`, tests and builds the app, then publishes `dist/` on pushes to `main`. A manual workflow trigger is also available. Production scripts, styles, favicon, illustrations, and avatar parts use the `/v2-2perspectives/` base path. Generated builds stay out of Git.
 
 ## Try the flow
 
@@ -60,6 +68,7 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/SelectionGrid.jsx` | Shared grid roles, roving focus, activation, and visibility |
 | `src/grid-navigation.js` | Row/column and Home/End focus movement |
 | `src/navigation.js` | Safe return from a private handoff |
+| `src/public-assets.js` | Public artwork URLs under the configured deployment path |
 | `src/data.js` | Original seed scenarios and fallback palette |
 | `src/content.js` | Onboarding and reflection content; artwork mapping |
 | `src/screens/` | Phone screen components |

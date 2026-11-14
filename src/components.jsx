@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef } from 'react';
+import { publicAsset } from './public-assets.js';
 
 export function Header({ title = '', onBack, onHelp }) {
   return <header className="phone-header">
@@ -17,7 +18,7 @@ export function ErrorMessage({ children, id }) {
 }
 
 export function Artwork({ name, alt = '', className = '', ...props }) {
-  return <img className={className} src={`/assets/${name}`} alt={alt} decoding="async" {...props} />;
+  return <img className={className} src={publicAsset(`assets/${name}`)} alt={alt} decoding="async" {...props} />;
 }
 
 export function Dialog({ title, onClose, children, className = '' }) {
