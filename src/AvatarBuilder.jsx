@@ -24,7 +24,7 @@ export function AvatarOptions({ field, avatar, onSelect }) {
     getLabel={(option) => option.label} buttonClassName={(_option, chosen) => `avatar-option ${chosen ? 'is-selected' : ''}`}
     onActivate={(option) => onSelect(createAvatar({ ...selected, [field]: option.id }))} renderOption={(option, chosen) => <>
       <OptionArt field={field} option={option} avatar={selected} />
-      <span className={field === 'expression' ? 'avatar-option-label sr-only' : 'avatar-option-label'}>{option.label}</span>
+      <span className="avatar-option-label">{option.label}</span>
       <span className="avatar-selected-mark" aria-hidden="true">{chosen ? '✓' : ''}</span>
     </>} />;
 }
@@ -42,7 +42,7 @@ export function AvatarDialog({ field, avatar, onSelect, onClose }) {
         <section className="avatar-choice-group"><h3>Facial hair</h3><AvatarOptions field="facialHair" avatar={avatar} onSelect={onSelect} /></section>
       </> : <AvatarOptions field={field} avatar={avatar} onSelect={onSelect} />}
     </div>
-    <Action className="dialog-primary" onClick={onClose}>Done</Action>
+    <Action className="dialog-primary" onClick={onClose}>Apply {category.label}</Action>
   </Dialog>;
 }
 

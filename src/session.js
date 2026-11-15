@@ -5,7 +5,7 @@ const REFLECTION_PATHS = ['repair', 'pause', 'agree', 'set-aside', 'later'];
 const TEXT_LIMIT = 1200;
 const trimmed = (value) => typeof value === 'string' ? value.trim() : '';
 
-export function createSessionState(code = 'DEMO24') {
+export function createSessionState(code = '') {
   return {
     code,
     participants: Array.from({ length: 2 }, () => ({
@@ -18,6 +18,11 @@ export function createSessionState(code = 'DEMO24') {
     reflection: { path: null, text: '' },
     status: 'setup',
   };
+}
+
+export function normalizeSessionCode(value) {
+  const code = trimmed(value).toUpperCase();
+  return /^[A-Z0-9]{6}$/.test(code) ? code : '';
 }
 
 export function validateNickname(value, otherName = '') {

@@ -1,13 +1,39 @@
-import { useId, useRef, useState } from 'react';
-import { gridFocusIndex } from './grid-navigation.js';
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
+import { gridFocusIndex, resolveGridColumns } from './grid-navigation.js';
 
 export default function SelectionGrid({ items, label, columns = 3, selectedId = null, className = '', getLabel, buttonClassName, onActivate, renderOption, opensDialog = false }) {
   const instructionsId = useId();
   const buttons = useRef(new Map());
+  const gridRef = useRef(null);
+  const restoreFocus = useRef(false);
+  const [layoutColumns, setLayoutColumns] = useState(null);
   const initialId = items.find((item) => item.id === selectedId)?.id ?? items[0]?.id;
   const [focusedId, setFocusedId] = useState(initialId);
   const activeId = items.some((item) => item.id === focusedId) ? focusedId : initialId;
-  const columnCount = Number.isInteger(columns) && columns > 0 ? columns : 1;
+  const configuredColumns = Number.isInteger(columns) && columns > 0 ? columns : 1;
+  const columnCount = Math.min(layoutColumns ?? configuredColumns, configuredColumns);
+  useEffect(() => {
+    const grid = gridRef.current;
+    if (!grid || typeof ResizeObserver === 'undefined') return;
+    let observed = columnCount;
+    const update = () => {
+      const next = resolveGridColumns(getComputedStyle(grid).getPropertyValue('--grid-columns'), configuredColumns);
+      if (next !== observed) {
+        restoreFocus.current = grid.contains(document.activeElement);
+        observed = next;
+      }
+      setLayoutColumns(next);
+    };
+    const observer = new ResizeObserver(update);
+    observer.observe(grid);
+    update();
+    return () => observer.disconnect();
+  }, [configuredColumns, items.length]);
+  useLayoutEffect(() => {
+    if (!restoreFocus.current) return;
+    restoreFocus.current = false;
+    buttons.current.get(activeId)?.focus({ preventScroll: true });
+  }, [columnCount, activeId]);
   const rows = [];
   for (let index = 0; index < items.length; index += columnCount) rows.push(items.slice(index, index + columnCount));
 
@@ -37,7 +63,7 @@ export default function SelectionGrid({ items, label, columns = 3, selectedId = 
   if (!items.length) return null;
   return <>
     <p id={instructionsId} className="sr-only">Use arrow keys to move between options. Home and End move within a row; Control or Command plus Home and End move to the first or last option. Press Enter or Space to choose. Tab and Shift+Tab move to the next or previous control.</p>
-    <div className={`selection-grid ${className}`} role="grid" aria-label={label} aria-describedby={instructionsId} aria-rowcount={rows.length} aria-colcount={columnCount} style={{ '--selection-columns': columnCount }}>
+    <div ref={gridRef} className={`selection-grid ${className}`} role="grid" aria-label={label} aria-describedby={instructionsId} aria-rowcount={rows.length} aria-colcount={columnCount} style={{ '--selection-columns': columnCount, '--preferred-columns': configuredColumns }}>
       {rows.map((row, rowIndex) => <div key={row[0].id} role="row" aria-rowindex={rowIndex + 1} className="selection-grid-row">
         {row.map((item, columnIndex) => {
           const selected = item.id === selectedId;

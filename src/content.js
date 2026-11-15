@@ -18,4 +18,5 @@ export const scenarioImages = {
   project: ['project-perspective-1.png', 'project-perspective-2.png'],
   cafe: ['cafe-perspective-1.png', 'cafe-perspective-2.png'],
   studio: ['studio-perspective-1.png', 'studio-perspective-2.png'],
+  ride: ['shared-rides-passenger.png', 'shared-rides-driver.png'],
 };

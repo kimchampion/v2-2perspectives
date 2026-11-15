@@ -111,6 +111,13 @@ test('both comparison views show each response with the correct avatar and put t
     assert.ok(partnerArticle.includes(texts[partner]));
     assert.ok(ownArticle.includes(texts[active]));
     assert.match(ownArticle, />You</);
+    for (const article of [partnerArticle, ownArticle]) {
+      const visuals = article.match(/<div class="comparison-visuals">[\s\S]*?<\/h2><\/div><div class="response-artwork[\s\S]*?<\/div><\/div>/)?.[0] || '';
+      assert.match(visuals, /comparison-avatar/);
+      assert.match(visuals, /<img/);
+      assert.ok(article.indexOf('comparison-visuals') < article.indexOf('preserve-lines'));
+    }
+    assert.doesNotMatch(html, /response-artwork compact|own-response[^>]*>[\s\S]*?class="small-heading">[^<]*’s response/);
   }
 });
 
@@ -128,8 +135,8 @@ test('both comparison views name each missing drawing and text, including whites
   for (const active of [0, 1]) {
     const html = render('compare', state, active);
     for (const name of ['River', 'Sky']) {
-      assert.ok(html.includes(`${name} did not draw anything`));
-      assert.ok(html.includes(`${name} did not provide a response.`));
+      assert.ok(html.includes(`${name} did not create a drawing`));
+      assert.ok(html.includes(`${name} did not create a response.`));
     }
     assert.doesNotMatch(html, /<img/);
   }
@@ -140,8 +147,8 @@ test('a drawing-only submission retains the drawing and names its missing text',
   state.responses[1].drawing = 'PRIVATE_SKY_DRAWING';
   const html = render('compare', state, 0);
   assert.match(html, /PRIVATE_SKY_DRAWING/);
-  assert.match(html, /Sky did not provide a response\./);
-  assert.doesNotMatch(html, /Sky did not draw anything/);
+  assert.match(html, /Sky did not create a response\./);
+  assert.doesNotMatch(html, /Sky did not create a drawing/);
 });
 
 test('a text-only submission retains the text and names its missing drawing', () => {
@@ -149,8 +156,8 @@ test('a text-only submission retains the text and names its missing drawing', ()
   state.responses[1].text = 'I felt unheard.';
   const html = render('compare', state, 0);
   assert.match(html, /I felt unheard\./);
-  assert.match(html, /Sky did not draw anything/);
-  assert.doesNotMatch(html, /Sky did not provide a response/);
+  assert.match(html, /Sky did not create a drawing/);
+  assert.doesNotMatch(html, /Sky did not create a response/);
 });
 
 test('missing-content messages remain unmounted before both submissions and during handoff', () => {
@@ -158,6 +165,6 @@ test('missing-content messages remain unmounted before both submissions and duri
   state.responses = state.responses.map((response) => ({ ...response, drawing: '', text: '' }));
   for (const screen of ['handoff', 'response', 'compare']) {
     const html = render(screen, state, 1);
-    assert.doesNotMatch(html, /did not draw anything|did not provide a response/);
+    assert.doesNotMatch(html, /did not create a drawing|did not create a response/);
   }
 });

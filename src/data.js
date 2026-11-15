@@ -1,5 +1,20 @@
 export const scenarios = [
   {
+    id: "ride",
+    category: "Shared Rides",
+    title: "Speeding and Changing Lanes",
+    image: "shared-rides-scenario.png",
+    cardDescription:
+      "[User 2] is driving [User 1]. The driver speeds and changes lanes several times, making the passenger uneasy.",
+    story:
+      "[User 2] is driving [User 1]. During the ride, [User 2] drives faster than the surrounding traffic and changes lanes several times. [User 1] feels uneasy but stays quiet.",
+    roles: ["Passenger", "Driver"],
+    perspectives: [
+      "You are the passenger. The speeding and frequent lane changes make you feel tense and unsafe. You hold back from speaking because you do not want to criticize the driver.\n\nYou want [User 2] to slow down and understand how the driving affects you.",
+      "You are the driver. You are focused on driving and think you are handling the car well. You do not realize that your speed and lane changes are making [User 1] uncomfortable.\n\nYou want to understand what [User 1] needs without feeling judged.",
+    ],
+  },
+  {
     id: "playlist",
     category: "FRIENDSHIP",
     title: "The shared playlist",

@@ -12,3 +12,9 @@ export function gridFocusIndex(index, count, columns, key, { ctrlKey = false, me
     default: return null;
   }
 }
+
+export function resolveGridColumns(value, fallback) {
+  const configured = Number.isInteger(fallback) && fallback > 0 ? fallback : 1;
+  const preferred = Number(value);
+  return Number.isInteger(preferred) && preferred > 0 ? Math.min(preferred, configured) : configured;
+}

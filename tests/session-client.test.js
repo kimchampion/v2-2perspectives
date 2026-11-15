@@ -1,0 +1,74 @@
+import test, { mock } from 'node:test';
+import assert from 'node:assert/strict';
+import { mkdir, writeFile } from 'node:fs/promises';
+import { resolve } from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { build } from 'esbuild';
+
+// Isolate Socket.IO's unrelated auto-connect side effect; HTTP fixtures are not live server checks.
+const output = resolve('test-results/session-client-unit.mjs');
+await mkdir(resolve('test-results'), { recursive: true });
+const bundle = await build({
+  entryPoints: [resolve('src/lib/sessionClient.js')], bundle: true, write: false,
+  platform: 'node', format: 'esm', define: { 'import.meta.env': '{"VITE_SESSION_SERVER":"http://session-server.test"}' },
+  plugins: [{ name: 'isolate-socket', setup(build) {
+    build.onResolve({ filter: /^socket\.io-client$/ }, () => ({ path: 'socket', namespace: 'fixture' }));
+    build.onLoad({ filter: /.*/, namespace: 'fixture' }, () => ({ contents: 'export const io = () => ({ emit() {} });' }));
+  } }],
+});
+await writeFile(output, bundle.outputFiles[0].text);
+const { createSession } = await import(pathToFileURL(output));
+test.before(() => mock.method(globalThis, 'fetch', () => Promise.reject(new Error('Unexpected non-fixture request'))));
+test.after(() => mock.restoreAll());
+
+test('session creation uses only the configured POST endpoint and returns a validated server code', async () => {
+  const calls = [];
+  const session = await createSession({ fetchImpl: async (...args) => { calls.push(args); return { ok: true, json: async () => ({ code: ' a01bc2 ' }) }; } });
+  assert.deepEqual(session, { code: 'A01BC2' });
+  assert.equal(calls.length, 1);
+  const [url, options] = calls[0];
+  assert.equal(url, 'http://session-server.test/api/sessions');
+  assert.equal(options.method, 'POST');
+  assert.deepEqual(options.headers, { 'Content-Type': 'application/json' });
+  assert.equal(options.body, undefined);
+  assert.equal(options.credentials, 'omit');
+  assert.ok(options.signal instanceof AbortSignal);
+});
+
+test('creation rejects HTTP errors and never retries a POST', async () => {
+  let calls = 0;
+  await assert.rejects(createSession({ fetchImpl: async () => { calls++; return { ok: false }; } }), /Unable to create session/);
+  assert.equal(calls, 1);
+});
+
+test('creation rejects malformed JSON and unusable server codes', async () => {
+  await assert.rejects(createSession({ fetchImpl: async () => ({ ok: true, json: async () => { throw new SyntaxError('Bad JSON'); } }) }));
+  for (const data of [null, [], {}, { code: 'ABC' }, { code: '<code>' }, { code: 123456 }]) {
+    await assert.rejects(createSession({ fetchImpl: async () => ({ ok: true, json: async () => data }) }), /valid session code/);
+  }
+});
+
+test('a pending session request is aborted after its time limit', async () => {
+  let aborted = false;
+  await assert.rejects(createSession({ timeoutMs: 10, fetchImpl: (_url, { signal }) => new Promise((_resolve, reject) => {
+    signal.addEventListener('abort', () => { aborted = true; reject(signal.reason); }, { once: true });
+  }) }));
+  assert.equal(aborted, true);
+});
+
+test('closing the caller cancels a pending creation request', async () => {
+  const controller = new AbortController();
+  const pending = createSession({ signal: controller.signal, fetchImpl: (_url, { signal }) => new Promise((_resolve, reject) => {
+    signal.addEventListener('abort', () => reject(signal.reason), { once: true });
+  }) });
+  controller.abort();
+  await assert.rejects(pending);
+});
+
+test('an already canceled request never contacts the server', async () => {
+  const controller = new AbortController();
+  controller.abort();
+  let calls = 0;
+  await assert.rejects(createSession({ signal: controller.signal, fetchImpl: async () => { calls++; } }));
+  assert.equal(calls, 0);
+});

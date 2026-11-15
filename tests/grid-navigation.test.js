@@ -1,6 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { gridFocusIndex } from '../src/grid-navigation.js';
+import { gridFocusIndex, resolveGridColumns } from '../src/grid-navigation.js';
+
+test('responsive column counts keep rendered rows and keyboard movement within the configured grid', () => {
+  assert.equal(resolveGridColumns(' 1 ', 3), 1);
+  assert.equal(resolveGridColumns('2', 3), 2);
+  assert.equal(resolveGridColumns('99', 3), 3);
+  for (const value of ['', 'auto', '2px', '-1', '1.5', 'Infinity']) assert.equal(resolveGridColumns(value, 3), 3);
+  assert.equal(resolveGridColumns('0', 0), 1);
+  const columns = resolveGridColumns('1', 3);
+  assert.equal(gridFocusIndex(1, 7, columns, 'ArrowDown'), 2);
+  assert.equal(gridFocusIndex(1, 7, columns, 'Home'), 1);
+});
 
 test('horizontal arrows follow reading order without wrapping past grid boundaries', () => {
   assert.equal(gridFocusIndex(2, 7, 3, 'ArrowRight'), 3);

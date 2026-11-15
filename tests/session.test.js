@@ -7,7 +7,7 @@ test('a new local session starts with two independent empty participants and dra
   assert.equal(typeof session.createSessionState, 'function', 'Session creation must be implemented');
   const state = session.createSessionState();
   assert.deepEqual(state, {
-    code: 'DEMO24',
+    code: '',
     participants: [
       { name: '', avatar: null },
       { name: '', avatar: null },
@@ -90,8 +90,8 @@ const expectedScenarios = [
 
 
 test('the four scenarios retain the original seed stories and perspectives', () => {
-  assert.deepEqual(data.scenarios, expectedScenarios);
-  assert.equal(data.scenarios?.length, 4);
+  assert.deepEqual(data.scenarios.filter((scenario) => scenario.id !== 'ride'), expectedScenarios);
+  assert.ok(data.scenarios.length >= 4);
 });
 
 test('preset colors retain the original named palette without legacy feature exports', () => {
@@ -109,6 +109,11 @@ test('preset colors retain the original named palette without legacy feature exp
 });
 
 const avatar = () => ({ hair: 'short', hairColor: 'ink', clothing: 'tee', accessory: 'none', facialHair: 'none', pose: 'bust', expression: 'calm' });
+
+test('server session codes normalize case and whitespace and allow all six-character alphanumeric values', () => {
+  assert.equal(session.normalizeSessionCode(' a01bc2 '), 'A01BC2');
+  for (const value of ['', undefined, null, 123456, 'ABC12', 'ABC1234', 'AB-123', '<code>']) assert.equal(session.normalizeSessionCode(value), '');
+});
 const participant = (name = 'Alex') => ({ name, avatar: avatar() });
 const written = (text = 'I felt unheard.') => ({ mode: 'write', text, drawing: '', color: '#68547F' });
 const drawn = () => ({ mode: 'draw', text: 'I needed a little more space.', drawing: 'data:image/png;base64,abc', color: '#68547F' });
@@ -161,7 +166,7 @@ test('drawn responses allow either part to be empty and reject invalid field typ
   }
 });
 
-test('local demo codes are six readable alphanumeric characters from cryptographic entropy', (context) => {
+test('local initialization codes are six readable alphanumeric characters from cryptographic entropy', (context) => {
   assert.equal(typeof session.newSessionCode, 'function');
   assert.match(session.newSessionCode(), /^[A-HJ-NP-Z2-9]{6}$/);
   const entropy = context.mock.method(globalThis.crypto, 'getRandomValues', (bytes) => {

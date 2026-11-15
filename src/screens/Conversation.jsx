@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { Action, Artwork, ErrorMessage } from '../components.jsx';
 import { scenarioImages } from '../content.js';
 import { scenarios } from '../data.js';
+import { formatScenarioText } from '../scenario-copy.js';
 import { canReveal, visibleResponses } from '../session.js';
 import SketchPad from '../SketchPad.jsx';
 import usePalette from '../usePalette.js';
@@ -25,7 +26,7 @@ function Handoff({ name, onReady }) {
     <h1>A moment for {name || 'your partner'}</h1>
     <p>Pass the device to <strong>{name || 'your partner'}</strong>. Only they should continue.</p>
     <p className="handoff-note">Your responses stay hidden until both of you have submitted. Take your time.</p>
-    <div className="screen-actions"><Action onClick={onReady}>I’m {name || 'ready'} · ready</Action><p className="field-hint centered">One device for this local demonstration.</p></div>
+    <div className="screen-actions"><Action onClick={onReady}>I’m {name || 'ready'} · ready</Action><p className="field-hint centered">One device for this session.</p></div>
   </section>;
 }
 
@@ -35,11 +36,11 @@ function Perspective({ state, active, onNext }) {
   const name = state.participants[active]?.name || `Person ${active + 1}`;
   return <section className="perspective-screen">
     <h1>Read your perspective</h1>
+    <p className="perspective-instructions">Consider what this character notices, feels, wants, and needs in this situation.</p>
     <h2 className="small-heading">Scenario setup</h2>
-    <AvatarIntro participant={state.participants[active]}><p>{scenario.story}</p></AvatarIntro>
+    <AvatarIntro participant={state.participants[active]}><p>{formatScenarioText(scenario.story, state.participants)}</p></AvatarIntro>
     <Artwork name={scenarioImages[scenario.id][active]} className="perspective-image" alt={`An illustration of ${scenario.title.toLowerCase()} from this character’s point of view.`} />
-    <h2 className="small-heading">{name}’s perspective</h2><p>{scenario.perspectives[active]}</p>
-    <div className="perspective-instructions"><h2 className="small-heading">Instructions</h2><p>Read the perspective assigned to you. Consider what this character notices, feels, wants, and needs in this situation. You do not have to agree with the perspective.</p></div>
+    <h2 className="small-heading">{name}’s perspective</h2><p className="preserve-lines">{formatScenarioText(scenario.perspectives[active], state.participants)}</p>
     <div className="screen-actions"><Action onClick={onNext}>Next</Action></div>
   </section>;
 }
@@ -78,22 +79,22 @@ function ResponseForm({ state, active, onChange, onSubmit, onExpression, error }
   </section>;
 }
 
-function ResponseArtwork({ response, name, compact = false }) {
+function ResponseArtwork({ response, name }) {
   const drawing = typeof response.drawing === 'string' ? response.drawing.trim() : '';
-  return <div className={`response-artwork ${compact ? 'compact' : ''} ${drawing ? '' : 'is-empty'}`}>
-    {drawing ? <img src={drawing} alt={`${name}’s drawing`} /> : <div className="empty-drawing"><p>{name} did not draw anything</p></div>}
+  return <div className={`response-artwork ${drawing ? '' : 'is-empty'}`}>
+    {drawing ? <img src={drawing} alt={`${name}’s drawing`} /> : <div className="empty-drawing"><p>{name} did not create a drawing</p></div>}
   </div>;
 }
 
 function ResponseText({ response, name }) {
   const text = typeof response.text === 'string' ? response.text : '';
-  return <p className="preserve-lines">{text.trim() ? text : `${name} did not provide a response.`}</p>;
+  return <p className="preserve-lines">{text.trim() ? text : `${name} did not create a response.`}</p>;
 }
 
 function ResponseAuthor({ participant, titleId, own = false }) {
   return <div className="comparison-author">
     <Avatar avatar={participant.avatar} flushBottom className="comparison-avatar" />
-    <h2 id={titleId} className="small-heading">{participant.name}’s response{own && <> <span className="you-label">You</span></>}</h2>
+    <h2 id={titleId} className="small-heading">{participant.name}{own && <> <span className="you-label">You</span></>}</h2>
   </div>;
 }
 
@@ -105,18 +106,22 @@ function Comparison({ state, active, onNext }) {
   const ownName = state.participants[active].name;
   return <section className="compare-screen">
     <h1 className="display-heading">Compare</h1>
-    <p className="compare-prompt">Read both responses. Notice where they differ and where they overlap.</p>
+    <p className="compare-prompt">Read both responses. Notice where they differ and where they overlap. Discuss the responses with your partner, use the tools on the next screen as prompts for discussion</p>
     <article className="partner-response" aria-labelledby="partner-response-title">
-      <ResponseAuthor participant={state.participants[partner]} titleId="partner-response-title" />
-      <ResponseArtwork response={responses[partner]} name={partnerName} />
+      <div className="comparison-visuals">
+        <ResponseAuthor participant={state.participants[partner]} titleId="partner-response-title" />
+        <ResponseArtwork response={responses[partner]} name={partnerName} />
+      </div>
       <ResponseText response={responses[partner]} name={partnerName} />
     </article>
     <article className="own-response" aria-labelledby="own-response-title">
-      <ResponseAuthor participant={state.participants[active]} titleId="own-response-title" own />
-      <ResponseArtwork response={responses[active]} name={ownName} compact />
+      <div className="comparison-visuals">
+        <ResponseAuthor participant={state.participants[active]} titleId="own-response-title" own />
+        <ResponseArtwork response={responses[active]} name={ownName} />
+      </div>
       <ResponseText response={responses[active]} name={ownName} />
     </article>
-    <div className="screen-actions"><Action onClick={onNext}>Next</Action></div>
+    <div className="screen-actions"><Action onClick={onNext}>Let's Reflect</Action></div>
   </section>;
 }
 

@@ -10,10 +10,13 @@ Use Node.js 24:
 
 ```sh
 npm ci
+podman start two-perspectives-server
 npm run dev
 ```
 
 Open the local address Vite prints, usually `http://127.0.0.1:5173/`. The phone layout uses available width from 320–430 CSS pixels and stays centered on wider screens. Browser status bars and home indicators are supplied by the device; the app does not draw fake phone controls.
+
+The existing session container listens on port 3001. On this Mac, Podman's binary is `/opt/podman/bin/podman` if it is not on the shell's PATH. The frontend uses `http://localhost:3001` by default; set `VITE_SESSION_SERVER` to use another session-service address. Starting a new activity requires the service to be running.
 
 ```sh
 npm test
@@ -34,10 +37,10 @@ In repository Settings → Pages, set **Source** to **GitHub Actions**. The work
 ## Try the flow
 
 1. Read or skip the four introduction screens. Acknowledge the welcome note and read the ground rules.
-2. Enter the first nickname and create an avatar using local Open Peeps parts. The preview starts with no hair or facial expression; choose Hair style, Clothing, Accessories, or Expression to customize it. **No expression** remains available in the expression picker to clear the face without changing appearance. Accessories includes independent eyewear/accessory and facial-hair groups, which can be combined. Choose at least one avatar option to enable Continue; an expression is optional. **Reset avatar** restores the default example and clears avatar choices while keeping the nickname. The join dialog is a **local demonstration**: its code and QR preview do not connect devices. Continue on the same device to enter a different nickname for the second participant. The displayed code or `DEMO24` can be used in the demo-code field.
-3. Select a fictional scenario. Your avatar sits beside the scenario introduction, scenario setup, and response prompt. Pass the device at the private handoff, then read the assigned perspective; private screens show only the current participant’s avatar.
+2. Accepting the ground rules creates a session on the Node service. Enter the first nickname and create an avatar using local Open Peeps parts. The preview starts with no hair or facial expression; choose Hair style, Clothing, Accessories, or Expression to customize it. **No expression** remains available in the expression picker to clear the face without changing appearance. Accessories includes independent eyewear/accessory and facial-hair groups, which can be combined. Choose at least one avatar option to enable Continue; an expression is optional. **Reset avatar** restores the default example and clears avatar choices while keeping the nickname. The invitation dialog displays the real server-created Session Code and can copy it. **Enter joint session** is a disabled primary action for now. The outlined **Continue on this device** action opens setup for the second participant. QR artwork is hidden. If opening the code-entry field, enter the displayed session code; there is no hardcoded bypass.
+3. Select one of five fictional scenarios. **Speeding and Changing Lanes** (Shared Rides) assigns the first participant as Passenger and the second as Driver; its card, setup, and perspectives use the entered nicknames. The four original scenarios are unchanged. Your avatar sits beside the scenario introduction, scenario setup, and response prompt. Pass the device at the private handoff, then read the assigned perspective; private screens show only the current participant’s avatar.
 4. Optionally change your avatar’s expression while composing your private response. Appearance stays the same, and the expression locks when you submit. Draw with a mouse, pen, or finger, then choose **Next** or **This represents...** to explain the drawing. Drawing and text are both optional. Both tabs keep the same private draft. Explicitly submit one response, even if leaving both parts empty. Pass the device to the other participant; the first response remains hidden.
-5. After both submissions, both responses appear together. Each comparison puts the partner’s response first and shows each participant’s avatar beside their name, including the expression they submitted with. Your own response is marked **You**. Missing parts show “[nickname] did not draw anything” or “[nickname] did not provide a response.” Whitespace-only entries count as empty. These messages are displayed in the comparison and are not saved into the participant’s draft.
+5. After both submissions, both responses appear together. Each comparison puts the partner’s response first. Both participants use the same layout: avatar above nickname on the left, drawing on the right, and written response across the full width below. Avatars include each participant's submitted expression. Your own response is marked **You**. Missing parts show “[nickname] did not create a drawing” or “[nickname] did not create a response.” Whitespace-only entries count as empty. These messages are displayed in the comparison and are not saved into the participant’s draft.
 6. Reflect and explore Repair, Pause, Agreement, Set aside, or Later. No agreement is required. Choose another scenario or end the session.
 
 Hiding the page during a private screen conceals it behind a handoff. Continuing returns to the perspective or draft that was open. Choosing a new scenario clears responses and the reflection choice while retaining avatars. **Start over** and **End session** clear all participant data. Refreshing clears everything.
@@ -48,9 +51,17 @@ Avatar choices, scenario cards, and reflection cards use the [WAI-ARIA layout-gr
 
 The focus outline is distinct from the selected state and scrolls into view. Dialogs keep Tab navigation inside, close with Escape, and return focus to the trigger. Ordinary buttons and fields retain their natural Tab order.
 
+## Larger text
+
+Typography follows the browser's preferred root text size. Supported Apple browsers use the [WebKit Dynamic Type body style](https://webkit.org/blog/3709/using-the-system-font-in-web-content/) as their sizing source. Roboto, the current default sizes, and their hierarchy are retained; labels scale along with the rest of the text when the user's preference grows. Pinch/page zoom remains enabled.
+
+When text is large relative to the phone frame, navigation titles get their own row, avatar introductions and comparison visuals stack, and choice grids become one column. Grid rows, ARIA column counts, and arrow-key movement update together; focus stays on the same choice when columns change. Avatar dialogs and reflection use full-content scrolling at these sizes so fixed panels cannot conceal text or actions. The normal text layout retains its existing pinned controls.
+
+Local browser checks include simulated 150%, 200%, and 300% root text preferences at 320–430 CSS pixels. The simulations run the real app from ignored test fixtures; native iOS/Android accessibility settings still need physical-device verification.
+
 ## Privacy and catalogs
 
-Nicknames, avatar configurations, drawings, written responses, and the reflection choice live only in React state. There is no persistence, backend, login, analytics, response-upload endpoint, or real multi-device connection. Same-device hiding is a turn-taking convention, not secure storage.
+Nicknames, avatar configurations, drawings, written responses, and the reflection choice live only in React state. The session service creates codes and stores its session records in memory. Creation sends no participant data. The Socket.IO foundation is present, but participant joining, response uploads, remote reveal events, and repair synchronization are not connected to the screens in this UI step. There is no frontend persistence, login, or analytics. Same-device hiding is a turn-taking convention, not secure storage.
 
 ColorMind receives only the fixed public request `{"model":"default"}`. Requests omit credentials and referrer information, never include participant data, and time out after seven seconds. Responses are validated before use. Preset colors remain usable while loading and are explicitly labeled after failure, with a retry action. Third-party services still receive ordinary connection metadata. Fonts and illustrations are served locally.
 
@@ -62,6 +73,7 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | --- | --- |
 | `src/App.jsx` | Connected screens, private handoffs, dialogs, reset and end |
 | `src/session.js` | Local session reducer, validators, and reveal guards |
+| `src/lib/sessionClient.js` | Server-code creation, validation, cancellation, and existing Socket.IO helpers |
 | `src/avatar.js` | Complete head/body/face/accessory/facial-hair catalogs, validation, and local SVG placements |
 | `src/Avatar.jsx` | Composed Open Peeps preview |
 | `src/AvatarBuilder.jsx` | Appearance and expression dialogs |
@@ -69,7 +81,8 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/grid-navigation.js` | Row/column and Home/End focus movement |
 | `src/navigation.js` | Safe return from a private handoff |
 | `src/public-assets.js` | Public artwork URLs under the configured deployment path |
-| `src/data.js` | Original seed scenarios and fallback palette |
+| `src/data.js` | Seed scenarios, including Shared Rides, and fallback palette |
+| `src/scenario-copy.js` | Plain-text participant-name substitution for scenario copy |
 | `src/content.js` | Onboarding and reflection content; artwork mapping |
 | `src/screens/` | Phone screen components |
 | `src/SketchPad.jsx` | Pointer drawing and local PNG state |
@@ -80,12 +93,14 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 
 The screen map and implementation plan are in `docs/superpowers/`. Verification results and limitations are in `docs/verification.md`.
 
-## Future joint session
+## Joint-session UI scope
 
-A Node.js session server, initially hosted locally in Podman, is intentionally deferred until the UI is approved. No part of this prototype joins devices, uploads responses, or saves a session to return to later.
+The supplied Node.js server runs in the existing local Podman container. The app creates its session code after ground rules, displays/copies it in the invitation dialog, and preserves it when starting another scenario within the same session. `newSessionCode` remains for initialization and clearing local state. Creation shows a pending state, rejects invalid server results, times out after ten seconds, and can be canceled by closing the rules dialog.
+
+The current Continue on this device action starts the second participant on the same device. Enter joint session remains disabled, with an accessible explanation. Connecting a second device's setup, scenario selection, private submissions, joint reveal, and reflection events is the next integration step. QR generation is deferred and the artwork is hidden. Session creation has been tested against the live container, while request failures/cancellation use controlled unit fixtures.
 
 ## Avatar artwork
 
-The avatar builder uses local [Open Peeps](https://www.openpeeps.com/) vector parts by Pablo Stanley, released under CC0: all 46 heads, 30 bodies, 30 faces, 9 accessories, and 17 facial-hair elements from the supplied archive. None options render no accessory/facial-hair layer. The choices scroll while the live preview and Done button stay visible. Expression names are visually hidden so participants can interpret the faces; descriptive labels remain available to screen readers. All faces are available during setup and while responding.
+The avatar builder uses local [Open Peeps](https://www.openpeeps.com/) vector parts by Pablo Stanley, released under CC0: all 46 heads, 30 bodies, 30 faces, 9 accessories, and 17 facial-hair elements from the supplied archive. None options render no accessory/facial-hair layer. The choices scroll while the live preview and category-specific Apply button stay visible. Every choice, including expressions, shows its text label beneath the image. Descriptive labels also remain available to screen readers. All faces are available during setup and while responding.
 
-All four change dialogs show the complete avatar in a bordered live preview, including the selected clothing. The frame grows to 260px on taller phones and compacts on short screens while keeping choices scrollable and Done visible. The wider avatar previews reference local vector groups directly, preserving artwork that extends beyond the original SVG frames. No avatar API, account, or new runtime dependency is used. The importer and source mappings are documented in `public/assets/open-peeps/README.md` and `manifest.json`. The app uses fixed monochrome head ink with no hair-color control. Nicknames and the seven avatar fields remain in React state and clear on session reset/end; the ink and pose fields have fixed values.
+All four change dialogs show the complete avatar in a bordered live preview, including the selected clothing. The compact frame grows to 144px, and choice cards have a 76px minimum height with 48px images and a 2px image-to-label gap. The main Persona preview is smaller too. The navigation title shows Person 1 of 2 or Person 2 of 2 during setup. The wider avatar previews reference local vector groups directly, preserving artwork that extends beyond the original SVG frames. No avatar API, account, or new runtime dependency is used. The importer and source mappings are documented in `public/assets/open-peeps/README.md` and `manifest.json`. The app uses fixed monochrome head ink with no hair-color control. Nicknames and the seven avatar fields remain in React state and clear on session reset/end; the ink and pose fields have fixed values.
