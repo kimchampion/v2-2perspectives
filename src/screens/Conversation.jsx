@@ -19,14 +19,14 @@ function Palette({ value, onChange }) {
   </div>;
 }
 
-function Handoff({ name, onReady }) {
+function Handoff({ name, onReady, joint }) {
   return <section className="handoff-screen">
     <span className="participant-caption">Private handoff</span>
     <Artwork name="welcome.png" className="handoff-art" alt="" />
     <h1>A moment for {name || 'your partner'}</h1>
-    <p>Pass the device to <strong>{name || 'your partner'}</strong>. Only they should continue.</p>
+    <p>{joint ? 'Your perspective is hidden while you’re away. Continue when you’re ready.' : <>Pass the device to <strong>{name || 'your partner'}</strong>. Only they should continue.</>}</p>
     <p className="handoff-note">Your responses stay hidden until both of you have submitted. Take your time.</p>
-    <div className="screen-actions"><Action onClick={onReady}>I’m {name || 'ready'} · ready</Action><p className="field-hint centered">One device for this session.</p></div>
+    <div className="screen-actions"><Action onClick={onReady}>I’m {name || 'ready'} · ready</Action><p className="field-hint centered">{joint ? 'Your own device · Shared session' : 'One device for this session.'}</p></div>
   </section>;
 }
 
@@ -45,10 +45,11 @@ function Perspective({ state, active, onNext }) {
   </section>;
 }
 
-function ResponseForm({ state, active, onChange, onSubmit, onExpression, error }) {
+function ResponseForm({ state, active, onChange, onSubmit, onExpression, error, busy }) {
   const response = visibleResponses(state, 'response', active)[0];
   const textRef = useRef(null);
   if (!response) return <PrivateGuard />;
+  if (busy) return <section role="status"><h1>Submitting your response…</h1><p>Waiting for confirmation. Your draft stays on this device until the server receives it.</p></section>;
   const name = state.participants[active].name;
   function submit(event) {
     event.preventDefault();
@@ -129,11 +130,11 @@ function PrivateGuard() {
   return <section className="private-guard" role="status"><h1>Responses are still private</h1><p>Both people need to submit before the responses can be shared.</p></section>;
 }
 
-export default function Conversation({ screen, state, active = 0, onReady, onNext, onChange, onSubmit, onExpression, error = '' }) {
+export default function Conversation({ screen, state, active = 0, onReady, onNext, onChange, onSubmit, onExpression, error = '', busy = false, joint = false }) {
   if (active !== 0 && active !== 1) return <PrivateGuard />;
-  if (screen === 'handoff') return <Handoff name={state.participants[active]?.name} onReady={onReady} />;
+  if (screen === 'handoff') return <Handoff name={state.participants[active]?.name} onReady={onReady} joint={joint} />;
   if (screen === 'perspective') return <Perspective state={state} active={active} onNext={onNext} />;
-  if (screen === 'response') return <ResponseForm state={state} active={active} onChange={onChange} onSubmit={onSubmit} onExpression={onExpression} error={error} />;
+  if (screen === 'response') return <ResponseForm state={state} active={active} onChange={onChange} onSubmit={onSubmit} onExpression={onExpression} error={error} busy={busy} />;
   if (screen === 'compare') return <Comparison state={state} active={active} onNext={onNext} />;
   return <PrivateGuard />;
 }

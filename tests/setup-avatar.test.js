@@ -12,7 +12,7 @@ await mkdir(resolve('test-results'), { recursive: true });
 const output = resolve('test-results/setup-avatar-ssr.mjs');
 const bundle = await build({ entryPoints: [resolve('src/screens/Setup.jsx')], bundle: true, write: false, platform: 'node', format: 'esm', jsx: 'automatic', packages: 'external' });
 await writeFile(output, bundle.outputFiles[0].text);
-const { CreatePerson, JoinPreview, ScenarioPicker, SessionStartActions } = await import(pathToFileURL(output));
+const { CreatePerson, ScenarioPicker, SessionChoices, SessionInvitation, JoinCodeForm, JointStatus } = await import(pathToFileURL(output));
 const render = (participant, otherName = 'Sky') => renderToStaticMarkup(React.createElement(CreatePerson, { participant, otherName, index: 0 }));
 const submitButton = (html) => html.match(/<button\b[^>]*type="submit"[^>]*>/)?.[0] || '';
 
@@ -61,64 +61,61 @@ test('scenario introduction shows the first participant’s configured avatar be
   assert.match(html, /expression\/happy.svg/);
 });
 
-test('the session dialog uses the revised invitation copy and displays the supplied server code', () => {
-  const html = renderToStaticMarkup(React.createElement(JoinPreview, { code: 'A01BC2', onContinue() {} }));
-  assert.match(html, /Session Code/);
-  assert.match(html, /<strong class="session-code">A01BC2<\/strong>/);
-  assert.match(html, /Share this code with other player so they can join the session\./);
-  assert.match(html, /Copy code/);
-  assert.match(html, /Continue on this device/);
-  assert.doesNotMatch(html, /DEMO24|local demonstration|demo code|Shared session|qr-preview|join-preview\.png|QR image|<h3>/i);
+test('session choices present three explicit routes without generating or displaying a code', () => {
+  assert.equal(typeof SessionChoices, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionChoices));
+  for (const label of ['Create a session', 'Join a session', 'Use one device']) assert.ok(html.includes(`>${label}</button>`));
+  assert.doesNotMatch(html, /session-code|Enter joint session|Local demo code|disabled/);
 });
 
-test('joint entry is disabled while one-device continuation remains the enabled secondary submit action', () => {
-  const html = renderToStaticMarkup(React.createElement(JoinPreview, { code: 'A01BC2', onContinue() {} }));
-  const joint = html.match(/<button\b[^>]*>Enter joint session<\/button>/)?.[0] || '';
-  const local = html.match(/<button\b[^>]*>Continue on this device<\/button>/)?.[0] || '';
-  assert.match(joint, /primary-button/);
-  assert.match(joint, /disabled=""/);
-  assert.match(joint, /aria-describedby=/);
-  assert.match(local, /class="outline-button"/);
-  assert.match(local, /type="submit"/);
-  assert.doesNotMatch(local, /disabled/);
-  assert.match(html, /Joint sessions are coming soon\./);
+test('pending creation disables duplicate creation while keeping join and local choices available', () => {
+  assert.equal(typeof SessionChoices, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionChoices, { pending: true, waiting: true }));
+  assert.match(html.match(/<button\b[^>]*>Creating session…<\/button>/)?.[0] || '', /disabled=""/);
+  assert.match(html, /aria-busy="true"/);
+  for (const label of ['Join a session', 'Use one device']) assert.doesNotMatch(html.match(new RegExp(`<button\\b[^>]*>${label}</button>`))?.[0] || '', /disabled/);
+  assert.match(html, /role="status"/);
+  assert.match(html, /waking up/);
 });
 
-test('an unavailable server code cannot be copied or continued with a fallback code', () => {
-  const html = renderToStaticMarkup(React.createElement(JoinPreview, { code: '', onContinue() {} }));
-  assert.match(html, /Session code unavailable/);
-  assert.doesNotMatch(html, /DEMO24/);
-  assert.equal((html.match(/disabled=""/g) || []).length, 3);
-});
-
-test('a failed session request presents an accessible error, retry, and local continuation', () => {
-  assert.equal(typeof SessionStartActions, 'function');
-  const html = renderToStaticMarkup(React.createElement(SessionStartActions, { error: 'The session server did not respond.' }));
+test('a failed creation keeps the three choices available and announces the error', () => {
+  assert.equal(typeof SessionChoices, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionChoices, { error: 'The session server is unavailable.' }));
   assert.match(html, /role="alert"/);
-  assert.match(html, /The session server did not respond\./);
-  assert.match(html, />Try again<\/button>/);
-  assert.match(html, /class="outline-button"[^>]*>Continue on this device<\/button>/);
+  assert.match(html, /The session server is unavailable\./);
   assert.doesNotMatch(html, /disabled/);
+  assert.match(html, />Create a session<\/button>/);
+  assert.match(html, />Use one device<\/button>/);
 });
 
-test('pending creation prevents duplicate requests and initial rule acceptance stays unchanged', () => {
-  assert.equal(typeof SessionStartActions, 'function');
-  const initial = renderToStaticMarkup(React.createElement(SessionStartActions));
-  assert.match(initial, />I agree · continue<\/button>/);
-  assert.doesNotMatch(initial, /Continue on this device/);
-  const pending = renderToStaticMarkup(React.createElement(SessionStartActions, { pending: true }));
-  assert.match(pending, /disabled=""/);
-  assert.match(pending, /aria-busy="true"/);
-  assert.match(pending, /Creating session…/);
+test('the creator can share the real code before persona setup without another joint-entry step', () => {
+  assert.equal(typeof SessionInvitation, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionInvitation, { code: 'A01BC2', onContinue() {} }));
+  assert.match(html, /Your session is ready/);
+  assert.match(html, /<strong class="session-code">A01BC2<\/strong>/);
+  assert.match(html, /Copy code/);
+  assert.match(html, /Build your persona/);
+  assert.doesNotMatch(html, /Enter joint session|Local demo code|Have a session code|<input/);
 });
 
-test('a local fallback code is clearly labeled and never offers remote code entry', () => {
-  const html = renderToStaticMarkup(React.createElement(JoinPreview, { code: 'XYZ234', codeSource: 'local', onContinue() {} }));
-  assert.match(html, /Local demo code/);
-  assert.match(html, /XYZ234/);
-  assert.match(html, /does not connect devices/);
-  assert.doesNotMatch(html, /Share this code|Have a session code|Enter session code/);
-  const local = html.match(/<button\b[^>]*>Continue on this device<\/button>/)?.[0] || '';
-  assert.doesNotMatch(local, /disabled/);
-  assert.match(html.match(/<button\b[^>]*>Enter joint session<\/button>/)?.[0] || '', /disabled/);
+test('an unavailable created code cannot be copied or used to continue', () => {
+  assert.equal(typeof SessionInvitation, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionInvitation, { code: '' }));
+  assert.match(html, /Session code unavailable/);
+  assert.equal((html.match(/disabled=""/g) || []).length, 2);
+});
+
+test('partner code entry is accessible before creating another session', () => {
+  assert.equal(typeof JoinCodeForm, 'function');
+  const html = renderToStaticMarkup(React.createElement(JoinCodeForm));
+  assert.match(html, /Enter session code/);
+  assert.match(html, /maxlength="6"/i);
+  assert.match(html, /Continue/);
+});
+
+test('waiting for a partner mounts no response input or private response content', () => {
+  assert.equal(typeof JointStatus, 'function');
+  const html = renderToStaticMarkup(React.createElement(JointStatus, { code: 'ABC123', connection: 'connected', session: { phase: 'responding', participantIndex: 0, participants: [{ name: 'River', submitted: true, connected: true }, { name: 'Sky', submitted: false, connected: true }] } }));
+  assert.match(html, /Waiting for Sky/);
+  assert.doesNotMatch(html, /<textarea|<canvas|response-artwork/);
 });

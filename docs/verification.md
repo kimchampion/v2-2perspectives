@@ -1,6 +1,6 @@
 # Local verification — updated November 15, 2026
 
-This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Browser checks below use the local development server.
+This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below used local development previews; the latest joint-session check used a stable production build and real loopback Node server.
 
 ## Automated checks
 
@@ -8,12 +8,48 @@ Final source verified with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 108 passed, 0 failed, 0 skipped |
+| `npm test` | 130 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The tests include 28 session/domain checks, 12 session-request checks, 9 ColorMind request/validation checks, 11 real-component rendering checks for private response visibility, active-participant avatars, separate drawing/explanation views, optional response parts, drawing retention, and comparison order, 3 handoff navigation regressions, 11 avatar asset/configuration checks, 11 setup/scenario rendering checks, 7 Shared Rides copy/asset/flow checks, 8 grid-navigation checks, 4 grid-rendering checks, and 4 deployment checks. They cover compiled production HTML and asset prefixes, server-code validation, request cancellation/timeouts, local fallback code provenance and controls, the local development URL, keyboard boundaries/semantics, responsive column counts, nickname/avatar validation, immutable private drafts, explicit empty submissions, submission locking, joint reveal, reset/end clearing, avatar-only reset, all five source asset catalogs, independent eyewear/facial hair, and return to the correct private screen. Request failures and timeout/abort behavior use controlled fixtures; these are not live API verification.
+The tests include 28 local session/domain checks, 16 session-request/acknowledgement checks, 10 joint-server/catalog checks, 7 joint-client snapshot/reducer checks, 9 ColorMind checks, 11 private-screen rendering checks, 3 handoff navigation checks, 11 avatar checks, 12 setup rendering checks, 7 Shared Rides checks, 8 grid-navigation checks, 4 grid-rendering checks, and 4 deployment checks. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
-## Browser checks
+Before the requested GitHub push, reran the production build successfully and all 120 tests outside the joint-server file passed. Permission to repeat the loopback integration run was declined, so the ten joint-server/catalog checks were not rerun at this stage; their prior full-suite pass above remains the latest result. No application source changed after that full-suite verification. The user also reported testing in two different browsers. Hosted deployment is separate from the Git push.
+
+## Explicit session choices — November 15, 2026
+
+Replaced automatic code creation at rule acceptance with an explicit Create a session / Join a session / Use one device screen. Only Create calls the existing bounded API. Its real code and copy action appear before persona setup; revisiting that code preserves the partial persona without another request. Shared persona completion connects directly. Join takes the partner’s code without creating another session; one-device setup advances directly from Person 1 to Person 2 with no code or join modal. Removed the later Enter joint session step. The exported legacy code generator remains available, but startup/reset/end no longer invoke it unnecessarily. Transport, server URL and backend protocol were unchanged by this startup redesign.
+
+Five setup checks failed before implementation, then all 130 tests passed with Node v24.22.1 and npm run build passed with Vite 7.3.7. The initial sandboxed test run could not bind its loopback ports; rerunning with local-socket permission passed all cases. A focused independent startup/navigation review found no actionable issues.
+
+Browser checks used the real production build on port 4181 and local Node session server on port 3002, plus ignored request-count/failure fixtures:
+
+- Initialization, rules acceptance and the choice screen made zero creation requests. Explicit Create made one POST and showed a real code before any persona. Copy code copied the displayed code exactly. Back through the code and choice screens reused it with no additional POST and retained the partial nickname.
+- The partner entered that code, revisited it with nickname preserved, and completed their persona first with zero creation POSTs. The creator then joined the reserved first slot. Each page received its correct Passenger/Driver perspective. The first submission mounted no textarea or response content while waiting; both responses revealed together after the second submission. Reflection was shared, and end cleared both pages.
+- One-device setup advanced straight to Person 2 without a dialog or code. Completed both private handoffs, empty submissions, both comparisons, reflection and end with zero creation requests. The first-submit handoff mounted no private response inputs or cards.
+- Controlled HTTP 503 creation failures announced an error. Keyboard Enter retried exactly once and focus returned to Create a session. Use one device remained usable. A controlled delayed response showed the waking notice after five seconds. Switching to one device, Join, Back or Help → View introduction aborted creation; all four routes remained unchanged after the deliberately late response arrived. These controlled failure fixtures are not hosted Render cold-start verification.
+- Checked choice and code screens at actual CSS widths 320, 375, 390 and 430, with normal and simulated 200% text: sixteen layouts with no horizontal document overflow. Default choice actions were 54px high; enlarged body text computed to 32px. Actions remained reachable through ordinary scrolling. No browser errors or warnings were recorded in the final clean-preview check.
+
+Evidence is in ignored test-results/session-choices.png, session-code-large-text.png and explicit-startup-checks.json. The local preview and standalone test server remain available; no push or deployment was performed. Native phone settings, mobile Safari, touch input and the updated protocol on hosted Render still need device/hosted verification.
+
+## Earlier joint-session testing — November 15, 2026
+
+Implemented the newly authorized two-device flow while keeping drafts and rejoin credentials in memory. A creator obtains a code and enters joint mode; a partner enters that code from welcome and builds only their own persona. Host/guest slots stay fixed even for guest-first joins. Only the creator starts a shared scenario. Each device reads its own perspective and submits one optional-empty response. Submitted text/drawing and the final expression stay out of partner snapshots until both explicit submissions. Shared reflection, a fresh scenario, and end update both clients. Requests are bounded; free-tier startup has a 75-second window with a waking notice/local bypass after five seconds. Reset/end clear responses. No persistence, analytics, accounts, or catalog participant-data transmission was added.
+
+All 132 tests and the production build pass with Node v24.22.1. Ten server checks include real two-socket loopback joins, guest-first roles, unknown/full/invalid claims, private packet/ack shape, explicit blank/text-only/drawing-only submissions, duplicate locking, stable rejoin ownership after a lost acknowledgement, shared actions, stale rounds, end clearing, memory bounds, expiry and catalog parity. Every successful server snapshot is checked against the actual frontend validator. Independent client spec/quality and server spec/quality reviews passed after fixing guest Back identity, stale reflection acknowledgements, end acknowledgement/disconnect timing, and avatar allowlist parity.
+
+The final browser run used two independent in-memory browser pages against the real local Node server and an ignored production build at port 4181, configured only for this test to use port 3002. The earlier development preview refreshed during file changes; its interrupted reconnect attempt is not counted as final verification. In the stable build:
+
+- Joined River and Sky to code E27490; both received their correct Passenger/Driver perspective. Guest-first slot reservation was also checked in the earlier UI pass and final loopback tests.
+- Drew a pointer stroke, added a written explanation, changed River's expression, and entered a different private draft for Sky. Neither page contained the other draft. Deliberately closed local transports; both drafts, drawing, expressions, and assigned roles survived rejoin. This used loopback-only controls excluded from the production container.
+- Submitted River first: the waiting page mounted no textarea/canvas/response text or drawing, and Sky still had only their own draft. Submitted Sky with no text/drawing: both pages revealed the same loaded PNG and explanation, correct avatars, missing-content messages and own/partner attribution. Guest Compare → Back → own Driver perspective → Next retained Sky as You.
+- Chose Repair on Sky's page and saw the same modal on both. Restarted from Sky and verified both old responses/drawings disappeared, the code and avatars remained, and only River could choose the next scenario. Ended from River; both pages cleared all response/participant content without an acknowledgement error.
+- Full and unknown code attempts displayed recovery messages and no private content. Invalid code length was checked with focus returned to the code input. Joining from welcome created no unnecessary HTTP session.
+- Repeated with simulated 200% text and both submissions completely empty. Checked actual CSS widths 320, 375, 390, and 430 for the lobby and comparison at normal and doubled text: sixteen cases with no horizontal overflow, usable actions, and correct enlarged body text.
+- Restarted the local server to lose its transient memory. Both clients reported the session unavailable; the own unsubmitted draft remained on the page, submission was blocked, and Return to start removed it. These are controlled local failure checks, not hosted Render cold-start verification. A separate controlled hanging-JSON check showed the five-second waking notice and successful canceled local bypass.
+
+No warnings/errors were recorded in the final large-text browser log check. Evidence is in ignored test-results/joint-shared-reveal.png, joint-private-wait.png, joint-large-text.png and joint-ui-checks.json. Temporary browser test pages were closed and viewport overrides reset. The loopback control harness was stopped; a clean standalone server on port 3002 and production preview at http://127.0.0.1:4181/ remain for local review. The user's existing server/container on port 3001 was not replaced. The changes have not been pushed or deployed. Physical phones, native accessibility settings, and the updated joint protocol on hosted Render remain unverified.
+
+## Initial one-device browser checks (historical)
 
 Used the local Vite development server in the Codex in-app browser. The preview is available at `http://127.0.0.1:5173/` while the server runs.
 
@@ -38,8 +74,8 @@ Rechecked both views at 320, 375, 390, and 430 CSS pixels without document overf
 
 - Physical phone touch, mobile Safari, the on-screen keyboard, and hardware safe areas still need device testing. The browser checks used viewport resizing and a mouse pointer, not touch emulation. Reduced-motion styles were reviewed but the OS preference was not exercised.
 - Visual implementation used the user-authorized desktop Figma reference because connector access was unavailable. It has not received the user's final visual approval.
-- Session codes now come from the local Node/Podman service. Joint entry is disabled and QR artwork is hidden. Participant joining and response synchronization across devices are not yet connected to the screens.
-- Responses and reflection choices remain in React memory. Refresh, reset, and end clear participant data. There is no persistence or saved session to resume later.
+- Joint entry is connected for compatible server codes; QR artwork remains hidden. Hosted Render verification of the updated two-device protocol and physical phone testing are still needed.
+- Drafts and rejoin credentials remain in React memory. Explicitly submitted joint responses are held in transient server memory until end/expiry/restart. There is no saved session to recover after refresh or a server restart.
 
 ## Onboarding spacing correction — November 13, 2026
 

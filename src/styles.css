@@ -156,6 +156,18 @@ legend { margin-bottom: 8px; }
 .join-input { margin: 18px 0; }
 .join-input input { text-transform: uppercase; letter-spacing: 3px; }
 .join-toggle { margin-top: 4px; }
+.session-choice-screen, .session-invitation-screen { display: flex; flex-direction: column; min-height: 100%; }
+.session-choice-actions { display: flex; flex-direction: column; gap: 22px; margin-top: 24px; }
+.session-choice-actions .outline-button { width: 100%; }
+.session-choice-actions .field-hint { margin: 6px 0 0; }
+.join-code-form input { text-transform: uppercase; letter-spacing: 3px; }
+.joint-status-screen { display: flex; flex-direction: column; min-height: 100%; }
+.joint-session-code { margin: 20px 0; }
+.joint-participants { list-style: none; padding: 0; margin: 0 0 20px; display: grid; gap: 10px; }
+.joint-participants li { display: flex; flex-direction: column; gap: 4px; padding: 14px; border: 1px solid var(--border); border-radius: 6px; background: white; overflow-wrap: anywhere; }
+.joint-participants span { font-size: calc(16 * var(--font-unit)); }
+.joint-connection-notice { padding: 12px; margin-bottom: 16px; border: 1px solid var(--border); border-radius: 6px; background: #eee9f1; overflow-wrap: anywhere; }
+.joint-connection-notice p { margin: 0 0 8px; }
 .join-preview form > .primary-button { margin-top: 16px; }
 .scenario-screen .avatar-intro-copy > p { font-size: calc(17 * var(--font-unit)); }
 .scenario-screen .avatar-intro-copy > .field-hint { font-size: calc(16 * var(--font-unit)); }

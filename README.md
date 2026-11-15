@@ -10,13 +10,15 @@ Use Node.js 24:
 
 ```sh
 npm ci
-podman start two-perspectives-server
+npm --prefix server ci
 npm run dev
 ```
 
 Open the local address Vite prints, usually `http://127.0.0.1:5173/`. The phone layout uses available width from 320–430 CSS pixels and stays centered on wider screens. Browser status bars and home indicators are supplied by the device; the app does not draw fake phone controls.
 
-The existing session container listens on port 3001. On this Mac, Podman's binary is `/opt/podman/bin/podman` if it is not on the shell's PATH. The frontend uses `http://localhost:3001` by default; set `VITE_SESSION_SERVER` to use another session-service address. If the service fails or does not respond within five seconds, the ground-rules dialog offers **Try again** or **Continue on this device**. The second option starts the one-device flow without the service and clearly labels its generated code **Local demo code**. It does not connect devices.
+In a second terminal, run `npm --prefix server start` with Node 24. The server listens on port 3001 by default. The frontend uses `http://localhost:3001`; set `VITE_SESSION_SERVER` before starting Vite or building to use another address. The updated server can also run from `server/Containerfile` in Podman; rebuild an older container before testing the joint protocol. On this Mac, Podman's binary is `/opt/podman/bin/podman` if it is not on the shell's PATH.
+
+After the ground rules, choose **Create a session**, **Join a session**, or **Use one device**. Only Create a session contacts the creation API. It allows up to 75 seconds for startup and shows a waking message after five seconds. Join and Use one device stay available while waiting; changing routes cancels creation and ignores late replies. A failed creation shows an error and lets you retry with Create a session. One-device activities need no service or session code.
 
 ```sh
 npm test
@@ -24,24 +26,30 @@ npm run build
 npm run preview
 ```
 
-The production preview is at `http://127.0.0.1:4173/v2-2perspectives/`. Development stays at the root URL on port 5173.
+The production preview is at `http://127.0.0.1:4173/`. Development stays at the root URL on port 5173. Production uses the `/` Vite base for the Render static site.
 
 Tests cover production asset paths, keyboard grid navigation and semantics, session validation, independent private drafts, submission locks, joint reveal, handoff rendering, reset/end, resume navigation, and the fixed-query ColorMind request. UI tests render the real grid and conversation components on the server; temporary compiled test output stays in ignored `test-results/`. The production build goes into ignored `dist/`.
 
-## GitHub Pages
+## Render testing
 
-Site URL: [kimchampion.github.io/v2-2perspectives](https://kimchampion.github.io/v2-2perspectives/).
+App URL: [twoperspectives.onrender.com](https://twoperspectives.onrender.com/).
 
-In repository Settings → Pages, set **Source** to **GitHub Actions**. The workflow in `.github/workflows/deploy-pages.yml` uses Node 24, runs `npm ci`, tests and builds the app, then publishes `dist/` on pushes to `main`. A manual workflow trigger is also available. Production scripts, styles, favicon, illustrations, and avatar parts use the `/v2-2perspectives/` base path. Generated builds stay out of Git.
+The frontend static site builds with `npm ci && npm run build` and publishes `dist`. Set its `VITE_SESSION_SERVER` environment variable to the separate Node web-service URL and rebuild; the React app's address is not the session-server address. For the Node web service use root directory `server`, Node 24, build `npm ci`, and start `npm start`. Keep its service on the free tier for controlled testing. Render sets `PORT`, which the server respects. No paid plan or persistence is required. [Free web services can take about a minute to wake up](https://render.com/docs/free#spinning-down-on-idle), so the app includes a longer startup window with an early one-device bypass.
+
+Set the Node service's `CLIENT_ORIGIN` to `https://twoperspectives.onrender.com` to restrict browser access to the app; multiple exact origins can be comma-separated for local testing. The default is `*`. Sessions are limited to 50 in memory and expire after 30 minutes without a session action. A restart clears them. Updating this feature requires releasing both the frontend and Node service.
+
+The legacy GitHub Pages workflow remains in the repository and installs both root and server test dependencies before running tests/build. The root-path build targets Render; publishing it under a GitHub project subpath would require a separate base-path configuration. Generated builds stay out of Git.
 
 ## Try the flow
 
 1. Read or skip the four introduction screens. Acknowledge the welcome note and read the ground rules.
-2. Accepting the ground rules tries to create a session on the Node service. If it fails, retry or choose **Continue on this device** to proceed locally. Enter the first nickname and create an avatar using local Open Peeps parts. The preview starts with no hair or facial expression; choose Hair style, Clothing, Accessories, or Expression to customize it. **No expression** remains available in the expression picker to clear the face without changing appearance. Accessories includes independent eyewear/accessory and facial-hair groups, which can be combined. Choose at least one avatar option to enable Continue; an expression is optional. **Reset avatar** restores the default example and clears avatar choices while keeping the nickname. The invitation dialog displays and copies either the real server-created **Session Code**, or a clearly labeled **Local demo code** for the fallback. Remote code entry is hidden in local mode. **Enter joint session** is a disabled primary action for now. The outlined **Continue on this device** action opens setup for the second participant. QR artwork is hidden. When using a server code, optional code entry must match the displayed code; there is no hardcoded bypass.
+2. Choose how to begin after accepting the ground rules. **Create a session** generates a real code and immediately shows it with Copy code, before persona setup. Share it, then choose Build your persona. **Join a session** accepts a partner’s six-character code and opens your own persona form without creating another session. Completing either shared persona connects directly; there is no later joint-entry step. **Use one device** opens Person 1, then Person 2 directly, without a code or network connection. Going Back to the same code preserves the partial persona. The creator is always participant 1 and the partner participant 2, even if the partner joins first. Both see connection/submission status, and the creator chooses a scenario once both are online. QR artwork remains hidden.
+
+   The avatar preview starts with no hair or facial expression. Hair style, Clothing, Accessories, and Expression open the existing pickers. No expression clears only the face. Accessories and facial hair can be combined. Choose at least one option to continue; expression is optional. Reset avatar keeps the nickname and clears avatar choices.
 3. Select one of five fictional scenarios. **Speeding and Changing Lanes** (Shared Rides) assigns the first participant as Passenger and the second as Driver; its card, setup, and perspectives use the entered nicknames. The four original scenarios are unchanged. Your avatar sits beside the scenario introduction, scenario setup, and response prompt. Pass the device at the private handoff, then read the assigned perspective; private screens show only the current participant’s avatar.
-4. Optionally change your avatar’s expression while composing your private response. Appearance stays the same, and the expression locks when you submit. Draw with a mouse, pen, or finger, then choose **Next** or **This represents...** to explain the drawing. Drawing and text are both optional. Both tabs keep the same private draft. Explicitly submit one response, even if leaving both parts empty. Pass the device to the other participant; the first response remains hidden.
+4. Optionally change your avatar’s expression while composing your private response. Appearance stays the same, and the expression locks when you submit. Draw with a mouse, pen, or finger, then choose **Next** or **This represents...** to explain the drawing. Drawing and text are both optional. Both tabs keep the same private draft. Explicitly submit one response, even if leaving both parts empty. In a joint session each device receives its own assigned perspective; a submitted response waits for the partner without mounting response content. On one device, pass it at the private handoff instead.
 5. After both submissions, both responses appear together. Each comparison puts the partner’s response first. Both participants use the same layout: avatar above nickname on the left, drawing on the right, and written response across the full width below. Avatars include each participant's submitted expression. Your own response is marked **You**. Missing parts show “[nickname] did not create a drawing” or “[nickname] did not create a response.” Whitespace-only entries count as empty. These messages are displayed in the comparison and are not saved into the participant’s draft.
-6. Reflect and explore Repair, Pause, Agreement, Set aside, or Later. No agreement is required. Choose another scenario or end the session.
+6. Reflect and explore Repair, Pause, Agreement, Set aside, or Later. A joint reflection choice is shared with both devices. Either person can choose a new scenario after reveal, clearing both responses and returning the creator to scenario selection, or end the session for both. No agreement is required.
 
 Hiding the page during a private screen conceals it behind a handoff. Continuing returns to the perspective or draft that was open. Choosing a new scenario clears responses and the reflection choice while retaining avatars. **Start over** and **End session** clear all participant data. Refreshing clears everything.
 
@@ -61,7 +69,7 @@ Local browser checks include simulated 150%, 200%, and 300% root text preference
 
 ## Privacy and catalogs
 
-Nicknames, avatar configurations, drawings, written responses, and the reflection choice live only in React state. The session service creates codes and stores its session records in memory. Creation sends no participant data. The Socket.IO foundation is present and stays disconnected during the current one-device flow; only an explicit future join call connects it. Participant joining, response uploads, remote reveal events, and repair synchronization are not connected to the screens in this UI step. There is no frontend persistence, login, or analytics. Same-device hiding is a turn-taking convention, not secure storage.
+Drafts and local activity data live in React memory. Creating a server code sends no participant data. Completing a shared persona sends the nickname/avatar; explicit submission sends that person's response/drawing and expression to transient server memory. No unfinished draft is sent. The server exposes response content and submitted expressions to the partner only after both explicit submissions. Socket.IO stays disconnected for one-device activities. There is no disk/browser persistence, login, or analytics. Same-device hiding is a turn-taking convention, not secure storage.
 
 ColorMind receives only the fixed public request `{"model":"default"}`. Requests omit credentials and referrer information, never include participant data, and time out after seven seconds. Responses are validated before use. Preset colors remain usable while loading and are explicitly labeled after failure, with a retry action. Third-party services still receive ordinary connection metadata. Fonts and illustrations are served locally.
 
@@ -74,6 +82,8 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/App.jsx` | Connected screens, private handoffs, dialogs, reset and end |
 | `src/session.js` | Local session reducer, validators, and reveal guards |
 | `src/lib/sessionClient.js` | Server-code creation, validation, cancellation, and existing Socket.IO helpers |
+| `src/useJointSession.js` | In-memory connection credentials, acknowledgements, bounded reconnect and stale-result guards |
+| `src/joint-session.js` | Validation of public/session-reveal snapshots before React state accepts them |
 | `src/avatar.js` | Complete head/body/face/accessory/facial-hair catalogs, validation, and local SVG placements |
 | `src/Avatar.jsx` | Composed Open Peeps preview |
 | `src/AvatarBuilder.jsx` | Appearance and expression dialogs |
@@ -90,14 +100,16 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/usePalette.js` | Loading, live, fallback, cancellation, and retry state |
 | `src/styles.css` | Figma colors, local Roboto, responsive layout, focus, and reduced motion |
 | `public/assets/` | Locally exported or supplied Figma illustrations |
+| `server/index.js` | Transient joint sessions, stable participant slots, private reveal, shared actions and cleanup |
+| `server/avatar-catalog.json` | Avatar ID allowlists generated from the UI catalog; tests enforce exact parity |
 
 The screen map and implementation plan are in `docs/superpowers/`. Verification results and limitations are in `docs/verification.md`.
 
-## Joint-session UI scope
+## Joint-session behavior and limits
 
-The supplied Node.js server runs in the existing local Podman container. The app requests its session code after ground rules, displays/copies it in the invitation dialog, and preserves the code and its source when starting another scenario within the same session. `newSessionCode` remains for initialization, clearing local state, and explicit local continuation. Creation shows a pending state, rejects HTTP/network errors and invalid server results, and bounds both fetching and JSON parsing to five seconds even if an operation ignores cancellation. Failure keeps the rules dialog open with an accessible error, focused **Try again** action, and **Continue on this device** fallback. Continuing locally generates a fresh code labeled **Local demo code**, explains that it does not connect devices, and hides remote code entry. Closing the dialog cancels the request; late results cannot navigate or overwrite a local session. No requests retry automatically.
+The Node server stores only transient sessions, uses stable participant slots and private in-memory rejoin credentials, validates commands and round numbers, locks submitted responses, and reveals only after both explicit submissions. Empty/drawing-only/text-only submissions are valid. A restarted scenario clears responses and reflection while retaining participants and their avatars. End clears participant data and closes the shared session. Never share rejoin credentials; only the short session code is intended for the partner.
 
-The current Continue on this device action starts the second participant on the same device. Enter joint session remains disabled, with an accessible explanation. Connecting a second device's setup, scenario selection, private submissions, joint reveal, and reflection events is the next integration step. QR generation is deferred and the artwork is hidden. Session creation has been tested against the live container, while request failures/cancellation use controlled unit fixtures.
+Network reconnects automatically rejoin the same slot while the page stays open and preserve the local unsubmitted draft. Commands need acknowledgement and do not queue stale writes while disconnected. A server restart, expired session, refresh, or closing the page can lose the activity because there is no persistence. The UI reports unavailable/full sessions and offers retry or return to start. Creating a shared session requires a compatible server that returns a creator token with the code. Older code-only servers show a creation error; Use one device remains available without a server. QR generation is deferred. Creation and reconnect allow a bounded 75-second startup window; ordinary command acknowledgements are bounded separately. A canceled or late reply cannot replace a new local activity.
 
 ## Avatar artwork
 

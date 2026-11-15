@@ -1,5 +1,7 @@
 import { scenarios } from './data.js';
 import { avatarOptions, isAvatar } from './avatar.js';
+import { readJointSnapshot } from './joint-session.js';
+export { readJointSnapshot };
 
 const REFLECTION_PATHS = ['repair', 'pause', 'agree', 'set-aside', 'later'];
 const TEXT_LIMIT = 1200;
@@ -98,6 +100,30 @@ export function sessionReducer(state = createSessionState(), action) {
   if (!isRecord(action)) return state;
   const index = action.participant;
   switch (action.type) {
+    case 'SYNC_JOINT': {
+      const snapshot = readJointSnapshot(action.session);
+      if (!snapshot || (state.code === snapshot.code && (snapshot.round < (state.jointRound ?? 0) || snapshot.revision <= (state.jointRevision ?? -1)))) return state;
+      const next = createSessionState(snapshot.code, 'server');
+      const sameRound = state.code === snapshot.code && state.jointRound === snapshot.round;
+      const own = snapshot.participantIndex;
+      next.jointRound = snapshot.round;
+      next.jointRevision = snapshot.revision;
+      if (snapshot.phase === 'ended') return { ...next, status: 'ended' };
+      next.participants = snapshot.participants.map((person, index) => person ? {
+        name: person.name,
+        avatar: sameRound && index === own && snapshot.phase === 'responding' && !person.submitted && isAvatar(state.participants[own].avatar)
+          ? { ...state.participants[own].avatar } : { ...person.avatar },
+      } : { name: '', avatar: null });
+      next.scenarioId = snapshot.phase === 'lobby' && sameRound && own === 0 ? state.scenarioId : snapshot.scenarioId;
+      next.status = snapshot.phase === 'lobby' ? 'setup' : snapshot.phase === 'revealed' ? 'revealed' : 'responding';
+      next.reflection.path = snapshot.reflectionPath;
+      if (snapshot.phase === 'revealed') next.responses = snapshot.responses.map(response => ({ ...response }));
+      else {
+        if (sameRound && snapshot.phase === 'responding') next.responses[own] = { ...state.responses[own] };
+        next.responses.forEach((response, index) => { response.submitted = snapshot.participants[index]?.submitted === true; });
+      }
+      return next;
+    }
     case 'RESET':
       return createSessionState(action.code, action.codeSource);
     case 'END':

@@ -68,6 +68,6 @@ export function GroundRules() {
     <div><h3>Keep it fictional.</h3><p>Step into the seeded characters’ shoes, rather than using a real disagreement.</p></div>
     <div><h3>Curiosity over certainty.</h3><p>Keep your words kind. Neither person needs to change their mind.</p></div>
     <div><h3>Your pace, your choice.</h3><p>Pause, restart, or leave whenever you like. This isn’t counseling or conflict resolution.</p></div>
-    <div><h3>Just here, just now.</h3><p>Responses stay in this page’s memory. Refreshing or ending clears them. Same-device privacy is a turn-taking convention, not secure storage.</p></div>
+    <div><h3>Just here, just now.</h3><p>Drafts stay on your device. A joint session temporarily shares your nickname, avatar, and submitted response with your partner. Ending clears this session. Refreshing cannot restore it. Same-device privacy is a turn-taking convention, not secure storage.</p></div>
   </div>;
 }

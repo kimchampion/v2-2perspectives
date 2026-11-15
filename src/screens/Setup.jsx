@@ -38,54 +38,77 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
   </section>;
 }
 
-export function SessionStartActions({ pending = false, error = '', onCreate, onLocal }) {
-  const retryRef = useRef(null);
+export function SessionChoices({ pending = false, waiting = false, error = '', onCreate, onJoin, onLocal }) {
+  const createRef = useRef(null);
   const errorId = useId();
-  useEffect(() => { if (error && !pending) retryRef.current?.focus(); }, [error, pending]);
-  return <div className="dialog-actions">
+  useEffect(() => { if (error && !pending) createRef.current?.focus(); }, [error, pending]);
+  return <section className="session-choice-screen">
+    <h1>How would you like to begin?</h1>
+    <p>Choose how you and your partner will take part.</p>
+    {pending && waiting && <p className="field-hint" role="status">The session server may be waking up. This can take about a minute. You can keep waiting or use one device.</p>}
     <ErrorMessage id={errorId}>{error}</ErrorMessage>
-    <Action ref={retryRef} onClick={onCreate} disabled={pending} aria-busy={pending} aria-describedby={error ? errorId : undefined}>{pending ? 'Creating session…' : error ? 'Try again' : 'I agree · continue'}</Action>
-    {error && <button type="button" className="outline-button" onClick={onLocal}>Continue on this device</button>}
-  </div>;
+    <div className="session-choice-actions">
+      <div><Action ref={createRef} onClick={onCreate} disabled={pending} aria-busy={pending} aria-describedby={error ? errorId : undefined}>{pending ? 'Creating session…' : 'Create a session'}</Action><p className="field-hint">Use separate devices and share a code with your partner.</p></div>
+      <div><button type="button" className="outline-button" onClick={onJoin}>Join a session</button><p className="field-hint">Use a code your partner shared with you.</p></div>
+      <div><button type="button" className="outline-button" onClick={onLocal}>Use one device</button><p className="field-hint">Take turns on one device. No code needed.</p></div>
+    </div>
+  </section>;
 }
 
-export function JoinPreview({ code, codeSource = 'server', onContinue }) {
-  const local = codeSource === 'local';
+export function SessionInvitation({ code, onContinue }) {
   const sessionCode = normalizeSessionCode(code);
-  const jointHintId = useId();
   const [copied, setCopied] = useState(false);
   const [copyError, setCopyError] = useState(false);
-  const [joining, setJoining] = useState(false);
-  const [input, setInput] = useState('');
-  const [error, setError] = useState('');
-  const joinRef = useRef(null);
   async function copyCode() {
     try { await navigator.clipboard.writeText(sessionCode); setCopied(true); setCopyError(false); }
     catch { setCopyError(true); }
   }
-  function submit(event) {
-    event.preventDefault();
-    if (!sessionCode) { setError('A session code is unavailable. Go back and create a session.'); return; }
-    if (!local && joining && normalizeSessionCode(input) !== sessionCode) {
-      setError('That code doesn’t match this session. Enter the session code shown above.');
-      joinRef.current?.focus();
-      return;
-    }
-    onContinue();
-  }
-  return <div className="join-preview">
-    <p>{local ? 'You’re continuing on one device. This local demo code does not connect devices.' : 'Share this code with other player so they can join the session.'}</p>
-    <div className="join-code-row"><div><span className="field-label">{local ? 'Local demo code' : 'Session Code'}</span><strong className="session-code">{sessionCode || 'Session code unavailable'}</strong><button type="button" className="text-button" onClick={copyCode} disabled={!sessionCode}>{copied ? 'Code copied ✓' : 'Copy code'}</button></div></div>
+  return <section className="session-invitation-screen">
+    <h1>Your session is ready</h1>
+    <p>Share this code with your partner. You can both build your personas next.</p>
+    <div className="join-code-row"><div><span className="field-label">Session Code</span><strong className="session-code">{sessionCode || 'Session code unavailable'}</strong><button type="button" className="text-button" onClick={copyCode} disabled={!sessionCode}>{copied ? 'Code copied ✓' : 'Copy code'}</button></div></div>
     {copyError && <p className="field-hint" role="status">Copy is unavailable. Select the code above to copy it manually.</p>}
-    <form onSubmit={submit} noValidate>
-      {!local && (!joining ? <button type="button" className="text-button join-toggle" onClick={() => setJoining(true)}>Have a session code?</button> : <div className="join-input"><label className="field-label" htmlFor="join-code">Enter session code</label><input ref={joinRef} id="join-code" value={input} onChange={(event) => { setInput(event.target.value); setError(''); }} maxLength={6} autoCapitalize="characters" autoComplete="off" spellCheck={false} placeholder="6-character code" aria-invalid={Boolean(error)} aria-describedby={error ? 'join-error' : undefined} /><ErrorMessage id="join-error">{error}</ErrorMessage></div>)}
-      <div className="dialog-actions">
-        <span className="sr-only" id={jointHintId}>Joint sessions are coming soon.</span>
-        <Action disabled aria-describedby={jointHintId} title="Joint sessions are coming soon.">Enter joint session</Action>
-        <button type="submit" className="outline-button" disabled={!sessionCode}>Continue on this device</button>
-      </div>
-    </form>
-  </div>;
+    <div className="screen-actions"><Action onClick={onContinue} disabled={!sessionCode}>Build your persona</Action></div>
+  </section>;
+}
+
+export function JoinCodeForm({ onJoin, initialCode = '' }) {
+  const [code, setCode] = useState(() => normalizeSessionCode(initialCode));
+  const [error, setError] = useState('');
+  const inputRef = useRef(null);
+  const id = useId();
+  return <form className="join-code-form" noValidate onSubmit={event => {
+    event.preventDefault();
+    const value = normalizeSessionCode(code);
+    if (!value) { setError('Enter the six-character code shared by your partner.'); inputRef.current?.focus(); return; }
+    onJoin?.(value);
+  }}>
+    <p>Use the code your partner shared to join their activity on this device.</p>
+    <label className="field-label" htmlFor={id}>Enter session code</label>
+    <input ref={inputRef} id={id} value={code} maxLength={6} onChange={event => { setCode(event.target.value); setError(''); }} autoCapitalize="characters" autoComplete="off" spellCheck={false} placeholder="6-character code" aria-invalid={Boolean(error)} aria-describedby={error ? `${id}-error` : undefined} />
+    <ErrorMessage id={`${id}-error`}>{error}</ErrorMessage>
+    <Action type="submit" className="dialog-primary">Continue</Action>
+  </form>;
+}
+
+export function JointStatus({ code, session, connection, error, slow, onRetry, onLeave, onChooseScenario }) {
+  const connected = connection === 'connected';
+  const own = session?.participantIndex ?? 0;
+  const partner = session?.participants?.[1 - own];
+  const submitted = session?.phase === 'responding' && session?.participants?.[own]?.submitted;
+  const ready = connected && session?.phase === 'lobby' && session.participants.every(person => person?.connected);
+  return <section className="joint-status-screen">
+    <h1>{error ? 'Let’s reconnect' : !connected ? 'Connecting your session' : submitted ? 'Your response is ready' : 'Your shared session'}</h1>
+    <p role={error ? 'alert' : 'status'}>{error || (!connected ? slow ? 'The session server may be waking up. This can take about a minute.' : 'Connecting to the session server…' : submitted ? `Waiting for ${partner?.name || 'your partner'} to submit. Both responses will be revealed together.` : own === 0 ? 'Share this code with your partner. You can choose a scenario when both of you are connected.' : `Waiting for ${partner?.name || 'your partner'} to choose a scenario.`)}</p>
+    <div className="joint-session-code"><span className="field-label">Session Code</span><strong className="session-code">{session?.code || code}</strong></div>
+    {session && <ul className="joint-participants" aria-label="Participants">{session.participants.map((person, index) => <li key={index}><strong>{person?.name || `Person ${index + 1}`}{index === own ? ' · You' : ''}</strong><span>{!person ? 'Not joined yet' : person.connected ? person.submitted ? 'Response submitted' : 'Connected' : 'Reconnecting'}</span></li>)}</ul>}
+    {error && <p className="field-hint">If the server restarted, this session may have ended. Refreshing cannot restore a session; your draft stays in this page until you leave.</p>}
+    <div className="screen-actions">
+      {error && <Action onClick={onRetry}>Try reconnecting</Action>}
+      {ready && own === 0 && <Action onClick={onChooseScenario}>Choose a scenario</Action>}
+      <button type="button" className="text-button" onClick={onLeave}>{connected ? 'End session' : 'Return to start'}</button>
+    </div>
+  </section>;
 }
 
 export function ScenarioPicker({ selected, participant, participants, onSelect, onContinue }) {

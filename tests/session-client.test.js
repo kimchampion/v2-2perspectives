@@ -13,11 +13,11 @@ const bundle = await build({
   platform: 'node', format: 'esm', define: { 'import.meta.env': '{"VITE_SESSION_SERVER":"http://session-server.test"}' },
   plugins: [{ name: 'isolate-socket', setup(build) {
     build.onResolve({ filter: /^socket\.io-client$/ }, () => ({ path: 'socket', namespace: 'fixture' }));
-    build.onLoad({ filter: /.*/, namespace: 'fixture' }, () => ({ contents: 'export const io = (_url, options) => ({ options, connections: 0, connect() { this.connections++; }, emit() {} });' }));
+    build.onLoad({ filter: /.*/, namespace: 'fixture' }, () => ({ contents: 'export const io = (_url, options) => ({ options, connected: false, connections: 0, connect() { this.connections++; this.connected=true; }, emit(_event,_payload,ack) { ack?.({ok:true,session:{}}); } });' }));
   } }],
 });
 await writeFile(output, bundle.outputFiles[0].text);
-const { createSession, SESSION_REQUEST_TIMEOUT, sessionSocket, joinSession } = await import(pathToFileURL(output));
+const { createSession, SESSION_REQUEST_TIMEOUT, sessionSocket, joinSession, requestSession } = await import(pathToFileURL(output));
 test.before(() => mock.method(globalThis, 'fetch', () => Promise.reject(new Error('Unexpected non-fixture request'))));
 test.after(() => mock.restoreAll());
 
@@ -109,4 +109,39 @@ test('local use opens no Socket.IO connection; an explicit join connects once', 
   assert.equal(sessionSocket.connections, 0);
   joinSession(' abc123 ', { name: 'River' });
   assert.equal(sessionSocket.connections, 1);
+});
+
+test('session creation preserves a validated creator token without inventing one for legacy servers', async () => {
+  const hostToken = 'a'.repeat(64);
+  assert.deepEqual(await createSession({ fetchImpl: async () => ({ ok: true, json: async () => ({ code: 'ABC123', hostToken }) }) }), { code: 'ABC123', hostToken });
+  await assert.rejects(createSession({ fetchImpl: async () => ({ ok: true, json: async () => ({ code: 'ABC123', hostToken: 'invalid' }) }) }));
+});
+
+test('joint commands await server acknowledgement and report server rejection', async () => {
+  assert.equal(typeof requestSession, 'function');
+  const sent = [];
+  const socket = { connected: true, emit: (event, payload, ack) => { sent.push({ event, payload }); ack({ ok: true, session: { phase: 'lobby' } }); } };
+  assert.deepEqual(await requestSession('select-scenario', { scenarioId: 'ride', round: 1 }, { socket }), { ok: true, session: { phase: 'lobby' } });
+  assert.equal(sent[0].event, 'select-scenario');
+  await assert.rejects(requestSession('join-session', {}, { socket: { connected: true, emit: (_e, _p, ack) => ack({ ok: false, error: { code: 'SESSION_FULL', message: 'This session already has two people.' } }) } }), { code: 'SESSION_FULL' });
+});
+
+test('joint acknowledgement timeout and cancellation ignore late replies', async () => {
+  assert.equal(typeof requestSession, 'function');
+  let late;
+  const socket = { connected: true, emit: (_e, _p, ack) => { late = ack; } };
+  await assert.rejects(requestSession('join-session', {}, { socket, timeoutMs: 5 }), { name: 'TimeoutError' });
+  late({ ok: true, session: {} });
+  const controller = new AbortController();
+  const pending = requestSession('join-session', {}, { socket, signal: controller.signal });
+  controller.abort();
+  await assert.rejects(pending, { name: 'AbortError' });
+  late({ ok: true, session: {} });
+});
+
+test('commands do not queue stale writes while disconnected', async () => {
+  assert.equal(typeof requestSession, 'function');
+  let emitted = false;
+  await assert.rejects(requestSession('submit-perspective', {}, { socket: { connected: false, emit() { emitted = true; } } }));
+  assert.equal(emitted, false);
 });

@@ -25,6 +25,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
+      - name: Install session server test dependencies
+        run: npm --prefix server ci
       - name: Test
         run: npm test
       - name: Build
