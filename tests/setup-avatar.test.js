@@ -12,7 +12,7 @@ await mkdir(resolve('test-results'), { recursive: true });
 const output = resolve('test-results/setup-avatar-ssr.mjs');
 const bundle = await build({ entryPoints: [resolve('src/screens/Setup.jsx')], bundle: true, write: false, platform: 'node', format: 'esm', jsx: 'automatic', packages: 'external' });
 await writeFile(output, bundle.outputFiles[0].text);
-const { CreatePerson, JoinPreview, ScenarioPicker } = await import(pathToFileURL(output));
+const { CreatePerson, JoinPreview, ScenarioPicker, SessionStartActions } = await import(pathToFileURL(output));
 const render = (participant, otherName = 'Sky') => renderToStaticMarkup(React.createElement(CreatePerson, { participant, otherName, index: 0 }));
 const submitButton = (html) => html.match(/<button\b[^>]*type="submit"[^>]*>/)?.[0] || '';
 
@@ -89,4 +89,36 @@ test('an unavailable server code cannot be copied or continued with a fallback c
   assert.match(html, /Session code unavailable/);
   assert.doesNotMatch(html, /DEMO24/);
   assert.equal((html.match(/disabled=""/g) || []).length, 3);
+});
+
+test('a failed session request presents an accessible error, retry, and local continuation', () => {
+  assert.equal(typeof SessionStartActions, 'function');
+  const html = renderToStaticMarkup(React.createElement(SessionStartActions, { error: 'The session server did not respond.' }));
+  assert.match(html, /role="alert"/);
+  assert.match(html, /The session server did not respond\./);
+  assert.match(html, />Try again<\/button>/);
+  assert.match(html, /class="outline-button"[^>]*>Continue on this device<\/button>/);
+  assert.doesNotMatch(html, /disabled/);
+});
+
+test('pending creation prevents duplicate requests and initial rule acceptance stays unchanged', () => {
+  assert.equal(typeof SessionStartActions, 'function');
+  const initial = renderToStaticMarkup(React.createElement(SessionStartActions));
+  assert.match(initial, />I agree · continue<\/button>/);
+  assert.doesNotMatch(initial, /Continue on this device/);
+  const pending = renderToStaticMarkup(React.createElement(SessionStartActions, { pending: true }));
+  assert.match(pending, /disabled=""/);
+  assert.match(pending, /aria-busy="true"/);
+  assert.match(pending, /Creating session…/);
+});
+
+test('a local fallback code is clearly labeled and never offers remote code entry', () => {
+  const html = renderToStaticMarkup(React.createElement(JoinPreview, { code: 'XYZ234', codeSource: 'local', onContinue() {} }));
+  assert.match(html, /Local demo code/);
+  assert.match(html, /XYZ234/);
+  assert.match(html, /does not connect devices/);
+  assert.doesNotMatch(html, /Share this code|Have a session code|Enter session code/);
+  const local = html.match(/<button\b[^>]*>Continue on this device<\/button>/)?.[0] || '';
+  assert.doesNotMatch(local, /disabled/);
+  assert.match(html.match(/<button\b[^>]*>Enter joint session<\/button>/)?.[0] || '', /disabled/);
 });

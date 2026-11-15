@@ -1,4 +1,4 @@
-import { useId, useRef, useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import { Action, Artwork, ErrorMessage } from '../components.jsx';
 import AvatarBuilder from '../AvatarBuilder.jsx';
 import { AvatarIntro } from '../Avatar.jsx';
@@ -38,7 +38,19 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
   </section>;
 }
 
-export function JoinPreview({ code, onContinue }) {
+export function SessionStartActions({ pending = false, error = '', onCreate, onLocal }) {
+  const retryRef = useRef(null);
+  const errorId = useId();
+  useEffect(() => { if (error && !pending) retryRef.current?.focus(); }, [error, pending]);
+  return <div className="dialog-actions">
+    <ErrorMessage id={errorId}>{error}</ErrorMessage>
+    <Action ref={retryRef} onClick={onCreate} disabled={pending} aria-busy={pending} aria-describedby={error ? errorId : undefined}>{pending ? 'Creating session…' : error ? 'Try again' : 'I agree · continue'}</Action>
+    {error && <button type="button" className="outline-button" onClick={onLocal}>Continue on this device</button>}
+  </div>;
+}
+
+export function JoinPreview({ code, codeSource = 'server', onContinue }) {
+  const local = codeSource === 'local';
   const sessionCode = normalizeSessionCode(code);
   const jointHintId = useId();
   const [copied, setCopied] = useState(false);
@@ -54,7 +66,7 @@ export function JoinPreview({ code, onContinue }) {
   function submit(event) {
     event.preventDefault();
     if (!sessionCode) { setError('A session code is unavailable. Go back and create a session.'); return; }
-    if (joining && normalizeSessionCode(input) !== sessionCode) {
+    if (!local && joining && normalizeSessionCode(input) !== sessionCode) {
       setError('That code doesn’t match this session. Enter the session code shown above.');
       joinRef.current?.focus();
       return;
@@ -62,11 +74,11 @@ export function JoinPreview({ code, onContinue }) {
     onContinue();
   }
   return <div className="join-preview">
-    <p>Share this code with other player so they can join the session.</p>
-    <div className="join-code-row"><div><span className="field-label">Session Code</span><strong className="session-code">{sessionCode || 'Session code unavailable'}</strong><button type="button" className="text-button" onClick={copyCode} disabled={!sessionCode}>{copied ? 'Code copied ✓' : 'Copy code'}</button></div></div>
+    <p>{local ? 'You’re continuing on one device. This local demo code does not connect devices.' : 'Share this code with other player so they can join the session.'}</p>
+    <div className="join-code-row"><div><span className="field-label">{local ? 'Local demo code' : 'Session Code'}</span><strong className="session-code">{sessionCode || 'Session code unavailable'}</strong><button type="button" className="text-button" onClick={copyCode} disabled={!sessionCode}>{copied ? 'Code copied ✓' : 'Copy code'}</button></div></div>
     {copyError && <p className="field-hint" role="status">Copy is unavailable. Select the code above to copy it manually.</p>}
     <form onSubmit={submit} noValidate>
-      {!joining ? <button type="button" className="text-button join-toggle" onClick={() => setJoining(true)}>Have a session code?</button> : <div className="join-input"><label className="field-label" htmlFor="join-code">Enter session code</label><input ref={joinRef} id="join-code" value={input} onChange={(event) => { setInput(event.target.value); setError(''); }} maxLength={6} autoCapitalize="characters" autoComplete="off" spellCheck={false} placeholder="6-character code" aria-invalid={Boolean(error)} aria-describedby={error ? 'join-error' : undefined} /><ErrorMessage id="join-error">{error}</ErrorMessage></div>}
+      {!local && (!joining ? <button type="button" className="text-button join-toggle" onClick={() => setJoining(true)}>Have a session code?</button> : <div className="join-input"><label className="field-label" htmlFor="join-code">Enter session code</label><input ref={joinRef} id="join-code" value={input} onChange={(event) => { setInput(event.target.value); setError(''); }} maxLength={6} autoCapitalize="characters" autoComplete="off" spellCheck={false} placeholder="6-character code" aria-invalid={Boolean(error)} aria-describedby={error ? 'join-error' : undefined} /><ErrorMessage id="join-error">{error}</ErrorMessage></div>)}
       <div className="dialog-actions">
         <span className="sr-only" id={jointHintId}>Joint sessions are coming soon.</span>
         <Action disabled aria-describedby={jointHintId} title="Joint sessions are coming soon.">Enter joint session</Action>

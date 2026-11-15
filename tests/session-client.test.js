@@ -5,7 +5,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 
-// Isolate Socket.IO's unrelated auto-connect side effect; HTTP fixtures are not live server checks.
+// Isolate Socket.IO from the network; HTTP fixtures are not live server checks.
 const output = resolve('test-results/session-client-unit.mjs');
 await mkdir(resolve('test-results'), { recursive: true });
 const bundle = await build({
@@ -13,11 +13,11 @@ const bundle = await build({
   platform: 'node', format: 'esm', define: { 'import.meta.env': '{"VITE_SESSION_SERVER":"http://session-server.test"}' },
   plugins: [{ name: 'isolate-socket', setup(build) {
     build.onResolve({ filter: /^socket\.io-client$/ }, () => ({ path: 'socket', namespace: 'fixture' }));
-    build.onLoad({ filter: /.*/, namespace: 'fixture' }, () => ({ contents: 'export const io = () => ({ emit() {} });' }));
+    build.onLoad({ filter: /.*/, namespace: 'fixture' }, () => ({ contents: 'export const io = (_url, options) => ({ options, connections: 0, connect() { this.connections++; }, emit() {} });' }));
   } }],
 });
 await writeFile(output, bundle.outputFiles[0].text);
-const { createSession } = await import(pathToFileURL(output));
+const { createSession, SESSION_REQUEST_TIMEOUT, sessionSocket, joinSession } = await import(pathToFileURL(output));
 test.before(() => mock.method(globalThis, 'fetch', () => Promise.reject(new Error('Unexpected non-fixture request'))));
 test.after(() => mock.restoreAll());
 
@@ -71,4 +71,42 @@ test('an already canceled request never contacts the server', async () => {
   let calls = 0;
   await assert.rejects(createSession({ signal: controller.signal, fetchImpl: async () => { calls++; } }));
   assert.equal(calls, 0);
+});
+
+test('the session-server wait defaults to five seconds', () => {
+  assert.equal(SESSION_REQUEST_TIMEOUT, 5000);
+});
+
+test('the deadline rejects a stalled fetch even when it ignores abort', async () => {
+  await assert.rejects(createSession({ timeoutMs: 10, fetchImpl: () => new Promise(resolve => {
+    setTimeout(() => resolve({ ok: true, json: async () => ({ code: 'ABC123' }) }), 50);
+  }) }), { name: 'TimeoutError' });
+});
+
+test('the deadline also bounds stalled JSON parsing', async () => {
+  await assert.rejects(createSession({ timeoutMs: 10, fetchImpl: async () => ({ ok: true, json: () => new Promise(resolve => {
+    setTimeout(() => resolve({ code: 'ABC123' }), 50);
+  }) }) }), { name: 'TimeoutError' });
+});
+
+test('caller cancellation rejects promptly even when fetch ignores abort', async () => {
+  const controller = new AbortController();
+  const pending = createSession({ signal: controller.signal, fetchImpl: () => new Promise(resolve => {
+    setTimeout(() => resolve({ ok: true, json: async () => ({ code: 'ABC123' }) }), 50);
+  }) });
+  controller.abort();
+  await assert.rejects(pending, { name: 'AbortError' });
+});
+
+test('a network failure is reported without automatically retrying session creation', async () => {
+  let calls = 0;
+  await assert.rejects(createSession({ fetchImpl: async () => { calls++; throw new TypeError('Network unavailable'); } }), /Network unavailable/);
+  assert.equal(calls, 1);
+});
+
+test('local use opens no Socket.IO connection; an explicit join connects once', () => {
+  assert.equal(sessionSocket.options.autoConnect, false);
+  assert.equal(sessionSocket.connections, 0);
+  joinSession(' abc123 ', { name: 'River' });
+  assert.equal(sessionSocket.connections, 1);
 });

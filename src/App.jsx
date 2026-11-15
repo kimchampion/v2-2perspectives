@@ -4,7 +4,7 @@ import { reflectionPaths } from './content.js';
 import { createSessionState, newSessionCode, sessionReducer, validateResponse } from './session.js';
 import { handoffReturnScreen } from './navigation.js';
 import { Onboarding, Welcome } from './screens/Onboarding.jsx';
-import { CreatePerson, JoinPreview, ScenarioPicker } from './screens/Setup.jsx';
+import { CreatePerson, JoinPreview, ScenarioPicker, SessionStartActions } from './screens/Setup.jsx';
 import Conversation from './screens/Conversation.jsx';
 import { createSession } from "./lib/sessionClient";
 import Reflection, { ReflectionPrompt } from './screens/Reflection.jsx';
@@ -21,6 +21,7 @@ export default function App() {
   const [responseError, setResponseError] = useState('');
   const [resumeScreen, setResumeScreen] = useState('perspective');
   const [creatingSession, setCreatingSession] = useState(false);
+  const [sessionError, setSessionError] = useState('');
   const sessionRequest = useRef(null);
   const mainRef = useRef(null);
   const privateView = ['handoff', 'perspective', 'response'].includes(screen);
@@ -52,24 +53,38 @@ export default function App() {
     sessionRequest.current?.abort();
     sessionRequest.current = null;
     setCreatingSession(false);
+    setSessionError('');
     setModal(null);
+  }
+
+  function startSession(code, codeSource) {
+    dispatch({ type: 'RESET', code, codeSource });
+    setSessionError(''); setWelcomeError('');
+    setSetupIndex(0); setActive(0); setModal(null); setScreen('person');
+  }
+
+  function continueLocally() {
+    sessionRequest.current?.abort();
+    sessionRequest.current = null;
+    setCreatingSession(false);
+    startSession(newSessionCode(), 'local');
   }
 
   async function acceptRules() {
     if (sessionRequest.current) return;
     const request = new AbortController();
     sessionRequest.current = request;
+    setSessionError('');
     setCreatingSession(true);
     try {
       const session = await createSession({ signal: request.signal });
-      if (request.signal.aborted) return;
-      dispatch({ type: 'RESET', code: session.code });
-      setSetupIndex(0); setActive(0); setModal(null); setScreen('person');
+      if (request.signal.aborted || sessionRequest.current !== request) return;
+      startSession(session.code, 'server');
     } catch (error) {
-      if (request.signal.aborted) return;
-      console.error('Unable to create session:', error);
-      setModal(null);
-      setWelcomeError('Unable to create a session. Make sure the session server is running.');
+      if (request.signal.aborted || sessionRequest.current !== request) return;
+      setSessionError(error?.name === 'TimeoutError'
+        ? 'The session server didn’t respond. Try again or continue on this device.'
+        : 'We couldn’t create a server session. Try again or continue on this device.');
     } finally {
       if (sessionRequest.current === request) {
         sessionRequest.current = null;
@@ -106,9 +121,9 @@ export default function App() {
   }
   function clearSession(destination) {
     const participants = state.participants.map((participant) => ({ ...participant }));
-    dispatch({ type: destination === 'ended' ? 'END' : 'RESET', code: destination === 'scenario' ? state.code : newSessionCode() });
+    dispatch({ type: destination === 'ended' ? 'END' : 'RESET', code: destination === 'scenario' ? state.code : newSessionCode(), codeSource: destination === 'scenario' ? state.codeSource : 'local' });
     if (destination === 'scenario') participants.forEach((values, participant) => dispatch({ type: 'SET_PARTICIPANT', participant, values }));
-    setResponseError(''); setWelcomeError(''); setResumeScreen('perspective'); setModal(null); setActive(0); setSetupIndex(0);
+    setResponseError(''); setWelcomeError(''); setSessionError(''); setResumeScreen('perspective'); setModal(null); setActive(0); setSetupIndex(0);
     if (destination === 'welcome') setAcknowledged(false);
     setScreen(destination);
   }
@@ -142,8 +157,8 @@ export default function App() {
     <a className="skip-link" href="#main-content">Skip to content</a>
     {screen !== 'onboarding' && <Header title={title} onBack={!['welcome', 'handoff', 'ended'].includes(screen) ? goBack : undefined} onHelp={() => setModal({ kind: 'help' })} />}
     <main id="main-content" ref={mainRef} tabIndex={-1} className={`phone-main screen-${screen}`}>{body}</main>
-    {modal?.kind === 'rules' && <Dialog title="A few things to remember." onClose={closeRules}><GroundRules />{modal.begin && <Action className="dialog-primary" onClick={acceptRules} disabled={creatingSession} aria-busy={creatingSession}>{creatingSession ? 'Creating session…' : 'I agree · continue'}</Action>}</Dialog>}
-    {modal?.kind === 'join' && <Dialog title="Join your partner’s activity" className="join-dialog" onClose={() => setModal(null)}><JoinPreview code={state.code} onContinue={() => { setSetupIndex(1); setScreen('person'); setModal(null); }} /></Dialog>}
+    {modal?.kind === 'rules' && <Dialog title="A few things to remember." onClose={closeRules}><GroundRules />{modal.begin && <SessionStartActions pending={creatingSession} error={sessionError} onCreate={acceptRules} onLocal={continueLocally} />}</Dialog>}
+    {modal?.kind === 'join' && <Dialog title="Join your partner’s activity" className="join-dialog" onClose={() => setModal(null)}><JoinPreview code={state.code} codeSource={state.codeSource} onContinue={() => { setSetupIndex(1); setScreen('person'); setModal(null); }} /></Dialog>}
     {chosenPath && <Dialog title="Reflection" onClose={() => setModal(null)}><ReflectionPrompt path={chosenPath} /></Dialog>}
     {modal?.kind === 'help' && <Dialog title="A little room for another view." onClose={() => setModal(null)}><p>Explore a fictional situation, share one response each, then read both responses together.</p><p className="small-copy">This version runs on one device. Your responses stay in this page’s memory and are cleared on refresh or when you end.</p><div className="help-actions"><button type="button" className="outline-button" onClick={() => setModal({ kind: 'rules' })}>Ground rules</button>{inSession ? <><button type="button" className="outline-button" onClick={() => setModal({ kind: 'restart', destination: 'welcome' })}>Start over</button><Action onClick={() => setModal({ kind: 'end' })}>End session</Action></> : <button type="button" className="outline-button" onClick={() => { setModal(null); setOnboardingIndex(0); setScreen('onboarding'); }}>View introduction</button>}</div></Dialog>}
     {modal?.kind === 'end' && <Dialog title="End this session?" onClose={() => setModal(null)}><p>Ending clears both people’s nicknames, choices, responses, reflections, and drawings on this device.</p><div className="dialog-actions"><button type="button" className="outline-button" onClick={() => setModal(null)}>Keep exploring</button><Action onClick={() => clearSession('ended')}>End session</Action></div></Dialog>}

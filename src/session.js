@@ -5,9 +5,10 @@ const REFLECTION_PATHS = ['repair', 'pause', 'agree', 'set-aside', 'later'];
 const TEXT_LIMIT = 1200;
 const trimmed = (value) => typeof value === 'string' ? value.trim() : '';
 
-export function createSessionState(code = '') {
+export function createSessionState(code = '', codeSource = 'local') {
   return {
     code,
+    codeSource: codeSource === 'server' ? 'server' : 'local',
     participants: Array.from({ length: 2 }, () => ({
       name: '', avatar: null,
     })),
@@ -98,7 +99,7 @@ export function sessionReducer(state = createSessionState(), action) {
   const index = action.participant;
   switch (action.type) {
     case 'RESET':
-      return createSessionState(action.code);
+      return createSessionState(action.code, action.codeSource);
     case 'END':
       return { ...createSessionState(action.code), status: 'ended' };
     case 'SET_PARTICIPANT': {

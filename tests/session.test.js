@@ -8,6 +8,7 @@ test('a new local session starts with two independent empty participants and dra
   const state = session.createSessionState();
   assert.deepEqual(state, {
     code: '',
+    codeSource: 'local',
     participants: [
       { name: '', avatar: null },
       { name: '', avatar: null },
@@ -27,6 +28,15 @@ test('a new local session starts with two independent empty participants and dra
   assert.notEqual(state.participants[0], another.participants[0]);
   assert.notEqual(state.responses[0], another.responses[0]);
   assert.notEqual(state.reflection, another.reflection);
+});
+
+test('code provenance distinguishes server creation from local fallback and clears on reset/end', () => {
+  const server = session.sessionReducer(session.createSessionState(), { type: 'RESET', code: 'ABC123', codeSource: 'server' });
+  assert.equal(server.codeSource, 'server');
+  assert.equal(session.sessionReducer(server, { type: 'RESET', code: 'XYZ234', codeSource: 'local' }).codeSource, 'local');
+  assert.equal(session.sessionReducer(server, { type: 'RESET' }).codeSource, 'local');
+  assert.equal(session.sessionReducer(server, { type: 'END' }).codeSource, 'local');
+  assert.equal(session.createSessionState('ABC123', 'invalid').codeSource, 'local');
 });
 
 const expectedScenarios = [
