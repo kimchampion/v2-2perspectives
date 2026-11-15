@@ -3,6 +3,6 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig(({ command, isPreview }) => ({
-  base: command === "build" || isPreview ? "/v2-2perspectives/" : "/",
+  base: "/",
   plugins: [react(), tailwindcss()],
 }));
