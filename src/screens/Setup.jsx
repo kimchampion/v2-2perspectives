@@ -13,6 +13,7 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
   const formId = useId();
   const nameError = participant.name.trim() ? validateNickname(participant.name, otherName) : '';
   const issue = validateParticipant(participant, otherName);
+  const continueHint = participant.name.trim() ? issue : '';
   function submit(event) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -22,7 +23,7 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
     setError('');
     onContinue(values);
   }
-  return <Page className="person-screen" label="Build your persona" actions={<Action type="submit" form={formId} disabled={Boolean(issue)} aria-describedby={issue ? 'person-continue-hint' : undefined}>Continue</Action>}>
+  return <Page className="person-screen" label="Build your persona" actions={<Action type="submit" form={formId} disabled={Boolean(issue)} aria-describedby={continueHint ? 'person-continue-hint' : undefined}>Continue</Action>}>
     <h1>Build your persona</h1>
     <p>Create an avatar that feels like you.</p>
     <form id={formId} onSubmit={submit} noValidate>
@@ -31,7 +32,7 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
       <span id="nickname-hint" className="sr-only">Choose a nickname different from your partner’s. Maximum 30 characters.</span>
       <ErrorMessage id="person-error">{error || nameError}</ErrorMessage>
       <AvatarBuilder avatar={participant.avatar} onChange={(avatar) => { setError(''); onChange({ avatar }); }} />
-        {issue && <p id="person-continue-hint" className="field-hint">{!participant.name.trim() ? 'Enter a nickname and choose an avatar option to continue.' : issue}</p>}
+      {continueHint && <p id="person-continue-hint" className="field-hint">{continueHint}</p>}
     </form>
   </Page>;
 }

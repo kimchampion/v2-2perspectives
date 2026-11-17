@@ -53,7 +53,7 @@ export default function AvatarBuilder({ avatar, onChange }) {
     <figure className="avatar-preview">
       <Avatar avatar={avatar} flushBottom />
     </figure>
-    {!avatar && <p className="field-hint avatar-example-hint">Example avatar. Choose an option below to make it yours.</p>}
+    {!avatar && <p className="field-hint avatar-example-hint">Choose an option below to make it yours.</p>}
     <div className="avatar-controls-heading">
       <h2 className="person-section-heading">Build your avatar:</h2>
       <button type="button" className="text-button" disabled={!avatar} onClick={() => { setEditing(null); onChange(null); }}>Reset avatar</button>

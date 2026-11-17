@@ -17,6 +17,12 @@ The tests include 28 local session/domain checks, 16 session-request/acknowledge
 
 Before the requested GitHub push, reran the production build successfully and all 120 tests outside the joint-server file passed. Permission to repeat the loopback integration run was declined, so the ten joint-server/catalog checks were not rerun at this stage; their prior full-suite pass above remains the latest result. No application source changed after that full-suite verification. The user also reported testing in two different browsers. Hosted deployment is separate from the Git push.
 
+## Persona helper copy — November 17, 2026
+
+Removed the initial “Enter a nickname and choose an avatar option to continue.” message and the “Example avatar.” prefix. The remaining “Choose an option below to make it yours.” guidance stays visible for an uncustomized avatar. Continue's description now points to the conditional validation hint only when that hint exists; required nickname/avatar validation is unchanged.
+
+The production build and all 28 focused deployment/privacy/setup tests passed with Node 24. At 320/375/390/430 CSS pixels, both requested strings were absent, Continue stayed disabled for an empty setup, all aria-describedby references resolved, and the document had no horizontal overflow. Entering only a nickname retained the avatar-choice validation; selecting an expression enabled Continue and reached the second participant's setup. Reset and clearing the nickname returned the first form to its empty state. Browser warning/error logs were empty. Evidence is in ignored test-results/persona-helper-copy.png and persona-helper-copy-checks.json. The full loopback suite was not rerun. These checks used the local preview.
+
 ## GitHub Pages asset prefix — November 17, 2026
 
 Reproduced the blank published page: its HTML requested /assets/index-BByZTm5_.js and the corresponding root URL returned GitHub's 404 page. The app is hosted under /v2-2perspectives/, while the default Vite base remains / for the separately hosted Render site.
