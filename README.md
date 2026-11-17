@@ -40,7 +40,7 @@ The frontend static site builds with `npm ci && npm run build` and publishes `di
 
 Set the Node service's `CLIENT_ORIGIN` to `https://twoperspectives.onrender.com` to restrict browser access to the app; multiple exact origins can be comma-separated for local testing. The default is `*`. Sessions are limited to 50 in memory and expire after 30 minutes without a session action. A restart clears them. Updating this feature requires releasing both the frontend and Node service.
 
-The legacy GitHub Pages workflow remains in the repository and installs both root and server test dependencies before running tests/build. The root-path build targets Render; publishing it under a GitHub project subpath would require a separate base-path configuration. Generated builds stay out of Git.
+The GitHub Pages workflow installs both root and server test dependencies, runs tests, then builds with `npm run build -- --base=/v2-2perspectives/`. This gives Pages its repository subpath while the ordinary `npm run build` keeps the root path used by Render. Generated builds stay out of Git.
 
 ## Try the flow
 

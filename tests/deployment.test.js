@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { build as bundle } from 'esbuild';
@@ -27,6 +27,19 @@ test('the production HTML loads compiled code, styles, and favicon from the site
   assert.match(html, /href="\/assets\/[^" ]+\.css"/);
   assert.match(html, /href="\/favicon\.svg"/);
   assert.doesNotMatch(html, /\/src\/main\.jsx|\/v2-2perspectives\//);
+});
+
+test('the GitHub Pages workflow builds code, styles, and favicon under the repository path', async () => {
+  const workflow = await readFile(resolve('.github/workflows/deploy-pages.yml'), 'utf8');
+  const buildStep = workflow.match(/- name: Build\s+run: npm run build([^\n]*)/);
+  assert.ok(buildStep, 'The Pages workflow must build the app.');
+  const base = buildStep[1].match(/--base=(\S+)/)?.[1] ?? '/';
+  const result = await build({ base, logLevel: 'silent', build: { write: false } });
+  const html = String(result.output.find((file) => file.fileName === 'index.html').source);
+  assert.match(html, /src="\/v2-2perspectives\/assets\/[^" ]+\.js"/);
+  assert.match(html, /href="\/v2-2perspectives\/assets\/[^" ]+\.css"/);
+  assert.match(html, /href="\/v2-2perspectives\/favicon\.svg"/);
+  assert.doesNotMatch(html, /(?:src|href)="\/(?:assets\/|favicon\.svg)/);
 });
 
 test('development keeps the existing local root URL', async () => {

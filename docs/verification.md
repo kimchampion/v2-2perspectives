@@ -17,6 +17,14 @@ The tests include 28 local session/domain checks, 16 session-request/acknowledge
 
 Before the requested GitHub push, reran the production build successfully and all 120 tests outside the joint-server file passed. Permission to repeat the loopback integration run was declined, so the ten joint-server/catalog checks were not rerun at this stage; their prior full-suite pass above remains the latest result. No application source changed after that full-suite verification. The user also reported testing in two different browsers. Hosted deployment is separate from the Git push.
 
+## GitHub Pages asset prefix — November 17, 2026
+
+Reproduced the blank published page: its HTML requested /assets/index-BByZTm5_.js and the corresponding root URL returned GitHub's 404 page. The app is hosted under /v2-2perspectives/, while the default Vite base remains / for the separately hosted Render site.
+
+The Pages workflow now builds with npm run build -- --base=/v2-2perspectives/. The regular Render build and Vite configuration remain unchanged. Added a regression check that reads the Pages workflow's build base, generates the production HTML, and verifies its script, stylesheet and favicon paths. Observed it fail with root paths before the workflow change, then pass afterward. All 28 focused deployment/privacy/setup tests passed; the full loopback suite was not rerun locally after the earlier permission decline. Both production build variants passed with Node 24.
+
+Served the corrected Pages artifact locally at /v2-2perspectives/ and checked 320/375/390/430 CSS pixels: onboarding loaded, artwork used the repository prefix, and there was no horizontal document overflow. Completed both local personas and reached scenario selection; visible card artwork and composed avatar references used the same prefix. The actual generated HTML uses /v2-2perspectives/assets/ for Pages and /assets/ for Render. Evidence is in ignored test-results/pages-base-local.png and pages-base-local-checks.json. These are pre-publication checks; hosted deployment verification is separate.
+
 ## Response expression controls hidden and drawing prompt updated — November 17, 2026
 
 Removed the response-only expression controls and their callback wiring from Thought on Perspective, in both Draw and This represents... modes. Persona setup still offers all expressions, and the avatar retains its setup choice. The empty drawing pad now uses the exact supplied placeholder: “Show us how your feeling right now, use your finger or stylus to start drawing”. Existing canvas accessibility guidance, mouse/pen/touch handlers, and the writing alternative remain intact.
