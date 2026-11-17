@@ -1,11 +1,12 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { gridFocusIndex, resolveGridColumns } from './grid-navigation.js';
 
-export default function SelectionGrid({ items, label, columns = 3, selectedId = null, className = '', getLabel, buttonClassName, onActivate, renderOption, opensDialog = false }) {
+export default function SelectionGrid({ items, label, columns = 3, selectedId = null, className = '', getLabel, buttonClassName, onActivate, renderOption, opensDialog = false, scrollOnPointerFocus = true }) {
   const instructionsId = useId();
   const buttons = useRef(new Map());
   const gridRef = useRef(null);
   const restoreFocus = useRef(false);
+  const pointerFocus = useRef(false);
   const [layoutColumns, setLayoutColumns] = useState(null);
   const initialId = items.find((item) => item.id === selectedId)?.id ?? items[0]?.id;
   const [focusedId, setFocusedId] = useState(initialId);
@@ -71,7 +72,13 @@ export default function SelectionGrid({ items, label, columns = 3, selectedId = 
           return <div key={item.id} role="gridcell" aria-colindex={columnIndex + 1} className="selection-grid-cell">
             <button type="button" ref={(node) => { if (node) buttons.current.set(item.id, node); else buttons.current.delete(item.id); }}
               className={buttonClassName?.(item, selected)} aria-label={getLabel?.(item)} aria-pressed={selected} aria-haspopup={opensDialog ? 'dialog' : undefined} tabIndex={item.id === activeId ? 0 : -1}
-              onFocus={(event) => { setFocusedId(item.id); keepVisible(event.currentTarget); }} onKeyDown={(event) => moveFocus(event, index)}
+              onPointerDown={(event) => {
+                if (scrollOnPointerFocus || event.button !== 0) return;
+                pointerFocus.current = true;
+                try { event.currentTarget.focus({ preventScroll: true }); }
+                finally { pointerFocus.current = false; }
+              }}
+              onFocus={(event) => { setFocusedId(item.id); if (scrollOnPointerFocus || (!pointerFocus.current && event.currentTarget.matches(':focus-visible'))) keepVisible(event.currentTarget); }} onKeyDown={(event) => moveFocus(event, index)}
               onClick={() => { setFocusedId(item.id); onActivate?.(item); }}>
               {renderOption(item, selected)}
             </button>

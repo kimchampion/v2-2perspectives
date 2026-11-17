@@ -190,7 +190,7 @@ export default function SketchPad({
         />
         {!hasDrawing && (
           <span className="drawing-placeholder" aria-hidden="true">
-            Use your finger or stylus to start drawing
+            Show us how your feeling right now, use your finger or stylus to start drawing
           </span>
         )}
       </div>

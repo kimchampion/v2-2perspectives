@@ -64,7 +64,7 @@ test('scenario introduction shows the first participant’s configured avatar be
 test('session choices present three explicit routes without generating or displaying a code', () => {
   assert.equal(typeof SessionChoices, 'function');
   const html = renderToStaticMarkup(React.createElement(SessionChoices));
-  for (const label of ['Create a session', 'Join a session', 'Use one device']) assert.ok(html.includes(`>${label}</button>`));
+  for (const label of ['Create Session', 'Join Session', 'Share one device']) assert.ok(html.includes(`>${label}</button>`));
   assert.doesNotMatch(html, /session-code|Enter joint session|Local demo code|disabled/);
 });
 
@@ -73,7 +73,11 @@ test('pending creation disables duplicate creation while keeping join and local 
   const html = renderToStaticMarkup(React.createElement(SessionChoices, { pending: true, waiting: true }));
   assert.match(html.match(/<button\b[^>]*>Creating session…<\/button>/)?.[0] || '', /disabled=""/);
   assert.match(html, /aria-busy="true"/);
-  for (const label of ['Join a session', 'Use one device']) assert.doesNotMatch(html.match(new RegExp(`<button\\b[^>]*>${label}</button>`))?.[0] || '', /disabled/);
+  for (const label of ['Join Session', 'Share one device']) {
+    const button = html.match(new RegExp(`<button\\b[^>]*>${label}</button>`))?.[0];
+    assert.ok(button, `${label} remains available`);
+    assert.doesNotMatch(button, /disabled/);
+  }
   assert.match(html, /role="status"/);
   assert.match(html, /waking up/);
 });
@@ -84,8 +88,8 @@ test('a failed creation keeps the three choices available and announces the erro
   assert.match(html, /role="alert"/);
   assert.match(html, /The session server is unavailable\./);
   assert.doesNotMatch(html, /disabled/);
-  assert.match(html, />Create a session<\/button>/);
-  assert.match(html, />Use one device<\/button>/);
+  assert.match(html, />Create Session<\/button>/);
+  assert.match(html, />Share one device<\/button>/);
 });
 
 test('the creator can share the real code before persona setup without another joint-entry step', () => {

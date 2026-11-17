@@ -46,7 +46,7 @@ test('a participant response view mounts only their own draft', () => {
   assert.doesNotMatch(html, /PRIVATE_RIVER_/);
   assert.match(html, /expression\/tired.svg/);
   assert.doesNotMatch(html, /expression\/happy.svg/);
-  assert.match(html, /Change expression/);
+  assert.doesNotMatch(html, /Change expression|response-feeling/);
 });
 
 test('each perspective shows only the active participant’s avatar and no private draft', () => {
@@ -64,6 +64,9 @@ test('drawing and explanation use separate views without losing the private draf
   state.responses[1].mode = 'draw';
   const drawing = render('response', state);
   assert.match(drawing, /This represents\.\.\./);
+  const emptyDrawing = render('response', { ...state, responses: [state.responses[0], { ...state.responses[1], drawing: '' }] });
+  assert.match(emptyDrawing, /Show us how your feeling right now, use your finger or stylus to start drawing/);
+  assert.doesNotMatch(drawing, /Change expression|response-feeling/);
   assert.doesNotMatch(drawing, /<textarea|PRIVATE_SKY_TEXT|Write instead/);
 
   const explaining = sessionReducer(state, {

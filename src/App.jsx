@@ -1,5 +1,5 @@
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { Action, Artwork, Dialog, ErrorMessage, GroundRules, Header } from './components.jsx';
+import { Action, Dialog, ErrorMessage, GroundRules, Header, PageNotice } from './components.jsx';
 import { reflectionPaths } from './content.js';
 import { createSessionState, sessionReducer, validateResponse } from './session.js';
 import { handoffReturnScreen } from './navigation.js';
@@ -9,6 +9,7 @@ import Conversation from './screens/Conversation.jsx';
 import { createSession, SESSION_START_TIMEOUT } from './lib/sessionClient.js';
 import useJointSession from './useJointSession.js';
 import Reflection, { ReflectionPrompt } from './screens/Reflection.jsx';
+import Ending from './screens/Ending.jsx';
 
 export default function App() {
   const [state, dispatch] = useReducer(sessionReducer, undefined, () => createSessionState());
@@ -34,6 +35,7 @@ export default function App() {
   const joint = useJointSession();
   const sessionRequest = useRef(null);
   const mainRef = useRef(null);
+  const shellRef = useRef(null);
   const privateView = ['handoff', 'perspective', 'response'].includes(screen);
   const inSession = ['person', 'scenario', 'handoff', 'perspective', 'response', 'compare', 'reflection', 'joint-wait'].includes(screen);
 
@@ -43,6 +45,17 @@ export default function App() {
   }, [screen, active, setupIndex, onboardingIndex]);
 
   useEffect(() => () => sessionRequest.current?.abort(), []);
+  useEffect(() => {
+    const viewport = window.visualViewport;
+    if (!viewport) return;
+    const resize = () => {
+      if (viewport.scale === 1 && viewport.height < window.innerHeight - 1) shellRef.current?.style.setProperty('--app-height', `${viewport.height}px`);
+      else shellRef.current?.style.removeProperty('--app-height');
+    };
+    resize();
+    viewport.addEventListener('resize', resize);
+    return () => viewport.removeEventListener('resize', resize);
+  }, []);
   useEffect(() => {
     setServerWaiting(false);
     if (!creatingSession) return;
@@ -131,8 +144,8 @@ export default function App() {
     } catch (error) {
       if (request.signal.aborted || sessionRequest.current !== request) return;
       setSessionError(error?.name === 'TimeoutError'
-        ? 'The session server didn’t respond. Try creating a session again, or choose Use one device.'
-        : 'We couldn’t create a shared session. Try again, or choose Use one device.');
+        ? 'The session server didn’t respond. Try creating a session again, or choose Share one device.'
+        : 'We couldn’t create a shared session. Try again, or choose Share one device.');
     } finally {
       if (sessionRequest.current === request) {
         sessionRequest.current = null;
@@ -254,7 +267,7 @@ export default function App() {
       catch (error) { if (error.name !== 'AbortError') setResponseError(error.message); }
     } else { dispatch({ type: 'SET_REFLECTION', path }); setModal({ kind: 'reflection', path }); }
   }
-  const title = screen === 'person' ? setupMode === 'join' ? 'Your persona' : `Person ${setupIndex + 1} of 2` : screen === 'joint-wait' ? 'Joint session' : privateView && screen !== 'handoff' ? 'Your Perspective' : ['compare', 'reflection'].includes(screen) ? 'Discussion' : '';
+  const title = screen === 'session-mode' ? 'Start Session' : screen === 'person' ? setupMode === 'join' ? 'Your persona' : `Person ${setupIndex + 1} of 2` : screen === 'joint-wait' ? 'Joint session' : privateView && screen !== 'handoff' ? 'Your Perspective' : ['compare', 'reflection'].includes(screen) ? 'Discussion' : '';
   const chosenPath = modal?.kind === 'reflection' && reflectionPaths.find((path) => path.id === modal.path);
   const body = screen === 'onboarding' ? <Onboarding index={onboardingIndex} onChange={setOnboardingIndex} onFinish={() => setScreen('welcome')} />
     : screen === 'welcome' ? <Welcome acknowledged={acknowledged} onAcknowledge={(value) => { setAcknowledged(value); setWelcomeError(''); }} onBegin={begin} error={welcomeError} />
@@ -263,16 +276,18 @@ export default function App() {
     : screen === 'person' ? <CreatePerson key={setupIndex} participant={state.participants[setupIndex]} otherName={state.participants[1 - setupIndex].name} onChange={(values) => dispatch({ type: 'SET_PARTICIPANT', participant: setupIndex, values })} onContinue={continuePerson} />
     : screen === 'joint-wait' ? <JointStatus code={pendingJoinCode || state.code} session={joint.session} connection={joint.connection} slow={joint.slow} error={joint.error} onRetry={joint.retry} onLeave={() => joint.connection === 'connected' ? setModal({ kind: 'end' }) : leaveJoint()} onChooseScenario={() => setScreen('scenario')} />
     : screen === 'scenario' ? <ScenarioPicker selected={state.scenarioId} participant={state.participants[jointMode ? active : 0]} participants={state.participants} onSelect={(id) => dispatch({ type: 'SELECT_SCENARIO', id })} onContinue={startResponses} />
-    : ['handoff', 'perspective', 'response', 'compare'].includes(screen) ? <Conversation key={`${screen}-${active}`} screen={screen} state={state} active={active} joint={jointMode} busy={jointBusy} onReady={handoffReady} onChange={updateResponse} onSubmit={submitResponse} onExpression={(expression) => dispatch({ type: 'SET_EXPRESSION', participant: active, expression })} error={responseError} onNext={() => screen === 'perspective' ? setScreen(state.status === 'revealed' ? 'compare' : 'response') : compareNext()} />
+    : ['handoff', 'perspective', 'response', 'compare'].includes(screen) ? <Conversation key={`${screen}-${active}`} screen={screen} state={state} active={active} joint={jointMode} busy={jointBusy} onReady={handoffReady} onChange={updateResponse} onSubmit={submitResponse} error={responseError} onNext={() => screen === 'perspective' ? setScreen(state.status === 'revealed' ? 'compare' : 'response') : compareNext()} />
     : screen === 'reflection' ? <Reflection state={state} onChoose={chooseReflection} onEnd={() => setModal({ kind: 'end' })} onNewScenario={() => setModal({ kind: 'restart', destination: 'scenario' })} />
-    : <section className="ending-screen"><Artwork name="welcome.png" className="ending-art" alt="" /><h1>A little more understanding.</h1><p>This session has ended. Your nicknames, choices, responses, reflections, and drawings have been cleared from this page.</p><div className="screen-actions"><Action onClick={leaveJoint}>Begin again</Action></div></section>;
+    : <Ending onBeginAgain={leaveJoint} />;
 
-  return <div className={`app-shell ${screen === 'onboarding' ? 'is-onboarding' : screen === 'reflection' ? 'is-reflection' : ''}`}>
+  return <div ref={shellRef} className={`app-shell ${screen === 'onboarding' ? 'is-onboarding' : screen === 'reflection' ? 'is-reflection' : ''}`}>
     <a className="skip-link" href="#main-content">Skip to content</a>
     {screen !== 'onboarding' && <Header title={title} onBack={!['welcome', 'handoff', 'ended', 'joint-wait'].includes(screen) ? goBack : undefined} onHelp={() => setModal({ kind: 'help' })} />}
     <main id="main-content" ref={mainRef} tabIndex={-1} className={`phone-main screen-${screen}`}>
-      {jointMode && joint.session && !['connected', 'ended'].includes(joint.connection) && screen !== 'joint-wait' && <div className="joint-connection-notice" role="status"><p>{joint.error || (joint.slow ? 'The session server may be waking up. Your draft stays on this device.' : 'Reconnecting to your partner. Your draft stays on this device.')}</p>{joint.error && <button type="button" className="text-button" onClick={joint.retry}>Try reconnecting</button>}<button type="button" className="text-button" onClick={leaveJoint}>Return to start</button></div>}
-      {responseError && screen !== 'response' && <ErrorMessage>{responseError}</ErrorMessage>}{body}
+      <PageNotice.Provider value={<>
+        {jointMode && joint.session && !['connected', 'ended'].includes(joint.connection) && screen !== 'joint-wait' && <div className="joint-connection-notice" role="status"><p>{joint.error || (joint.slow ? 'The session server may be waking up. Your draft stays on this device.' : 'Reconnecting to your partner. Your draft stays on this device.')}</p>{joint.error && <button type="button" className="text-button" onClick={joint.retry}>Try reconnecting</button>}<button type="button" className="text-button" onClick={leaveJoint}>Return to start</button></div>}
+        {responseError && screen !== 'response' && <ErrorMessage>{responseError}</ErrorMessage>}
+      </>}>{body}</PageNotice.Provider>
     </main>
     {modal?.kind === 'rules' && <Dialog title="A few things to remember." onClose={closeRules}><GroundRules />{modal.begin && <Action className="dialog-primary" onClick={acceptRules}>I agree · continue</Action>}</Dialog>}
     {modal?.kind === 'join-entry' && <Dialog title="Join a session" onClose={() => setModal(null)}><JoinCodeForm initialCode={pendingJoinCode} onJoin={joinWithCode} /></Dialog>}

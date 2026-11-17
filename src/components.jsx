@@ -1,5 +1,36 @@
-import { useEffect, useId, useRef } from 'react';
+import { createContext, useContext, useEffect, useId, useLayoutEffect, useRef } from 'react';
 import { publicAsset } from './public-assets.js';
+
+export const PageNotice = createContext(null);
+
+export function Page({ children, actions, className = '', label = 'Page content', ...props }) {
+  const notice = useContext(PageNotice);
+  const ref = useRef(null);
+  const hasActions = Boolean(actions);
+  useLayoutEffect(() => {
+    const page = ref.current;
+    const shell = page?.closest('.app-shell');
+    if (!shell) return;
+    const footer = page.querySelector(':scope > .page-actions');
+    function positionActions() {
+      const primary = footer?.querySelector(':scope > .primary-button, :scope > button');
+      const start = page.getBoundingClientRect().top - shell.getBoundingClientRect().top;
+      const offset = primary ? primary.getBoundingClientRect().top - footer.getBoundingClientRect().top : 0;
+      const height = Math.max(0, Math.min(636, 714 - start - offset - 22));
+      page.style.setProperty('--page-content-height', `${height}px`);
+      page.style.setProperty('--page-actions-gap', `${Math.max(0, 714 - start - offset - height)}px`);
+    }
+    positionActions();
+    const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(positionActions);
+    [page, footer, shell.querySelector('.phone-header')].filter(Boolean).forEach(element => observer?.observe(element));
+    window.addEventListener('resize', positionActions);
+    return () => { observer?.disconnect(); window.removeEventListener('resize', positionActions); };
+  }, [hasActions]);
+  return <section ref={ref} className={`page-screen ${className}`} {...props}>
+    <div className="page-content" role="region" aria-label={label} tabIndex={0}>{notice}{children}</div>
+    {actions && <div className="screen-actions page-actions" role="group" aria-label="Page actions">{actions}</div>}
+  </section>;
+}
 
 export function Header({ title = '', onBack, onHelp }) {
   return <header className="phone-header">

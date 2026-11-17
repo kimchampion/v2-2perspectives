@@ -10,4 +10,6 @@ Stable participant slots must survive network reconnects while the page stays op
 
 Keep seed scenarios in `src/data.js`. ColorMind requests may contain only the fixed public query `{"model":"default"}`. Never send participant data or credentials to catalogs. Validate API data, enforce a timeout, and clearly label preset fallbacks. Do not call mocked API checks live verification.
 
+Non-modal pages use the shared Page layout: scrollable content is capped at 636 CSS pixels; the primary action starts exactly 714 CSS pixels from the top of the app frame, with secondary buttons 8px below it. Short screens scroll the whole page to reach the actions; do not move the primary upward to fit the viewport. Keep native form ownership for external submit buttons and bring validation into view. Modal layout is separate.
+
 Preserve touch drawing, accessible labels, keyboard alternatives, visible focus, safe areas, scrolling, and reduced-motion support. Keep unrequested original features hidden. Ignore dependencies, generated builds, local environment files, browser profiles, and temporary test outputs in Git.
