@@ -4,8 +4,9 @@ import { onboarding } from '../content.js';
 
 export function Onboarding({ index, onChange, onFinish }) {
   const page = onboarding[index];
-  return <Page key={index} className="onboarding-screen" aria-label={`Introduction ${index + 1} of 4`} label={page.title} actions={<>
-      <nav className="page-dots" aria-label="Introduction pages">{onboarding.map((item, i) => <button type="button" key={item.title} aria-label={`Introduction ${i + 1}: ${item.title}`} aria-current={i === index ? 'step' : undefined} onClick={() => onChange(i)}><span /></button>)}</nav>
+  return <Page key={index} className="onboarding-screen" aria-label={`Introduction ${index + 1} of 4`} label={page.title}
+    pagination={<nav className="page-dots" aria-label="Introduction pages">{onboarding.map((item, i) => <button type="button" key={item.title} aria-label={`Introduction ${i + 1}: ${item.title}`} aria-current={i === index ? 'step' : undefined} onClick={() => onChange(i)}><span /></button>)}</nav>}
+    actions={<>
       <Action onClick={() => index === 3 ? onFinish() : onChange(index + 1)}>Next</Action>
       <button type="button" className="text-button skip-button" onClick={onFinish}>Skip for Now</button>
     </>}>

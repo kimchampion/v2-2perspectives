@@ -23,8 +23,8 @@ export function CreatePerson({ participant, otherName, onChange, onContinue }) {
     setError('');
     onContinue(values);
   }
-  return <Page className="person-screen" label="Build your persona" actions={<Action type="submit" form={formId} disabled={Boolean(issue)} aria-describedby={continueHint ? 'person-continue-hint' : undefined}>Continue</Action>}>
-    <h1>Build your persona</h1>
+  return <Page className="person-screen" label="Create your avatar" actions={<Action type="submit" form={formId} disabled={Boolean(issue)} aria-describedby={continueHint ? 'person-continue-hint' : undefined}>Continue</Action>}>
+    <h1>Create your avatar</h1>
     <p>Create an avatar that feels like you.</p>
     <form id={formId} onSubmit={submit} noValidate>
       <label className="field-label" htmlFor="nickname">Name or nickname</label>

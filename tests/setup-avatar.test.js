@@ -19,7 +19,7 @@ const submitButton = (html) => html.match(/<button\b[^>]*type="submit"[^>]*>/)?.
 test('person setup uses the requested copy, nickname field, and local avatar preview', () => {
   assert.equal(typeof CreatePerson, 'function');
   const html = render({ name: '', avatar: null });
-  assert.match(html, /<h1>Build your persona<\/h1>/);
+  assert.match(html, /<h1>Create your avatar<\/h1>/);
   assert.match(html, /<p>Create an avatar that feels like you\.<\/p>/);
   assert.match(html, /Name or nickname/);
   assert.match(html, /placeholder="Enter your name or nickname"/);

@@ -17,14 +17,16 @@ html { font-size: 100%; -webkit-text-size-adjust: auto; text-size-adjust: auto; 
   --border: #dededb;
   --muted: #656464;
   --header-height: calc(56 * var(--font-unit));
+  --stable-app-height: 100vh;
 }
+@supports (height: 100svh) { :root { --stable-app-height: 100svh; } }
 @supports (font: -apple-system-body) {
   html { font: -apple-system-body; }
   :root { --font-unit: calc(1rem / 17); }
 }
 * { box-sizing: border-box; }
 body { margin: 0; min-width: 320px; font-size: calc(16 * var(--font-unit)); }
-#root { width: 100%; max-width: 430px; margin: 0 auto; font-size: calc(16 * var(--font-unit)); container: phone / inline-size; }
+#root { width: 100%; max-width: 430px; min-height: var(--stable-app-height); margin: 0 auto; font-size: calc(16 * var(--font-unit)); }
 button, input, textarea { font: inherit; }
 button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 button, a, input, textarea { touch-action: manipulation; }
@@ -58,7 +60,8 @@ legend, .field-label { display: block; font-size: calc(14 * var(--font-unit)); f
 legend { margin-bottom: 8px; }
 .field-label { margin-bottom: 8px; }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-.app-shell { width: 100%; max-width: 430px; margin: 0 auto; min-height: 100svh; min-height: var(--app-height,100dvh); display: flex; flex-direction: column; background: var(--page); position: relative; }
+.app-shell { width: 100%; max-width: 430px; height: var(--usable-app-height,var(--stable-app-height)); margin: 0 auto; display: flex; flex-direction: column; background: var(--page); position: relative; overflow-y: auto; container: phone / inline-size; }
+.app-shell[data-viewport-constrained='true'] { position: fixed; top: var(--usable-app-top,0px); left: 50%; transform: translateX(-50%); }
 .phone-header { flex: 0 0 auto; min-height: var(--header-height); padding: max(4px, env(safe-area-inset-top)) 18px 4px; display: grid; grid-template-columns: 76px minmax(0,1fr) 44px; align-items: center; gap: 4px; }
 .header-title { font-size: calc(14 * var(--font-unit)); text-align: center; font-weight: 600; line-height: 1.2; }
 .header-right { display: flex; justify-content: end; }
@@ -66,15 +69,20 @@ legend { margin-bottom: 8px; }
 .back-button > span { font-size: calc(31 * var(--font-unit)); line-height: 1; transform: translateY(-1px); }
 .help-button { width: max(44px,calc(44 * var(--font-unit))); height: max(44px,calc(44 * var(--font-unit))); border: 0; background: transparent; display: grid; place-items: center; }
 .help-button > span { width: calc(23 * var(--font-unit)); height: calc(23 * var(--font-unit)); border: 2px solid currentColor; border-radius: 50%; font-size: calc(18 * var(--font-unit)); font-weight: 600; line-height: 1.1; text-align: center; }
-.phone-main { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 0 18px max(24px, env(safe-area-inset-bottom)); }
-.page-screen { flex: 1; min-height: 0; min-width: 0; display: flex; flex-direction: column; }
-.page-content { flex: 0 0 var(--page-content-height,636px); height: var(--page-content-height,636px); min-height: 0; max-height: 636px; overflow-y: auto; overflow-x: hidden; scroll-padding-block: 8px; padding: 0 8px 8px; margin-inline: -8px; animation: enter 160ms ease-out; }
+.phone-main { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 0 18px; }
+.page-screen { --page-action-height: 54px; flex: 1; min-height: 0; min-width: 0; display: grid; grid-template-rows: minmax(48px,1fr); }
+.page-screen.has-page-actions { grid-template-rows: minmax(48px,1fr) auto; }
+.page-content { position: relative; min-height: 0; max-height: 636px; overflow-y: auto; overflow-x: hidden; scroll-padding-block: 8px; padding: 0 8px 8px; margin-inline: -8px; animation: enter 160ms ease-out; }
 .page-content:focus-visible { outline-offset: -3px; }
 .page-content > h1 { margin-bottom: 22px; }
 .page-content > p + p { margin-top: 14px; }
-.page-actions { flex: 0 0 auto; display: flex; flex-direction: column; gap: 8px; margin-top: var(--page-actions-gap,22px); padding-top: 0; }
-.page-actions > button { width: 100%; flex: 0 0 auto; margin: 0; }
-.page-actions > .page-dots { margin: 0 auto; flex-shrink: 0; }
+.page-actions { display: grid; grid-template-rows: minmax(24px,auto) minmax(var(--page-action-height),auto) minmax(var(--page-action-height),auto); gap: 8px; padding: 12px 0 max(16px,env(safe-area-inset-bottom)); }
+.page-pagination-slot { display: grid; align-items: end; justify-content: center; }
+.page-primary-action, .page-secondary-actions { display: grid; grid-template-columns: minmax(0,1fr); gap: 8px; }
+.page-primary-action > button, .page-secondary-actions > button { width: 100%; min-height: var(--page-action-height); margin: 0; }
+.page-pagination-slot > .page-dots { margin: 0; }
+.handoff-screen .page-primary-action > button { gap: .25em; white-space: nowrap; }
+.handoff-action-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .primary-button, .outline-button { display: flex; width: 100%; align-items: center; justify-content: center; min-height: 54px; border: 1px solid transparent; padding: 14px 18px; font-weight: 600; font-size: calc(16 * var(--font-unit)); line-height: 1.35; text-align: center; border-radius: 8px; transition: background-color 140ms ease, border-color 140ms ease; overflow-wrap: anywhere; }
 .primary-button { color: white; background: var(--primary); }
 .primary-button:active { background: var(--primary-dark); }
@@ -92,7 +100,7 @@ legend { margin-bottom: 8px; }
 .skip-link:focus { top: 12px; }
 
 /* The phone's browser supplies its status bar and home indicator. */
-.is-onboarding .phone-main { padding: max(24px, env(safe-area-inset-top)) 18px max(12px, env(safe-area-inset-bottom)); }
+.is-onboarding .phone-main { padding: max(24px, env(safe-area-inset-top)) 18px 0; }
 .onboarding-hero { width: 100%; height: min(43svh, 350px); flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
 .onboarding-image { width: 100%; height: 100%; min-height: 0; object-fit: contain; }
 .onboarding-copy { padding-top: 24px; }
@@ -304,6 +312,7 @@ legend { margin-bottom: 8px; }
 }
 /* Reflow based on available room relative to the user's text size. */
 @container phone (width < 20em) {
+  .page-screen { --page-action-height: max(54px,calc(43.2 * var(--font-unit) + 30px)); }
   .phone-header { grid-template-columns: minmax(0,1fr) auto; }
   .phone-header > div:first-child { grid-column: 1; grid-row: 1; }
   .header-right { grid-column: 2; grid-row: 1; }

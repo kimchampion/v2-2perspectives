@@ -65,9 +65,9 @@ The focus outline is distinct from the selected state and scrolls into view. Dia
 
 ## Page layout
 
-Non-modal pages share a keyboard-focusable content region with a maximum height of 636 CSS pixels. The primary action’s top edge is always 714 CSS pixels from the top of the app frame, and secondary buttons follow with an 8px gap. Shorter screens scroll the whole page to reach those actions; longer content also scrolls inside its capped region. Navigation height, enlarged text and onboarding dots are accounted for without changing the 714px coordinate. Onboarding, setup, session information, perspectives, response entry, comparison, reflection and ending use the same layout. Modal layout and scrolling are unchanged.
+Non-modal pages use a stable small-viewport frame (`100svh`, with `100vh` fallback), sized for expanded browser controls. The primary action aligns across screens for the same available viewport and text preference. Reserved pagination and secondary-action slots prevent jumps when onboarding dots or a second action appear. Secondary actions follow with an 8px gap; bottom padding respects the device safe area. The content region fills the remaining space, scrolls independently, and is capped at 636 CSS pixels. This replaces the former fixed 714px action position. Onboarding, setup, session information, perspectives, response entry, comparison, reflection and ending share this layout; modal layout is separate.
 
-Native form submission still works with fixed actions: each external submit button belongs to its original form. Validation scrolls the relevant acknowledgement or scenario error into view. Browser controls and keyboards may reduce the visible viewport; the document remains scrollable so the actions can be reached without changing their frame coordinate. Pinch zoom remains enabled. Physical-device keyboard behavior still needs verification.
+Native form submission still works: each external submit button belongs to its original form, and validation brings the relevant field into view. While a page field is being edited, VisualViewport can constrain and reposition the frame above the keyboard. It keeps that constraint through blur until the keyboard closes, preserving footer taps, then restores the normal frame. Toolbar collapse does not resize the normal layout and pinch zoom remains enabled. Very short frames or enlarged text can scroll the outer frame when its navigation and actions cannot all fit; navigation resets that scroll. Long handoff nicknames shorten visually within the button while remaining complete in its accessible name and the page heading. Physical-device Safari keyboard behavior still needs verification.
 
 ## Larger text
 
@@ -102,6 +102,7 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/SelectionGrid.jsx` | Shared grid roles, roving focus, activation, and visibility |
 | `src/grid-navigation.js` | Row/column and Home/End focus movement |
 | `src/navigation.js` | Safe return from a private handoff |
+| `src/phone-viewport.js` | Stable frame keyboard sizing, panning, dismissal, and zoom guards |
 | `src/public-assets.js` | Public artwork URLs under the configured deployment path |
 | `src/data.js` | Seed scenarios, including Shared Rides, and fallback palette |
 | `src/scenario-copy.js` | Plain-text participant-name substitution for scenario copy |

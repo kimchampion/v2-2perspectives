@@ -19,7 +19,7 @@ function Palette({ value, onChange }) {
 }
 
 function Handoff({ name, onReady, joint }) {
-  return <Page className="handoff-screen" label="Private handoff" actions={<Action onClick={onReady}>I’m {name || 'ready'} · ready</Action>}>
+  return <Page className="handoff-screen" label="Private handoff" actions={<Action onClick={onReady}>I’m <span className="handoff-action-name">{name || 'ready'}</span> · ready</Action>}>
     <span className="participant-caption">Private handoff</span>
     <Artwork name="welcome.png" className="handoff-art" alt="" />
     <h1>A moment for {name || 'your partner'}</h1>
@@ -57,7 +57,7 @@ function ResponseForm({ state, active, onChange, onSubmit, error, busy }) {
     onSubmit(text);
   }
   return <Page className={`response-screen ${response.mode === 'draw' ? 'is-drawing' : ''}`} label="Your response" actions={response.mode === 'draw' ? <Action onClick={(event) => { event.preventDefault(); onChange({ mode: 'write' }); }}>Next</Action> : <Action type="submit" form={formId}>Submit response</Action>}>
-    <h1>Thought on Perspective</h1>
+    <h1>What are your thoughts?</h1>
     <AvatarIntro participant={state.participants[active]}>
       <p className="response-prompt">{name}, {response.mode === 'draw' ? 'draw a picture that represents how you feel about what happened.' : 'describe what your drawing represents for you, or share how you feel in words.'}</p>
     </AvatarIntro>

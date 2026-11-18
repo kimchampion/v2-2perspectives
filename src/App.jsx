@@ -10,6 +10,7 @@ import { createSession, SESSION_START_TIMEOUT } from './lib/sessionClient.js';
 import useJointSession from './useJointSession.js';
 import Reflection, { ReflectionPrompt } from './screens/Reflection.jsx';
 import Ending from './screens/Ending.jsx';
+import { watchPhoneViewport } from './phone-viewport.js';
 
 export default function App() {
   const [state, dispatch] = useReducer(sessionReducer, undefined, () => createSessionState());
@@ -41,21 +42,12 @@ export default function App() {
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
+    shellRef.current?.scrollTo({ top: 0, behavior: 'instant' });
     mainRef.current?.focus({ preventScroll: true });
   }, [screen, active, setupIndex, onboardingIndex]);
 
   useEffect(() => () => sessionRequest.current?.abort(), []);
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!viewport) return;
-    const resize = () => {
-      if (viewport.scale === 1 && viewport.height < window.innerHeight - 1) shellRef.current?.style.setProperty('--app-height', `${viewport.height}px`);
-      else shellRef.current?.style.removeProperty('--app-height');
-    };
-    resize();
-    viewport.addEventListener('resize', resize);
-    return () => viewport.removeEventListener('resize', resize);
-  }, []);
+  useEffect(() => watchPhoneViewport(shellRef.current), []);
   useEffect(() => {
     setServerWaiting(false);
     if (!creatingSession) return;

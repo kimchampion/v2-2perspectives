@@ -1,4 +1,4 @@
-# Local verification — updated November 17, 2026
+# Local verification — updated November 18, 2026
 
 This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below used local development previews; the latest joint-session check used a stable production build and real loopback Node server.
 
@@ -8,14 +8,38 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 130 passed, 0 failed, 0 skipped |
+| `npm test` | 142 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-Subsequent scenario-introduction and response-control/copy edits passed the production build and phone-layout checks. Permission to rerun npm test for the introduction edit was declined; the 130-test result above predates these changes. The latest response update passed all 23 focused privacy/response and persona/setup UI tests without loopback ports.
+The November 18 full run includes the pending copy changes and the new page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
-The tests include 28 local session/domain checks, 16 session-request/acknowledgement checks, 10 joint-server/catalog checks, 7 joint-client snapshot/reducer checks, 9 ColorMind checks, 11 private-screen rendering checks, 3 handoff navigation checks, 11 avatar checks, 12 setup rendering checks, 7 Shared Rides checks, 8 grid-navigation checks, 4 grid-rendering checks, and 4 deployment checks. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
+The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
-Before the requested GitHub push, reran the production build successfully and all 120 tests outside the joint-server file passed. Permission to repeat the loopback integration run was declined, so the ten joint-server/catalog checks were not rerun at this stage; their prior full-suite pass above remains the latest result. No application source changed after that full-suite verification. The user also reported testing in two different browsers. Hosted deployment is separate from the Git push.
+Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Safari-safe viewport and shared footer — November 18, 2026
+
+Replaced the user’s former exact 714px action coordinate with their newly approved stable 100svh frame (100vh fallback). Page content fills the remaining room and scrolls with a 636px cap. Reserved pagination, primary, and secondary slots keep actions aligned across pages, with an 8px secondary gap and bottom safe-area padding. Enlarged text receives larger action slots. If navigation, a minimal content region, and the actions cannot fit, the outer frame scrolls; navigation resets it. External buttons retain native form ownership. Modal layout is unchanged.
+
+An isolated viewport controller constrains the frame while editing a page field, follows keyboard panning, retains the constraint until the keyboard actually closes so footer taps stay in place, and ignores pinch zoom. It measures the stable parent without temporarily expanding the live frame. Modal fields keep their existing behavior. Long handoff nicknames ellipsize within the button while remaining complete in its accessible name and heading. Positioned the content region to contain its visually hidden grid instructions, preventing artificial outer overflow.
+
+Recorded 175 portrait layout measurements at actual CSS widths 320/375/390/430px, approximately 568/812/844/932px high, plus 320×450. Checks include normal and simulated 200%/300% root text. No horizontal document overflow or content region above 636px was recorded. Primary actions aligned for matching viewport/text settings when the frame could accommodate its navigation and actions; very short/enlarged cases used the documented outer-scroll fallback. Rechecked the large-text scenario/reflection screens after containing hidden instructions: outer overflow remained only when genuinely needed. A 30-character wide nickname previously made the handoff button 94px tall at 320px; it now stays 54px and aligns with Next.
+
+Completed both participants’ drawing/writing, submission, comparison, reflection, end, and restart flow. Pointer drawing survived submission and appeared in comparison. During the first-submit handoff no response text, canvas, or textarea was mounted. Validation focused and scrolled to the acknowledgment; scenario Continue remained disabled before selection. Grid Control+End and Space reached/opened the final reflection choice, and enlarged dialogs scrolled. The shell reset to the top after short-screen navigation. The final local preview had no warning/error console entries.
+
+Six additional browser checks used the real Page/Header/CSS/controller with explicitly synthetic VisualViewport events: normal height, 360px keyboard frame, 80px pan, successful footer submission while panned, ignored simulated pinch zoom, and restored height. These are geometry/integration simulations, not native Safari toolbar, pinch gesture, touch drawing, or on-screen keyboard verification. Physical iPhone testing remains necessary. No session URLs or protocol were changed.
+
+All 142 tests and npm run build passed with Node v24.22.1. Eleven new tests cover action composition/form ownership, empty slots, keyboard bounds/panning/dismissal, zoom guards, modal exclusion, event coalescing, and cleanup. Independent review findings were addressed and rechecked. Evidence is in ignored test-results/safari-safe-layout-checks.json, safari-safe-response.png, safari-safe-200-percent.png, and safari-safe-keyboard-simulation.png. The local preview was refreshed; no push or deployment was performed.
+
+## Perspective response heading — November 17, 2026
+
+Restored “Your Perspective” as the navigation title and changed the response page heading from “Thought on Perspective” to “What are your thoughts?” in both Draw and This represents... modes. The production build and all 28 focused deployment/privacy/setup tests passed. Checked both response modes at 320/375/390/430 CSS pixels: the navigation and heading matched the requested text, neither overflowed, the document stayed within the viewport width, and primary actions remained at 714px. Opened a fresh local preview displaying the corrected titles. Evidence is in ignored test-results/thoughts-page-heading.png and thoughts-page-heading-checks.json. Changes remain local; the full loopback suite was not rerun.
+
+## Avatar setup heading — November 17, 2026
+
+Changed the setup heading and its accessible content-region name from “Build your persona” to “Create your avatar”. Updated the existing heading assertion, observed its failure before implementation, then passed all 28 focused deployment/privacy/setup tests and the production build. Checked 320/375/390/430 CSS pixels: the heading and region name matched, with no horizontal document overflow. Evidence is in ignored test-results/create-your-avatar-heading.png and create-your-avatar-heading-checks.json. This heading change is local; the full loopback suite was not rerun.
+
+Follow-up: the already-open persona-copy preview retained the older compiled app and still displayed Build your persona. Confirmed that state without reloading its form, then opened a fresh local preview at ?preview=create-your-avatar and verified Create your avatar in the visible heading and accessibility tree. Evidence is in ignored test-results/create-your-avatar-fresh-preview.png. No publication was needed for this local-preview correction.
 
 ## Persona helper copy — November 17, 2026
 
