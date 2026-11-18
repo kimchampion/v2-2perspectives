@@ -8,7 +8,7 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 142 passed, 0 failed, 0 skipped |
+| `npm test` | 143 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
 The November 18 full run includes the pending copy changes and the new page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
@@ -17,7 +17,19 @@ The suite covers session validation/privacy, transient joint-server integration,
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
 
-## Safari-safe viewport and shared footer — November 18, 2026
+## Larger scrolling region and lower actions — November 18, 2026
+
+The user’s annotated iPhone screenshot clarified that the primary should move down, most primary actions should align, and secondary actions may require scrolling provided their top remains discoverable. Removed empty pagination/secondary groups and the forced large-text button-row heights. Single-action pages now share the lower baseline. Actual secondary actions sit 8px below the primary in a compact 24px layout region; overflowing button content and a trailing safe-area spacer are reachable through the app frame’s outer scroll. Modals, the 636px content cap, keyboard/zoom controller, and external form ownership are unchanged.
+
+At an actual 390×664 CSS-pixel viewport, the ordinary scrolling region increased from 431.8px to 525.8px (94px), with the primary top moving from 531.8px to 593.8px. Session choices, persona setup, scenarios, handoff, perspective, drawing, writing, and comparison use that same baseline at normal text. Reflection/ending place the primary 32px higher to expose approximately 40px of the secondary action. At simulated 200% text, the persona region at this width increased from 221.4px to 421.8px. Wrapped labels remain allowed to grow.
+
+All 143 tests and the production build passed with Node v24.22.1. Two updated layout assertions failed before implementation and then passed; the tests preserve native form ownership, reading order, and keyboard focus targets while checking that unused rows are absent. Independent source review found no actionable issues.
+
+Recorded 72 browser layout cases at 320×568, 375×667, 390×664, and 430×740 CSS pixels, covering normal, simulated 200%, and simulated 300% text. No horizontal document overflow or content-height cap violations were recorded. Completed both participants’ response/submission/comparison/reflection flow, with private text/canvas/textarea absent during handoff. Secondary actions remained initially discoverable at all measured widths/scales. Tab brought Choose a new Scenario and Close app fully into view with bottom clearance; end cleared participant data. Screens with enlarged or wrapped labels remained usable through scrolling. Six additional synthetic viewport-fixture checks confirmed bounded keyboard sizing/panning, a working external submission button, zoom guards, and restoration with the new footer CSS. These are not native keyboard or pinch-gesture checks. Physical iPhone Safari toolbar/keyboard behavior remains a device-testing limitation.
+
+Evidence is in ignored test-results/more-content-layout-checks.json, content-space-before-checks.json, more-content-keyboard-simulation.json, more-content-handoff.png, and more-content-secondary-preview.png. The final local preview had no warning/error console entries. This follow-up is local; the earlier GitHub push does not include it.
+
+## Safari-safe viewport and shared footer — November 18, 2026 (superseded footer spacing)
 
 Replaced the user’s former exact 714px action coordinate with their newly approved stable 100svh frame (100vh fallback). Page content fills the remaining room and scrolls with a 636px cap. Reserved pagination, primary, and secondary slots keep actions aligned across pages, with an 8px secondary gap and bottom safe-area padding. Enlarged text receives larger action slots. If navigation, a minimal content region, and the actions cannot fit, the outer frame scrolls; navigation resets it. External buttons retain native form ownership. Modal layout is unchanged.
 

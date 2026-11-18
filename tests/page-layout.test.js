@@ -28,12 +28,21 @@ test('pagination precedes the primary slot and secondary actions follow without 
   assert.ok(html.indexOf('>Continue<') < html.indexOf('>Back<'));
 });
 
-test('one action reserves empty secondary and pagination slots without extra focus targets', () => {
+test('a lone primary action does not reserve empty pagination or secondary rows', () => {
   const html = render({ actions: el(Action, null, 'Next') });
-  assert.match(html, /page-pagination-slot" aria-hidden="true"><\/div>/);
-  assert.match(html, /page-secondary-actions" aria-hidden="true"><\/div>/);
+  assert.doesNotMatch(html, /page-pagination-slot|page-secondary-actions/);
   assert.equal((html.match(/<button\b/g) || []).length, 1);
   assert.equal((html.match(/tabindex=/g) || []).length, 1);
+});
+
+test('real secondary actions remain in reading and Tab order without adding unused pagination', () => {
+  const html = render({ actions: el(React.Fragment, null,
+    el(Action, null, 'End session'), el('button', { type: 'button' }, 'Choose a new scenario'),
+  ) });
+  assert.doesNotMatch(html, /page-pagination-slot|aria-hidden="true"/);
+  assert.match(html, /page-secondary-actions[^>]*><button type="button">Choose a new scenario/);
+  assert.ok(html.indexOf('>End session<') < html.indexOf('>Choose a new scenario<'));
+  assert.equal((html.match(/<button\b/g) || []).length, 2);
 });
 
 test('status pages without actions have no empty footer group', () => {

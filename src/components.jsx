@@ -13,9 +13,9 @@ export function Page({ children, actions, pagination, className = '', label = 'P
   return <section className={`page-screen ${primary ? 'has-page-actions' : ''} ${className}`} {...props}>
     <div className="page-content" role="region" aria-label={label} tabIndex={0}>{notice}{children}</div>
     {primary && <div className="screen-actions page-actions" role="group" aria-label="Page actions">
-      <div className="page-pagination-slot" aria-hidden={pagination ? undefined : true}>{pagination}</div>
+      {pagination && <div className="page-pagination-slot">{pagination}</div>}
       <div className="page-primary-action">{primary}</div>
-      <div className="page-secondary-actions" aria-hidden={secondary.length ? undefined : true}>{secondary}</div>
+      {secondary.length > 0 && <div className="page-secondary-actions">{secondary}</div>}
     </div>}
   </section>;
 }
