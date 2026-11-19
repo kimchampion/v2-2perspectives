@@ -64,7 +64,12 @@ test('scenario introduction shows the first participant’s configured avatar be
 test('session choices present three explicit routes without generating or displaying a code', () => {
   assert.equal(typeof SessionChoices, 'function');
   const html = renderToStaticMarkup(React.createElement(SessionChoices));
-  for (const label of ['Create Session', 'Join Session', 'Share one device']) assert.ok(html.includes(`>${label}</button>`));
+  for (const label of ['Create Session', 'Join Session', 'Shared Device']) assert.ok(html.includes(`>${label}</button>`));
+  assert.match(html, /Start the game as the first participant\./);
+  assert.match(html, /Only one Device\?/);
+  assert.match(html, /You and your partner want to take turns on a single device\? No session code required/);
+  assert.equal((html.match(/class="session-choice-row"/g) || []).length, 3);
+  assert.doesNotMatch(html, /aria-label="Page actions"|outline-button/);
   assert.doesNotMatch(html, /session-code|Enter joint session|Local demo code|disabled/);
 });
 
@@ -73,7 +78,7 @@ test('pending creation disables duplicate creation while keeping join and local 
   const html = renderToStaticMarkup(React.createElement(SessionChoices, { pending: true, waiting: true }));
   assert.match(html.match(/<button\b[^>]*>Creating session…<\/button>/)?.[0] || '', /disabled=""/);
   assert.match(html, /aria-busy="true"/);
-  for (const label of ['Join Session', 'Share one device']) {
+  for (const label of ['Join Session', 'Shared Device']) {
     const button = html.match(new RegExp(`<button\\b[^>]*>${label}</button>`))?.[0];
     assert.ok(button, `${label} remains available`);
     assert.doesNotMatch(button, /disabled/);
@@ -89,7 +94,7 @@ test('a failed creation keeps the three choices available and announces the erro
   assert.match(html, /The session server is unavailable\./);
   assert.doesNotMatch(html, /disabled/);
   assert.match(html, />Create Session<\/button>/);
-  assert.match(html, />Share one device<\/button>/);
+  assert.match(html, />Shared Device<\/button>/);
 });
 
 test('the creator can share the real code before persona setup without another joint-entry step', () => {

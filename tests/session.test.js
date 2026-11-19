@@ -15,8 +15,8 @@ test('a new local session starts with two independent empty participants and dra
     ],
     scenarioId: null,
     responses: [
-      { mode: 'draw', text: '', drawing: '', color: '#68547F', submitted: false },
-      { mode: 'draw', text: '', drawing: '', color: '#68547F', submitted: false },
+      { mode: 'write', text: '', drawing: '', color: '#68547F', submitted: false },
+      { mode: 'write', text: '', drawing: '', color: '#68547F', submitted: false },
     ],
     reflection: { path: null, text: '' },
     status: 'setup',

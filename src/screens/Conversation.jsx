@@ -53,23 +53,23 @@ function ResponseForm({ state, active, onChange, onSubmit, error, busy }) {
   function submit(event) {
     event.preventDefault();
     const values = new FormData(event.currentTarget);
-    const text = String(values.get('response') || '');
+    const text = String(values.get('response') ?? response.text);
     onSubmit(text);
   }
-  return <Page className={`response-screen ${response.mode === 'draw' ? 'is-drawing' : ''}`} label="Your response" actions={response.mode === 'draw' ? <Action onClick={(event) => { event.preventDefault(); onChange({ mode: 'write' }); }}>Next</Action> : <Action type="submit" form={formId}>Submit response</Action>}>
+  return <Page className={`response-screen ${response.mode === 'draw' ? 'is-drawing' : ''}`} label="Your response" actions={<Action type="submit" form={formId}>Next</Action>}>
     <h1>What are your thoughts?</h1>
     <AvatarIntro participant={state.participants[active]}>
-      <p className="response-prompt">{name}, {response.mode === 'draw' ? 'draw a picture that represents how you feel about what happened.' : 'describe what your drawing represents for you, or share how you feel in words.'}</p>
+      <p className="response-prompt">{name}, think about the scenario and your perspective. Write down what you noticed and want to share. Add a drawing if helpful.</p>
     </AvatarIntro>
-    <div className="response-modes" role="group" aria-label="How to respond"><button type="button" aria-pressed={response.mode === 'draw'} className={response.mode === 'draw' ? 'is-selected' : ''} onClick={() => onChange({ mode: 'draw' })}>Draw</button><button type="button" aria-pressed={response.mode === 'write'} className={response.mode === 'write' ? 'is-selected' : ''} onClick={() => onChange({ mode: 'write' })}>This represents...</button></div>
+    <div className="response-modes" role="group" aria-label="How to respond"><button type="button" aria-pressed={response.mode === 'write'} className={response.mode === 'write' ? 'is-selected' : ''} onClick={() => onChange({ mode: 'write' })}>My thoughts</button><button type="button" aria-pressed={response.mode === 'draw'} className={response.mode === 'draw' ? 'is-selected' : ''} onClick={() => onChange({ mode: 'draw' })}>Draw</button></div>
     <form id={formId} onSubmit={submit} noValidate>
       {response.mode === 'draw' && <>
         <Palette value={response.color} onChange={(color) => onChange({ color })} />
         <SketchPad value={response.drawing} color={response.color} onChange={(drawing) => onChange({ drawing })} />
       </>}
       {response.mode === 'write' && <>
-        <label className="field-label response-label" htmlFor="response-text">What does this drawing represent for you?</label>
-        <textarea ref={textRef} id="response-text" name="response" value={response.text} onChange={(event) => onChange({ text: event.target.value })} maxLength={1200} rows={5} placeholder="Think about it and write down what the drawing represents to you, or share how you feel in words." aria-invalid={Boolean(error)} aria-describedby={error ? 'response-error' : undefined} />
+        <label className="field-label response-label" htmlFor="response-text">What does this scenario and perspective represent for you?</label>
+        <textarea ref={textRef} id="response-text" name="response" value={response.text} onChange={(event) => onChange({ text: event.target.value })} maxLength={1200} rows={5} placeholder="Write your thoughts here..." aria-invalid={Boolean(error)} aria-describedby={error ? 'response-error' : undefined} />
       </>}
       {response.mode === 'write' && <div className="response-hints"><span className="character-count" aria-label={`${response.text.length} of 1200 characters`}>{response.text.length}/1200</span></div>}
       <ErrorMessage id="response-error">{error}</ErrorMessage>

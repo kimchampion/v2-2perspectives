@@ -136,8 +136,8 @@ export default function App() {
     } catch (error) {
       if (request.signal.aborted || sessionRequest.current !== request) return;
       setSessionError(error?.name === 'TimeoutError'
-        ? 'The session server didn’t respond. Try creating a session again, or choose Share one device.'
-        : 'We couldn’t create a shared session. Try again, or choose Share one device.');
+        ? 'The session server didn’t respond. Try creating a session again, or choose Shared Device.'
+        : 'We couldn’t create a shared session. Try again, or choose Shared Device.');
     } finally {
       if (sessionRequest.current === request) {
         sessionRequest.current = null;

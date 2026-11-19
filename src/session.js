@@ -16,7 +16,7 @@ export function createSessionState(code = '', codeSource = 'local') {
     })),
     scenarioId: null,
     responses: Array.from({ length: 2 }, () => ({
-      mode: 'draw', text: '', drawing: '', color: '#68547F', submitted: false,
+      mode: 'write', text: '', drawing: '', color: '#68547F', submitted: false,
     })),
     reflection: { path: null, text: '' },
     status: 'setup',

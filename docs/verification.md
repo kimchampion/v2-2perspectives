@@ -1,4 +1,4 @@
-# Local verification — updated November 18, 2026
+# Local verification — updated November 19, 2026
 
 This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below used local development previews; the latest joint-session check used a stable production build and real loopback Node server.
 
@@ -8,14 +8,36 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 143 passed, 0 failed, 0 skipped |
+| `npm test` | 144 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 18 full run includes the pending copy changes and the new page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 19 full run includes the revised Start Session choices, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Thoughts-first response tabs and copy — November 19, 2026
+
+Put My thoughts before Draw and replaced the mode-specific instruction with the shared prompt from the screenshot. Updated the field label, writing placeholder, drawing hint, and canvas accessible guidance. The navigation title remains Your Perspective, with What are your thoughts? as the page title. The prompt uses regular-weight copy in both modes.
+
+The user explicitly approved opening on My thoughts and making Next submit from either tab. Fresh drafts now default to write, including reset/new-round drafts. Both modes use the same native external submit button. The Draw form has no textarea, so submission falls back to the thoughts already saved in React state; an explicitly empty writing field remains empty. Tab switches retain both draft parts and do not submit. Existing reveal and submission-lock guards are unchanged.
+
+Observed the changed initialization/render assertions fail before implementation, then passed all 144 tests and npm run build with Node v24.22.1. Added reducer coverage for submitting a draft in Draw mode while retaining its text. An independent source review found no actionable issues.
+
+Checked both modes at actual CSS widths 320/375/390/430px with normal and simulated 200% text: 16 browser cases. Tab order, selected states, common copy, native submit ownership, and wrapping matched the design; no horizontal document overflow occurred. Next stayed at the same vertical coordinate between tabs at each width/text size. In the actual UI, typed thoughts, drew a pointer stroke, switched back to confirm the saved text, and submitted from Draw. The first handoff mounted no private text, canvas, or textarea. After the other participant submitted empty My thoughts, comparison retained the original text and a loaded drawing image. Separately confirmed writing-only Next reaches the private handoff. Both participants started on My thoughts. No warning/error console entries were recorded. Native phone touch/Safari keyboard behavior and live two-device UI were not rerun for this change.
+
+Evidence is in ignored test-results/my-thoughts-first.jpg, my-thoughts-draw.jpg, my-thoughts-reveal.jpg, and my-thoughts-layout-checks.json. The updated local preview is on port 5173. Changes remain local alongside the Start Session update; no push or deployment.
+
+## Matching Start Session choices — November 19, 2026
+
+Moved Shared Device from the outlined footer into a third matching description/action row, using the existing purple button and responsive row styles. Added the supplied Only one Device? heading and description, changed first user to first participant, and updated waiting/error guidance to the new button label. All three options retain their existing immediate handlers; this page no longer has footer actions.
+
+Updated the existing setup rendering checks, observed three failures before implementation, then passed all 143 tests and npm run build with Node v24.22.1. Rendering checks cover the matching rows, new copy, absent footer, pending-create bypasses, and failure state. No dependency or session-protocol changes were needed.
+
+Checked eight real-browser layout cases at actual CSS widths 320/375/390/430px, with normal and simulated 200% text. All three choices stayed inside the phone width; normal text uses the matching two-column rows, and enlarged text stacks descriptions/actions. Scrolling and keyboard focus brought Shared Device fully into view at 320px. Tab followed Create Session → Join Session → Shared Device; Join opened its code modal, and Enter on Shared Device reached Person 1 setup. The normal preview had no warning/error console entries. Live session creation was not repeated for this layout-only update, and native Safari remains a physical-device check.
+
+Evidence is in ignored test-results/start-session-three-rows.jpg and start-session-three-rows-checks.json. The local Vite preview is running on port 5173. Changes remain local; no push or deployment.
 
 ## Larger scrolling region and lower actions — November 18, 2026
 

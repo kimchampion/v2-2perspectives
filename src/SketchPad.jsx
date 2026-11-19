@@ -186,11 +186,11 @@ export default function SketchPad({
           onPointerUp={finish}
           onPointerCancel={finish}
           onLostPointerCapture={finish}
-          aria-label="Draw an image or symbol using your finger, stylus, or mouse. Or choose This represents... to respond in words."
+          aria-label="Draw an image or symbol using your finger, stylus, or mouse. Or choose My thoughts to respond in words."
         />
         {!hasDrawing && (
           <span className="drawing-placeholder" aria-hidden="true">
-            Show us how your feeling right now, use your finger or stylus to start drawing
+            Show us how your feelings right now, use your finger or stylus to start drawing
           </span>
         )}
       </div>

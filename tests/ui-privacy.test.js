@@ -59,13 +59,16 @@ test('each perspective shows only the active participant’s avatar and no priva
   }
 });
 
-test('drawing and explanation use separate views without losing the private draft', () => {
+test('thoughts come before optional drawing and both tabs use the shared prompt and submit action', () => {
   const state = privateSession();
   state.responses[1].mode = 'draw';
   const drawing = render('response', state);
-  assert.match(drawing, /This represents\.\.\./);
+  assert.ok(drawing.indexOf('>My thoughts</button>') < drawing.indexOf('>Draw</button>'));
+  assert.match(drawing, /Sky, think about the scenario and your perspective\. Write down what you noticed and want to share\. Add a drawing if helpful\./);
+  assert.match(drawing, /<button[^>]*type="submit"[^>]*form="[^"]+">Next<\/button>/);
   const emptyDrawing = render('response', { ...state, responses: [state.responses[0], { ...state.responses[1], drawing: '' }] });
-  assert.match(emptyDrawing, /Show us how your feeling right now, use your finger or stylus to start drawing/);
+  assert.match(emptyDrawing, /Show us how your feelings right now, use your finger or stylus to start drawing/);
+  assert.doesNotMatch(drawing, /This represents|Submit response/);
   assert.doesNotMatch(drawing, /Change expression|response-feeling/);
   assert.doesNotMatch(drawing, /<textarea|PRIVATE_SKY_TEXT|Write instead/);
 
@@ -73,11 +76,25 @@ test('drawing and explanation use separate views without losing the private draf
     type: 'UPDATE_RESPONSE', participant: 1, values: { mode: 'write' },
   });
   const explanation = render('response', explaining);
-  assert.match(explanation, /What does this drawing represent for you\?/);
+  assert.match(explanation, /What does this scenario and perspective represent for you\?/);
+  assert.match(explanation, /placeholder="Write your thoughts here\.\.\."/);
+  assert.match(explanation, /<button[^>]*type="submit"[^>]*form="[^"]+">Next<\/button>/);
   assert.match(explanation, /<textarea/);
   assert.match(explanation, /PRIVATE_SKY_TEXT/);
   assert.equal(explaining.responses[1].drawing, 'PRIVATE_SKY_DRAWING');
   assert.doesNotMatch(explanation, /PRIVATE_RIVER_/);
+  const backToDrawing = sessionReducer(explaining, { type: 'UPDATE_RESPONSE', participant: 1, values: { mode: 'draw' } });
+  assert.equal(backToDrawing.responses[1].text, 'PRIVATE_SKY_TEXT');
+  assert.equal(backToDrawing.responses[1].drawing, 'PRIVATE_SKY_DRAWING');
+});
+
+test('submitting while drawing still reveals the thoughts saved in the other tab', () => {
+  const state = privateSession();
+  state.responses[1].mode = 'draw';
+  const submitted = sessionReducer(state, { type: 'SUBMIT_RESPONSE', participant: 1 });
+  const html = render('compare', submitted, 0);
+  assert.match(html, /PRIVATE_SKY_DRAWING/);
+  assert.match(html, /PRIVATE_SKY_TEXT/);
 });
 
 test('submitting from the explanation view reveals the drawing with its explanation', () => {

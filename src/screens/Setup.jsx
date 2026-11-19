@@ -41,21 +41,23 @@ export function SessionChoices({ pending = false, waiting = false, error = '', o
   const createRef = useRef(null);
   const errorId = useId();
   useEffect(() => { if (error && !pending) createRef.current?.focus(); }, [error, pending]);
-  return <Page className="session-choice-screen" label="Choose how to begin" actions={<>
-    <button type="button" className="outline-button" onClick={onLocal}>Share one device</button>
-  </>}>
+  return <Page className="session-choice-screen" label="Choose how to begin">
     <h1>How would you like to begin?</h1>
     <div className="session-choice-options">
       <div className="session-choice-row">
-        <div><h2>Start the game as the first user.</h2><p>Share a code with your partner</p></div>
+        <div><h2>Start the game as the first participant.</h2><p>Share a code with your partner</p></div>
         <Action ref={createRef} onClick={onCreate} disabled={pending} aria-busy={pending} aria-describedby={error ? errorId : undefined}>{pending ? 'Creating session…' : 'Create Session'}</Action>
       </div>
       <div className="session-choice-row">
         <div><h2>Game already started? Join your partner’s session.</h2><p>Use separate devices and share a code with your partner</p></div>
         <Action onClick={onJoin}>Join Session</Action>
       </div>
+      <div className="session-choice-row">
+        <div><h2>Only one Device?</h2><p>You and your partner want to take turns on a single device? No session code required</p></div>
+        <Action onClick={onLocal}>Shared Device</Action>
+      </div>
     </div>
-    {pending && waiting && <p className="field-hint session-choice-status" role="status">The session server may be waking up. This can take about a minute. You can keep waiting or choose Share one device.</p>}
+    {pending && waiting && <p className="field-hint session-choice-status" role="status">The session server may be waking up. This can take about a minute. You can keep waiting or choose Shared Device.</p>}
     <ErrorMessage id={errorId}>{error}</ErrorMessage>
   </Page>;
 }
