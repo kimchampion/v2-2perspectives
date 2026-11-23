@@ -35,6 +35,18 @@ test('a lone primary action does not reserve empty pagination or secondary rows'
   assert.equal((html.match(/tabindex=/g) || []).length, 1);
 });
 
+test('an empty conditional action cannot hide the following primary and secondary buttons', () => {
+  const error = '';
+  const html = render({ actions: el(React.Fragment, null,
+    error && el(Action, null, 'Try reconnecting'),
+    el(React.Fragment, null, '', el(Action, null, 'Choose a scenario')),
+    el('button', { type: 'button' }, 'End session'),
+  ) });
+  assert.match(html, /page-primary-action[^>]*><button[^>]*>Choose a scenario<\/button>/);
+  assert.match(html, /page-secondary-actions[^>]*><button[^>]*>End session<\/button>/);
+  assert.doesNotMatch(html, /Try reconnecting/);
+});
+
 test('real secondary actions remain in reading and Tab order without adding unused pagination', () => {
   const html = render({ actions: el(React.Fragment, null,
     el(Action, null, 'End session'), el('button', { type: 'button' }, 'Choose a new scenario'),

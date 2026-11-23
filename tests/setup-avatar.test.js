@@ -128,3 +128,29 @@ test('waiting for a partner mounts no response input or private response content
   assert.match(html, /Waiting for Sky/);
   assert.doesNotMatch(html, /<textarea|<canvas|response-artwork/);
 });
+
+test('the connected creator can advance to scenarios when both participants are ready', () => {
+  const html = renderToStaticMarkup(React.createElement(JointStatus, {
+    connection: 'connected', error: '',
+    session: { phase: 'lobby', participantIndex: 0, participants: [{ name: 'River', connected: true }, { name: 'Sky', connected: true }] },
+  }));
+  assert.match(html, /page-primary-action[^>]*><button[^>]*>Choose a scenario<\/button>/);
+  assert.match(html, />End session<\/button>/);
+});
+
+test('waiting and joining participants retain their exit action without choosing scenarios', () => {
+  for (const [participantIndex, partner] of [[0, null], [1, { name: 'Sky', connected: true }]]) {
+    const html = renderToStaticMarkup(React.createElement(JointStatus, {
+      connection: 'connected', error: '',
+      session: { phase: 'lobby', participantIndex, participants: [{ name: 'River', connected: true }, partner] },
+    }));
+    assert.match(html, />End session<\/button>/);
+    assert.doesNotMatch(html, />Choose a scenario<\/button>/);
+  }
+});
+
+test('connection startup retains the return action before any session snapshot arrives', () => {
+  const html = renderToStaticMarkup(React.createElement(JointStatus, { connection: 'connecting', error: '' }));
+  assert.match(html, />Return to start<\/button>/);
+  assert.doesNotMatch(html, />Choose a scenario<\/button>/);
+});

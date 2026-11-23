@@ -1,6 +1,6 @@
-# Local verification — updated November 19, 2026
+# Local verification — updated November 23, 2026
 
-This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below used local development previews; the latest joint-session check used a stable production build and real loopback Node server.
+This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below identify their preview environments; joint-session checks use a real loopback Node server.
 
 ## Automated checks
 
@@ -8,14 +8,22 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 144 passed, 0 failed, 0 skipped |
+| `npm test` | 148 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 19 full run includes the revised Start Session choices, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 23 full run includes the restored joint-lobby actions, revised Start Session choices, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Restored joint-session scenario navigation — November 23, 2026
+
+Reproduced the missing footer after both participants connected. The empty error string produced by a conditional action occupied the first action slot, hiding the whole footer. Page now ignores empty strings while flattening action fragments. The creator's Choose a scenario button, End session, and the connecting-state Return to start action render again. Scenario ownership and the requirement for both participants to be connected remain unchanged.
+
+Four regression cases failed before the fix and passed afterward. The full suite passed all 148 tests and the production build passed. In the local development preview with a real Node server and two browser tabs, both participants joined, the creator opened the scenario picker, Continue stayed disabled until selection, and selecting Shared Rides advanced the partner to the driver perspective. Checked the restored creator action at 320 × 567 CSS pixels and the partner lobby at 430 × 932 without horizontal overflow; the creator lobby was also checked at 390 × 664. Screenshot: `test-results/joint-scenario-button-restored.jpg` (ignored local artifact).
+
+The additional production-preview browser pass was interrupted and is not counted as completed. Native iPhone Safari and a hosted deployment were not tested in this pass.
 
 ## Thoughts-first response tabs and copy — November 19, 2026
 

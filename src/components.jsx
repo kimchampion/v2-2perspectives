@@ -4,7 +4,10 @@ import { publicAsset } from './public-assets.js';
 export const PageNotice = createContext(null);
 
 function pageActions(children) {
-  return Children.toArray(children).flatMap(child => child.type === Fragment ? pageActions(child.props.children) : [child]);
+  return Children.toArray(children).flatMap(child => {
+    if (child === '') return [];
+    return child.type === Fragment ? pageActions(child.props.children) : [child];
+  });
 }
 
 export function Page({ children, actions, pagination, className = '', label = 'Page content', ...props }) {
