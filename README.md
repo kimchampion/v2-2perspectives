@@ -32,6 +32,12 @@ The production preview is at `http://127.0.0.1:4173/`. Development stays at the 
 
 Tests cover production asset paths, keyboard grid navigation and semantics, session validation, independent private drafts, submission locks, joint reveal, handoff rendering, reset/end, resume navigation, and the fixed-query ColorMind request. UI tests render the real grid and conversation components on the server; temporary compiled test output stays in ignored `test-results/`. The production build goes into ignored `dist/`.
 
+## Language
+
+On **One story. Two perspectives.**, use **Language / Idioma** to choose English or neutral Latin American Spanish. The choice translates the interface, all five scenarios and perspectives, avatar labels, drawing controls, errors, help, and reflection prompts. The brand remains Two Perspectives. Nicknames and written responses stay exactly as entered; the app does not translate participant content.
+
+English is the default. Each device chooses its own language in React memory, independently of its partner. Switching languages preserves the acknowledgment and activity state. Ending or restarting an activity keeps the language choice until the page is refreshed. There is no translation service or saved preference. The document language updates for assistive technology. To see translated onboarding, choose Español and use Help → Ver introducción.
+
 ## Render testing
 
 App URL: [twoperspectives.onrender.com](https://twoperspectives.onrender.com/).
@@ -44,7 +50,7 @@ The GitHub Pages workflow installs both root and server test dependencies, runs 
 
 ## Try the flow
 
-1. On a fresh page load, the Figma speech-bubble splash animates for approximately two seconds before onboarding. Reduced-motion preferences show the resting logo without movement. Returning to the introduction or beginning another activity does not replay the splash. Read or skip the four introduction screens: **Share your perspective**, **See both sides**, **Compare and reflect**, then **Plan for next time**. Acknowledge the welcome note and read the ground rules.
+1. On a fresh page load, the splash shows **Two Perspectives** below the speech-bubble logo, which animates for approximately two seconds before onboarding. Reduced-motion preferences show the resting logo without movement. Returning to the introduction or beginning another activity does not replay the splash. Read or skip the four introduction screens: **Share your perspective**, **See both sides**, **Compare and reflect**, then **Plan for next time**. Acknowledge the welcome note and read the ground rules.
 2. Choose how to begin after accepting the ground rules. **Create Session** generates a real code and immediately shows it with Copy code, before persona setup. Share it, then choose Build your persona. **Join Session** accepts a partner’s six-character code and opens your own persona form without creating another session. Completing either shared persona connects directly; there is no later joint-entry step. **Shared Device** opens Person 1, then Person 2 directly, without a code or network connection. Going Back to the same code preserves the partial persona. The creator is always participant 1 and the partner participant 2, even if the partner joins first. Both see connection/submission status, and the creator chooses a scenario once both are online. QR artwork remains hidden.
 
    The avatar preview starts with no hair or facial expression. Hair style, Clothing, Accessories, and Expression open the existing pickers. No expression clears only the face. Accessories and facial hair can be combined. Choose at least one option to continue; expression is optional. Reset avatar keeps the nickname and clears avatar choices.
@@ -105,6 +111,9 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/phone-viewport.js` | Stable frame keyboard sizing, panning, dismissal, and zoom guards |
 | `src/public-assets.js` | Public artwork URLs under the configured deployment path |
 | `src/data.js` | Seed scenarios, including Shared Rides, and fallback palette |
+| `src/Language.jsx` | In-memory language context, document language, Welcome selector, and explicit rich text |
+| `src/i18n.js` | Literal named interpolation and localized error fallback |
+| `src/spanish.js` | Bundled neutral Latin American Spanish interface copy |
 | `src/scenario-copy.js` | Plain-text participant-name substitution for scenario copy |
 | `src/content.js` | Onboarding and reflection content; artwork mapping |
 | `src/screens/` | Phone screen components |

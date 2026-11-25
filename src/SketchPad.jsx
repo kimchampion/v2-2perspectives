@@ -1,3 +1,4 @@
+import { useLanguage } from './Language.jsx';
 import { useEffect, useRef, useState } from "react";
 
 export default function SketchPad({
@@ -7,6 +8,7 @@ export default function SketchPad({
   width = 720,
   height = 600,
 }) {
+  const { t } = useLanguage();
   const canvasRef = useRef(null);
   const mounted = useRef(false);
   const stroke = useRef(null);
@@ -186,19 +188,15 @@ export default function SketchPad({
           onPointerUp={finish}
           onPointerCancel={finish}
           onLostPointerCapture={finish}
-          aria-label="Draw an image or symbol using your finger, stylus, or mouse. Or choose My thoughts to respond in words."
+          aria-label={t("Draw an image or symbol using your finger, stylus, or mouse. Or choose My thoughts to respond in words.")}
         />
         {!hasDrawing && (
-          <span className="drawing-placeholder" aria-hidden="true">
-            Show us how your feelings right now, use your finger or stylus to start drawing
-          </span>
+          <span className="drawing-placeholder" aria-hidden="true">{t("Show us how your feelings right now, use your finger or stylus to start drawing")}</span>
         )}
       </div>
       <div className="sketch-footer">
-        <span>A shape, a squiggle, anything.</span>
-        <button type="button" className="text-button" onClick={clear}>
-          Clear drawing
-        </button>
+        <span>{t("A shape, a squiggle, anything.")}</span>
+        <button type="button" className="text-button" onClick={clear}>{t("Clear drawing")}</button>
       </div>
     </div>
   );

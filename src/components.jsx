@@ -1,3 +1,4 @@
+import { useLanguage } from './Language.jsx';
 import { Children, Fragment, createContext, useContext, useEffect, useId, useRef } from 'react';
 import { publicAsset } from './public-assets.js';
 
@@ -11,11 +12,12 @@ function pageActions(children) {
 }
 
 export function Page({ children, actions, pagination, className = '', label = 'Page content', ...props }) {
+  const { t } = useLanguage();
   const notice = useContext(PageNotice);
   const [primary, ...secondary] = pageActions(actions);
   return <section className={`page-screen ${primary ? 'has-page-actions' : ''} ${className}`} {...props}>
-    <div className="page-content" role="region" aria-label={label} tabIndex={0}>{notice}{children}</div>
-    {primary && <div className="screen-actions page-actions" role="group" aria-label="Page actions">
+    <div className="page-content" role="region" aria-label={t(label)} tabIndex={0}>{notice}{children}</div>
+    {primary && <div className="screen-actions page-actions" role="group" aria-label={t("Page actions")}>
       {pagination && <div className="page-pagination-slot">{pagination}</div>}
       <div className="page-primary-action">{primary}</div>
       {secondary.length > 0 && <div className="page-secondary-actions">{secondary}</div>}
@@ -24,10 +26,11 @@ export function Page({ children, actions, pagination, className = '', label = 'P
 }
 
 export function Header({ title = '', onBack, onHelp }) {
+  const { t } = useLanguage();
   return <header className="phone-header">
-    <div>{onBack && <button type="button" className="back-button" onClick={onBack}><span aria-hidden="true">‹</span> Back</button>}</div>
-    <span className="header-title">{title}</span>
-    <div className="header-right">{onHelp && <button type="button" className="help-button" aria-label="Open help and session options" onClick={onHelp}><span aria-hidden="true">?</span></button>}</div>
+    <div>{onBack && <button type="button" className="back-button" onClick={onBack}><span aria-hidden="true">‹</span>{' '}{t("Back")}</button>}</div>
+    <span className="header-title">{t(title)}</span>
+    <div className="header-right">{onHelp && <button type="button" className="help-button" aria-label={t("Open help and session options")} onClick={onHelp}><span aria-hidden="true">?</span></button>}</div>
   </header>;
 }
 
@@ -36,14 +39,17 @@ export function Action({ children, className = '', ...props }) {
 }
 
 export function ErrorMessage({ children, id }) {
-  return children ? <p id={id} className="error-message" role="alert">{children}</p> : null;
+  const { errorText } = useLanguage();
+  return children ? <p id={id} className="error-message" role="alert">{errorText(children)}</p> : null;
 }
 
 export function Artwork({ name, alt = '', className = '', ...props }) {
-  return <img className={className} src={publicAsset(`assets/${name}`)} alt={alt} decoding="async" {...props} />;
+  const { t } = useLanguage();
+  return <img className={className} src={publicAsset(`assets/${name}`)} alt={t(alt)} decoding="async" {...props} />;
 }
 
 export function Dialog({ title, onClose, children, className = '' }) {
+  const { t } = useLanguage();
   const ref = useRef(null);
   const titleId = useId();
   const closeRef = useRef(onClose);
@@ -79,17 +85,18 @@ export function Dialog({ title, onClose, children, className = '' }) {
       const rect = event.currentTarget.getBoundingClientRect();
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) closeRef.current();
     }}>
-    <div className="dialog-top"><button type="button" className="close-button" onClick={onClose} autoFocus><span aria-hidden="true">×</span> Close</button></div>
-    <h2 id={titleId}>{title}</h2>
+    <div className="dialog-top"><button type="button" className="close-button" onClick={onClose} autoFocus><span aria-hidden="true">×</span>{' '}{t("Close")}</button></div>
+    <h2 id={titleId}>{t(title)}</h2>
     {children}
   </dialog>;
 }
 
 export function GroundRules() {
+  const { t } = useLanguage();
   return <div className="ground-rules">
-    <div><h3>Keep it fictional.</h3><p>Step into the seeded characters’ shoes, rather than using a real disagreement.</p></div>
-    <div><h3>Curiosity over certainty.</h3><p>Keep your words kind. Neither person needs to change their mind.</p></div>
-    <div><h3>Your pace, your choice.</h3><p>Pause, restart, or leave whenever you like. This isn’t counseling or conflict resolution.</p></div>
-    <div><h3>Just here, just now.</h3><p>Drafts stay on your device. A joint session temporarily shares your nickname, avatar, and submitted response with your partner. Ending clears this session. Refreshing cannot restore it. Same-device privacy is a turn-taking convention, not secure storage.</p></div>
+    <div><h3>{t("Keep it fictional.")}</h3><p>{t("Step into the seeded characters’ shoes, rather than using a real disagreement.")}</p></div>
+    <div><h3>{t("Curiosity over certainty.")}</h3><p>{t("Keep your words kind. Neither person needs to change their mind.")}</p></div>
+    <div><h3>{t("Your pace, your choice.")}</h3><p>{t("Pause, restart, or leave whenever you like. This isn’t counseling or conflict resolution.")}</p></div>
+    <div><h3>{t("Just here, just now.")}</h3><p>{t("Drafts stay on your device. A joint session temporarily shares your nickname, avatar, and submitted response with your partner. Ending clears this session. Refreshing cannot restore it. Same-device privacy is a turn-taking convention, not secure storage.")}</p></div>
   </div>;
 }

@@ -1,0 +1,15 @@
+# Spanish language option implementation plan
+
+**Goal:** Add English/Español selection to Welcome and neutral Latin American Spanish throughout the app.
+
+**Architecture:** Bundle Spanish copy locally. A React language provider owns only an in-memory `en`/`es` preference and supplies `t(message, values)` to explicit UI call sites. English remains the default. Update the document language for assistive technology. Keep participant text, nicknames, drawings, session IDs, avatar IDs, scenario IDs, and server payloads unchanged. Each joint-session device chooses its own language. The brand remains Two Perspectives.
+
+**Stack:** Existing Node 24, React, Vite, Tailwind, and Node test runner. No new dependency, persistence, translation API, analytics, server, worktree, or publishing.
+
+- [x] Add failing regression checks for a Welcome language selector and complete Spanish versions of all five scenarios.
+- [x] Add `src/i18n.js` for single-pass named interpolation, a Spanish message catalog, and localized errors. Add `src/Language.jsx` for context, document language, an accessible native language selector, and explicitly marked rich text. Test Spanish interpolation with literal nickname characters, missing-message fallback, and separate provider instances.
+- [x] Keep Spanish scenario seeds in `src/data.js`, keyed by the existing scenario IDs. Add `localizeScenario(scenario, language)` without mutating English records or changing perspective ownership. Keep `[User 1]`/`[User 2]` substitution as the existing single pass after choosing the translated scenario.
+- [x] Translate public UI labels, headings, instructions, loading/fallback states, validations, image descriptions, avatar options, session statuses, drawing controls, comparison empty states, reflection prompts, and ending/help dialogs. Use complete named templates for dynamic copy and keep user-authored response rendering outside translation calls. Preserve existing English strings and layout/classes.
+- [x] Add a Language / Idioma selector on Welcome. Keep it outside the acknowledgment form, preserve acknowledgment and session state while changing language, and retain the preference across local resets until refresh. Translate onboarding when revisited through Help.
+- [x] Test Spanish scenario and perspective rendering, literal nicknames/responses, both private and revealed states, complete onboarding/reflection/avatar translations, and known/fallback errors. Run `npm test` and `npm run build` with Node 24. Result: 160 tests pass; production build passes.
+- [x] Check the real Spanish one-device flow from Welcome through ending, switch back to English, inspect joint-session lobby/error rendering through component tests, and check 320–430px portrait widths and simulated 200% text. Record limits and save screenshots. Keep the existing uncommitted splash title change and the unrelated untracked image intact. Do not push without another request. Native-device, native-speaker, hosted, and two-browser Spanish joint checks remain unverified.

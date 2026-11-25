@@ -1,4 +1,5 @@
 import { avatarLayers, avatarOptionLabel, avatarOptions, createAvatar } from './avatar.js';
+import { useLanguage } from './Language.jsx';
 
 export function AvatarIntro({ participant, children }) {
   return <div className="avatar-intro">
@@ -8,13 +9,14 @@ export function AvatarIntro({ participant, children }) {
 }
 
 export default function Avatar({ avatar, crop = 'bust', flushBottom = false, decorative = false, className = '' }) {
+  const { t } = useLanguage();
   const selected = createAvatar(avatar);
-  const description = ['hair', 'clothing', 'accessory', 'facialHair', 'expression'].map((field) => avatarOptionLabel(field, selected[field])).join(', ');
+  const description = ['hair', 'clothing', 'accessory', 'facialHair', 'expression'].map((field) => t(avatarOptionLabel(field, selected[field]))).join(', ');
   const layers = avatarLayers(selected).filter((layer) => crop !== 'head' || layer.key !== 'clothing');
   const baseY = flushBottom ? avatarOptions.clothing.find((option) => option.id === selected.clothing).baseY : 1533;
   const topY = flushBottom ? avatarOptions.hair.find((option) => option.id === selected.hair).topY : 0;
   const visibleHeight = baseY - topY;
-  return <svg className={`avatar-art ${className}`} style={flushBottom ? { '--avatar-visible-ratio': visibleHeight / baseY } : undefined} viewBox={crop === 'head' ? '190 30 800 990' : `0 ${topY} 1136 ${visibleHeight}`} preserveAspectRatio={flushBottom ? 'xMidYMax meet' : 'xMidYMid meet'} role={decorative ? undefined : 'img'} aria-hidden={decorative || undefined} aria-label={decorative ? undefined : `Avatar preview: ${description}`} focusable="false">
+  return <svg className={`avatar-art ${className}`} style={flushBottom ? { '--avatar-visible-ratio': visibleHeight / baseY } : undefined} viewBox={crop === 'head' ? '190 30 800 990' : `0 ${topY} 1136 ${visibleHeight}`} preserveAspectRatio={flushBottom ? 'xMidYMax meet' : 'xMidYMid meet'} role={decorative ? undefined : 'img'} aria-hidden={decorative || undefined} aria-label={decorative ? undefined : t('Avatar preview: {description}', { description })} focusable="false">
     {layers.map(({ key, href, x, y }) => <use key={key} href={`${href}#avatar-part`} x={x} y={y} aria-hidden="true" />)}
   </svg>;
 }

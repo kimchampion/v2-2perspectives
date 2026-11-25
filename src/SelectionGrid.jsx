@@ -1,7 +1,9 @@
+import { useLanguage } from './Language.jsx';
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react';
 import { gridFocusIndex, resolveGridColumns } from './grid-navigation.js';
 
 export default function SelectionGrid({ items, label, columns = 3, selectedId = null, className = '', getLabel, buttonClassName, onActivate, renderOption, opensDialog = false, scrollOnPointerFocus = true }) {
+  const { t } = useLanguage();
   const instructionsId = useId();
   const buttons = useRef(new Map());
   const gridRef = useRef(null);
@@ -63,8 +65,8 @@ export default function SelectionGrid({ items, label, columns = 3, selectedId = 
 
   if (!items.length) return null;
   return <>
-    <p id={instructionsId} className="sr-only">Use arrow keys to move between options. Home and End move within a row; Control or Command plus Home and End move to the first or last option. Press Enter or Space to choose. Tab and Shift+Tab move to the next or previous control.</p>
-    <div ref={gridRef} className={`selection-grid ${className}`} role="grid" aria-label={label} aria-describedby={instructionsId} aria-rowcount={rows.length} aria-colcount={columnCount} style={{ '--selection-columns': columnCount, '--preferred-columns': configuredColumns }}>
+    <p id={instructionsId} className="sr-only">{t("Use arrow keys to move between options. Home and End move within a row; Control or Command plus Home and End move to the first or last option. Press Enter or Space to choose. Tab and Shift+Tab move to the next or previous control.")}</p>
+    <div ref={gridRef} className={`selection-grid ${className}`} role="grid" aria-label={t(label)} aria-describedby={instructionsId} aria-rowcount={rows.length} aria-colcount={columnCount} style={{ '--selection-columns': columnCount, '--preferred-columns': configuredColumns }}>
       {rows.map((row, rowIndex) => <div key={row[0].id} role="row" aria-rowindex={rowIndex + 1} className="selection-grid-row">
         {row.map((item, columnIndex) => {
           const selected = item.id === selectedId;

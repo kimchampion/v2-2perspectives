@@ -72,6 +72,68 @@ export const scenarios = [
   },
 ];
 
+// Translated seed copy stays alongside the English scenarios. IDs and perspective slots are shared.
+export const scenarioTranslations = {
+  es: {
+    ride: {
+      category: 'Viajes compartidos',
+      title: 'Velocidad y cambios de carril',
+      cardDescription: '[User 2] lleva a [User 1] en su auto. La velocidad y los cambios frecuentes de carril hacen que el pasajero sienta inquietud.',
+      story: '[User 2] lleva a [User 1] en su auto. Durante el trayecto, [User 2] conduce más rápido que el tráfico a su alrededor y cambia de carril varias veces. [User 1] siente inquietud, pero no dice nada.',
+      roles: ['Pasajero', 'Conductor'],
+      perspectives: [
+        'Vas en el asiento del pasajero. La velocidad y los cambios frecuentes de carril te hacen sentir tensión e inseguridad. Prefieres no decir nada porque no quieres criticar a quien conduce.\n\nQuieres que [User 2] reduzca la velocidad y comprenda cómo te afecta su forma de conducir.',
+        'Estás al volante. Te concentras en conducir y crees que estás manejando bien el auto. No te das cuenta de que la velocidad y los cambios de carril le están causando incomodidad a [User 1].\n\nQuieres entender qué necesita [User 1] sin sentir que te están juzgando.',
+      ],
+    },
+    playlist: {
+      category: 'AMISTAD',
+      title: 'La lista de música compartida',
+      description: 'Dos amigos. Un viaje por carretera. Una lista de música que, de pronto, suena un poco diferente.',
+      story: 'Tú y un amigo prepararon una lista de música para un viaje por carretera que esperaban desde hace tiempo. La noche antes de salir, uno de ustedes cambia la mayoría de las canciones sin consultarlo.',
+      perspectives: [
+        'Dedicaste una tarde a preparar la lista de música. Cuando la abres, la mayoría de tus canciones ya no están. Te hacía ilusión compartir la música que te gusta y ahora te preguntas si tus gustos le importan a tu amigo.',
+        'Agregaste canciones animadas para hacer más divertido el viaje y quitaste algunas más lentas para dejar espacio. Pensabas que la lista era un punto de partida y te entusiasmaba sorprender a tu amigo.',
+      ],
+    },
+    project: {
+      category: 'TRABAJO EN EQUIPO',
+      title: 'El cambio de último minuto',
+      description: 'Un proyecto en equipo, un cambio por la noche y dos ideas diferentes sobre lo que significa ayudar.',
+      story: 'Dos compañeros de clase terminaron una presentación juntos. La mañana de la entrega, uno descubre que el otro rediseñó varias diapositivas durante la noche.',
+      perspectives: [
+        'Trabajaste mucho en las diapositivas originales y pensabas que ambos habían acordado que estaban listas. Ver cambios en tu trabajo sin haberlo conversado te hace sentir que te dejaron fuera de tu propio proyecto.',
+        'Notaste que algunas diapositivas eran difíciles de leer y te quedaste hasta tarde mejorándolas. Querías aliviar la carga de tu compañero y pensabas que agradecería el esfuerzo extra.',
+      ],
+    },
+    cafe: {
+      category: 'MOMENTOS COTIDIANOS',
+      title: 'Un cambio de planes',
+      description: 'Una tarde para ponerse al día toma un rumbo inesperado cuando llega alguien más.',
+      story: 'Dos amigos planean encontrarse en su cafetería favorita. Uno llega con un nuevo amigo, sin haberlo mencionado antes.',
+      perspectives: [
+        'Esperabas pasar un rato a solas con tu amigo y querías compartir algo personal. Te gusta conocer gente, pero esta no era la tarde que habías imaginado.',
+        'Tu nuevo amigo estaba pasando un fin de semana tranquilo, así que lo invitaste a acompañarlos. Pensabas que se llevarían bien y lo viste como una oportunidad para reunir a tus amigos.',
+      ],
+    },
+    studio: {
+      category: 'ESPACIOS COMPARTIDOS',
+      title: 'Espacio para crear',
+      description: 'Compartir un espacio creativo significa compartir algo más que un escritorio.',
+      story: 'Dos personas comparten un pequeño estudio de arte. Una reorganiza el espacio durante el fin de semana y guarda los materiales de la otra en cajones etiquetados.',
+      perspectives: [
+        'Colocas los materiales donde puedes verlos porque así encuentras inspiración. La nueva organización se ve ordenada, pero no encuentras tus herramientas favoritas y el espacio ya no te resulta familiar.',
+        'El estudio estaba cada vez más desordenado, así que dedicaste el fin de semana a hacerlo más fácil de usar. Etiquetaste todo con cuidado y pensabas que estabas creando más espacio para ambos.',
+      ],
+    },
+  },
+};
+
+export function localizeScenario(scenario, language = 'en') {
+  const copy = scenarioTranslations[language]?.[scenario?.id];
+  return copy ? { ...scenario, ...copy } : scenario;
+}
+
 export const presetColors = [
   { value: "#D9CEEB", label: "Lavender", note: "A little reflective" },
   { value: "#F1C6AD", label: "Peach", note: "Soft and open" },

@@ -71,8 +71,10 @@ legend { margin-bottom: 8px; }
 .help-button > span { width: calc(23 * var(--font-unit)); height: calc(23 * var(--font-unit)); border: 2px solid currentColor; border-radius: 50%; font-size: calc(18 * var(--font-unit)); font-weight: 600; line-height: 1.1; text-align: center; }
 .phone-main { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 0 18px; }
 .phone-main.screen-splash { padding: 0; }
-.splash-screen .page-content { display: grid; place-items: center; max-height: none; padding: 0; margin: 0; overflow: hidden; animation: none; }
+.splash-screen .page-content { display: flex; flex-direction: column; max-height: none; padding: 16px 0; margin: 0; overflow-y: auto; animation: none; }
+.splash-lockup { display: flex; flex-direction: column; align-items: center; gap: 16px; width: 100%; margin-block: auto; flex-shrink: 0; }
 .splash-logo { width: 58%; max-width: 233.12px; height: auto; overflow: visible; }
+.splash-title { max-width: calc(100% - 32px); font-size: calc(32 * var(--font-unit)); line-height: 1.2; text-align: center; color: #000; }
 .splash-scale-filled, .splash-scale-outline { transform-box: fill-box; transform-origin: 50% 50%; }
 /* Read from the Figma splash timeline: six tracks sharing one two-second clock. */
 .splash-bubble-filled { animation: splash-filled-y 2s ease-in-out both, splash-filled-opacity 2s ease-out both; }
@@ -148,6 +150,9 @@ legend { margin-bottom: 8px; }
 .page-dots [aria-current] span { background: #212121; }
 .skip-button { width: 100%; margin-top: 4px; }
 .welcome-screen h1 { font-size: var(--emphasis-heading-medium-size); line-height: 1.15; margin-top: 16px; margin-bottom: 28px !important; }
+.language-choice { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-bottom: 16px; }
+.language-choice label { font-size: calc(14 * var(--font-unit)); font-weight: 500; }
+.language-choice select { width: min(100%,calc(160 * var(--font-unit))); min-width: 0; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; color: inherit; font: inherit; }
 .welcome-description { font-size: calc(16 * var(--font-unit)); line-height: 1.35; }
 .welcome-details { margin: 27px 0 20px; padding: 0; display: flex; flex-wrap: wrap; gap: 9px; list-style: none; justify-content: space-between; }
 .welcome-details li { border: 1px solid var(--border); background: white; font-size: calc(16 * var(--font-unit)); border-radius: 4px; padding: 8px 7px; max-width: 100%; }

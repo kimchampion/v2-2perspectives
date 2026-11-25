@@ -8,16 +8,30 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 150 passed, 0 failed, 0 skipped |
+| `npm test` | 160 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 25 full run includes the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 25 full run includes English/Spanish localization, the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
 
+## English and Spanish language selection — November 25, 2026
+
+Added the accessible Language / Idioma native selector to Welcome. English remains the default; Español uses neutral Latin American Spanish. A React provider retains the choice only in memory, updates the document language, and preserves it through activity reset/end until refresh. Each device can choose independently. Explicit public-copy translation includes all five scenario records in src/data.js, persona labels, drawing tools, comparison placeholders, reflection prompts, help, status, and error messages. Participant-authored responses, nicknames, IDs, server payloads, and drawings remain literal. No translation API, persistence, analytics, or new dependency was added. The existing uncommitted splash title change was preserved.
+
+Ten localization regression tests cover the selector, English compatibility, independent providers, scenario roles/assets, complete copy catalogs, known/fallback errors, single-pass nickname interpolation, and private versus revealed responses. Literal values containing braces, dollar signs, bracketed placeholders, and UI words are preserved. A catalog key matching an Object prototype property is handled safely. Tests failed before the corresponding implementation/fixes. All 160 tests and the production build passed on Node v24.22.1; git diff --check passed. A focused independent read-only code review found no actionable issues.
+
+Completed the real Spanish one-device flow in the local production preview: switched English/Español while keeping acknowledgment, accepted ground rules, checked invalid Join-code validation, created Ana/Luis avatars with Spanish expression labels, selected Shared Rides, read correctly assigned passenger/driver perspectives, entered a written response and pointer drawing, submitted the partner's empty response, viewed both comparison orders, opened Repair prompts, ended, restarted, and revisited all four translated onboarding pages. The first-submit handoff mounted neither textarea nor canvas and contained no response text. The comparison retained the drawing and the exact mixed-language test response, including the word Next, and showed Spanish empty-response messages. Ending cleared the participant names while retaining Español. No browser warnings/errors were recorded.
+
+Welcome was checked at 320, 375, 390, and 430 CSS pixels. Reflection was checked at 320, 375, and 430, with no horizontal document overflow and the primary action inside the viewport. A temporary HTML fixture ran the real production app with simulated 200% root text at 320 and 430; the selector fit, content scrolled, primary actions remained reachable, and session-choice rows stacked at enlarged text. The fixture was removed afterward. Screenshots and measurements remain ignored: test-results/spanish-welcome.jpg, spanish-reflection.jpg, spanish-large-text.jpg, and spanish-layout-checks.json.
+
+Spanish joint-lobby states and server errors were checked through real-component rendering tests; this pass did not repeat a two-browser Spanish joint session or verify a hosted deployment. The full suite's existing loopback server integration tests passed. Native iPhone Safari, native OS text settings/touch drawing, and native-speaker editorial review of the Spanish copy remain unverified. All 160 tests and the production build were rerun successfully before the requested GitHub push.
+
 ## Animated splash and onboarding order — November 25, 2026
+
+Screenshot follow-up: added the visible Two Perspectives heading below the logo. The centered group uses a 16px gap and a bold 32px title that scales with the root text preference. Short or enlarged layouts can scroll. The two-second timer and bubble animation are unchanged. Rechecked all 150 tests and the production build, normal layouts at 320–430 CSS pixels, and a simulated 200% root text preference at 320px; the title remained readable without horizontal overflow. Proof: `test-results/splash-with-title.jpg` and `test-results/splash-title-checks.json`. Temporary static fixtures were removed after checking.
 
 Implemented the supplied splash frame (Figma node 628:406) before onboarding, using the original outlined and filled speech bubbles exported locally as SVGs. The connector could not access the file; the open desktop Figma file supplied the design dimensions, colors, six motion tracks, 25 keyframes, and easing values. Temporary export settings were removed afterward. Position, scale, and opacity use a shared two-second CSS timeline. Static layout translation remains separate from animated transforms, and each scale uses the bubble's center. The existing reduced-motion rule disables these animations, leaving both bubbles visible at rest.
 
