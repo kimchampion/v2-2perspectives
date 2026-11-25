@@ -10,6 +10,7 @@ const messages = {
   "Close": "Cerrar",
   "Skip to content": "Ir al contenido",
   "Open help and session options": "Abrir ayuda y opciones de la sesión",
+  "Choose your language": "Elige tu idioma",
   "Welcome": "Bienvenida",
   "One story.": "Una historia.",
   "Two perspectives.": "Dos perspectivas.",

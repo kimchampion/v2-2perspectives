@@ -153,6 +153,9 @@ legend { margin-bottom: 8px; }
 .language-choice { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; margin-bottom: 16px; }
 .language-choice label { font-size: calc(14 * var(--font-unit)); font-weight: 500; }
 .language-choice select { width: min(100%,calc(160 * var(--font-unit))); min-width: 0; min-height: 48px; padding: 10px 12px; border: 1px solid var(--border); border-radius: 6px; background: white; color: inherit; font: inherit; }
+.language-screen .page-content { align-self: center; }
+.language-screen .language-choice { flex-direction: column; gap: 16px; margin: 8px 0; }
+.language-screen .language-choice label { font-size: var(--emphasis-heading-medium-size); font-weight: 700; line-height: 1.2; text-align: center; }
 .welcome-description { font-size: calc(16 * var(--font-unit)); line-height: 1.35; }
 .welcome-details { margin: 27px 0 20px; padding: 0; display: flex; flex-wrap: wrap; gap: 9px; list-style: none; justify-content: space-between; }
 .welcome-details li { border: 1px solid var(--border); background: white; font-size: calc(16 * var(--font-unit)); border-radius: 4px; padding: 8px 7px; max-width: 100%; }

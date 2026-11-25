@@ -8,14 +8,24 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 160 passed, 0 failed, 0 skipped |
+| `npm test` | 162 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 25 full run includes English/Spanish localization, the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 25 full run includes language selection before onboarding, English/Spanish localization, the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Language selection before onboarding — November 25, 2026
+
+Moved the existing native language dropdown from Welcome to a dedicated page immediately after the two-second splash. The page matches the user's screenshot with a centered bold Language / Idioma label and dropdown beneath it. The user confirmed retaining Continue so English can be accepted without changing the default. The primary action translates to Continuar after choosing Español and opens onboarding page 1. The shared Page layout, safe areas, and primary baseline remain in use, with no navigation header on this startup step. A translated screen-reader heading preserves page semantics without adding another visible title. The four existing Spanish onboarding records are now used on the first visit; IDs, artwork order, Next/Skip behavior, in-memory preference, participant data, and server protocol are unchanged.
+
+Regression checks failed before adding the new page/removing Welcome's selector and then passed. Tests cover the bilingual native options, English/Spanish Continue action, Welcome acknowledgment without a duplicate dropdown, and all four translated onboarding headings, body text, artwork labels, navigation buttons, and dot labels. The final full suite passed 162 tests on Node v24.22.1, including real loopback session tests. The production build and git diff --check passed.
+
+In the real production preview, observed Splash → Language choice → Onboarding → Welcome. Confirmed default English can Continue without changing the selection, and all four English screens retain their order and copy. Used the native keyboard menu to choose Español, Tab to Continuar, and Enter to open Spanish onboarding. Completed all four Spanish pages and reached the translated Welcome with no duplicate selector. Help → Ver introducción retained Spanish without replaying language selection or the splash; Omitir por ahora returned to Welcome.
+
+Checked 30 layout cases: the centered language screen and all four Spanish onboarding pages at 320, 375, 390, and 430 CSS pixels, plus those five pages at simulated 200% root text at 320 and 430px. No horizontal document overflow occurred; dropdowns stayed within the frame and all primary actions remained within the visible viewport. Enlarged onboarding content scrolled. No browser warnings/errors were recorded. Temporary viewport overrides were reset and the enlarged-text HTML fixture was removed. Ignored evidence: test-results/language-before-onboarding.jpg, spanish-onboarding-first-visit.jpg, and language-startup-checks.json. Physical iPhone Safari/native accessibility settings and a hosted release were not tested. This record covers local verification before the requested GitHub push.
 
 ## English and Spanish language selection — November 25, 2026
 

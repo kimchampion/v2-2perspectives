@@ -3,6 +3,14 @@ import { useEffect, useId, useRef } from 'react';
 import { Action, Artwork, ErrorMessage, Page } from '../components.jsx';
 import { onboarding } from '../content.js';
 
+export function ChooseLanguage({ onContinue }) {
+  const { t } = useLanguage();
+  return <Page className="language-screen" label={t('Choose your language')} actions={<Action onClick={onContinue}>{t('Continue')}</Action>}>
+    <h1 className="sr-only">{t('Choose your language')}</h1>
+    <LanguageChoice />
+  </Page>;
+}
+
 export function Onboarding({ index, onChange, onFinish }) {
   const { t } = useLanguage();
   const page = onboarding[index];
@@ -29,7 +37,6 @@ export function Welcome({ acknowledged, onAcknowledge, onBegin, error }) {
   useEffect(() => { if (error) showAcknowledgment(); }, [error]);
   return <Page className="welcome-screen" label={t("Welcome")} actions={<Action type="submit" form={formId}>{t("Let’s Begin")}</Action>}>
     <h1>{t("One story.")}<br />{t("Two perspectives.")}</h1>
-    <LanguageChoice />
     <p className="welcome-description">{t("Conflict isn’t a good or bad thing. Two Perspectives creates an experience for empathy building and discussion.")}</p>
     <ul className="welcome-details" aria-label={t("About the experience")}><li>{t("2 people")}</li><li>{t("10–15 minutes")}</li><li>{t("No right answers")}</li></ul>
     <Artwork name="welcome.png" className="welcome-art" alt={t("Two different speech bubbles overlapping.")} />

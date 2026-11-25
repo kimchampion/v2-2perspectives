@@ -19,7 +19,7 @@ const output = resolve('test-results/localization-ssr.mjs');
 const bundle = await build({ stdin: { contents: `
 export { default as App } from './src/App.jsx';
 export { LanguageProvider } from './src/Language.jsx';
-export { Welcome, Onboarding } from './src/screens/Onboarding.jsx';
+export * from './src/screens/Onboarding.jsx';
 export { ScenarioPicker, CreatePerson, JointStatus } from './src/screens/Setup.jsx';
 export { default as Conversation } from './src/screens/Conversation.jsx';
 export { default as Reflection, ReflectionPrompt } from './src/screens/Reflection.jsx';
@@ -27,15 +27,45 @@ export { AvatarOptions, AvatarDialog } from './src/AvatarBuilder.jsx';
 export { ErrorMessage } from './src/components.jsx';
 `, resolveDir: resolve('.'), sourcefile: 'localization-entry.jsx' }, bundle: true, write: false, platform: 'node', format: 'esm', jsx: 'automatic', packages: 'external' });
 await writeFile(output, bundle.outputFiles[0].text);
-const { App, Welcome, Onboarding, LanguageProvider, ScenarioPicker, CreatePerson, JointStatus, Conversation, Reflection, ReflectionPrompt, AvatarOptions, AvatarDialog, ErrorMessage } = await import(pathToFileURL(output));
+const { App, ChooseLanguage, Welcome, Onboarding, LanguageProvider, ScenarioPicker, CreatePerson, JointStatus, Conversation, Reflection, ReflectionPrompt, AvatarOptions, AvatarDialog, ErrorMessage } = await import(pathToFileURL(output));
 const render = (Component, props = {}, language = 'es') => renderToStaticMarkup(React.createElement(LanguageProvider, { initialLanguage: language }, React.createElement(Component, props)));
 
-test('Welcome offers an accessible English and Español language choice', () => {
-  const html = renderToStaticMarkup(React.createElement(Welcome));
+test('a separate language screen offers English and Español before the introduction', () => {
+  assert.equal(typeof ChooseLanguage, 'function');
+  const html = render(ChooseLanguage, {}, 'en');
+  assert.match(html, /lang="en">Language/);
+  assert.match(html, /lang="es">Idioma/);
+  assert.match(html, /<h1 class="sr-only">Choose your language<\/h1>/);
   assert.match(html, /Language.*Idioma/);
   assert.match(html, /<select[^>]*name="language"/);
-  assert.match(html, /<option[^>]*value="en"[^>]*>English<\/option>/);
+  assert.match(html, /<option[^>]*value="en"[^>]*selected[^>]*>English<\/option>/);
   assert.match(html, /<option[^>]*value="es"[^>]*>Español<\/option>/);
+  assert.match(html, /<button[^>]*>Continue<\/button>/);
+  const spanish = render(ChooseLanguage);
+  assert.match(spanish, /<h1 class="sr-only">Elige tu idioma<\/h1>/);
+  assert.match(spanish, /value="es"[^>]*selected/);
+  assert.match(spanish, /<button[^>]*>Continuar<\/button>/);
+});
+
+test('Welcome retains its acknowledgment and no longer repeats the language dropdown', () => {
+  const html = render(Welcome, { acknowledged: true });
+  assert.doesNotMatch(html, /<select|Language.*Idioma/);
+  assert.match(html, /type="checkbox"[^>]*checked/);
+  assert.match(html, /Comencemos/);
+});
+
+test('all four Spanish onboarding screens translate copy, artwork labels, navigation and dots', () => {
+  onboarding.forEach((page, index) => {
+    const spanish = render(Onboarding, { index });
+    assert.ok(spanish.includes(translate(page.title, 'es')));
+    assert.ok(spanish.includes(translate(page.text, 'es')));
+    assert.ok(spanish.includes(translate(page.alt, 'es')));
+    assert.match(spanish, /Siguiente/);
+    assert.match(spanish, /Omitir por ahora/);
+    assert.ok(spanish.includes(`Introducción ${index + 1} de 4`));
+    assert.ok(spanish.includes(`Introducción ${index + 1}: ${translate(page.title, 'es')}`));
+    assert.match(render(Onboarding, { index }, 'en'), new RegExp(page.title));
+  });
 });
 
 test('Spanish interpolation is a single pass and never translates nickname values', () => {
@@ -51,7 +81,6 @@ test('language providers do not leak Spanish into independent English rendering'
   const es = render(Welcome);
   const en = render(Welcome, {}, 'en');
   assert.match(es, /Una historia\.<br\/>Dos perspectivas\./);
-  assert.match(es, /value="es"[^>]*selected/);
   assert.match(en, /One story\.<br\/>Two perspectives\./);
   assert.doesNotMatch(en, /Una historia/);
   assert.match(renderToStaticMarkup(React.createElement(App, { initialLanguage: 'es' })), /lang="es"/);
