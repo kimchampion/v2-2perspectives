@@ -1,4 +1,4 @@
-# Local verification — updated November 23, 2026
+# Local verification — updated November 25, 2026
 
 This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below identify their preview environments; joint-session checks use a real loopback Node server.
 
@@ -8,14 +8,24 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 148 passed, 0 failed, 0 skipped |
+| `npm test` | 150 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 23 full run includes the restored joint-lobby actions, revised Start Session choices, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 25 full run includes the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Animated splash and onboarding order — November 25, 2026
+
+Implemented the supplied splash frame (Figma node 628:406) before onboarding, using the original outlined and filled speech bubbles exported locally as SVGs. The connector could not access the file; the open desktop Figma file supplied the design dimensions, colors, six motion tracks, 25 keyframes, and easing values. Temporary export settings were removed afterward. Position, scale, and opacity use a shared two-second CSS timeline. Static layout translation remains separate from animated transforms, and each scale uses the bubble's center. The existing reduced-motion rule disables these animations, leaving both bubbles visible at rest.
+
+The app advances after a cancellable 2000 ms timer and shows no splash navigation/footer. Browser timing observed the splash at 200 ms and the first onboarding heading at about 2102 ms after reload. Returning through Help → View introduction opened onboarding immediately without replaying the splash. Onboarding now runs Share your perspective → See both sides → Compare and reflect → Plan for next time; the existing copy and artwork stay paired with each title.
+
+Both new regression tests failed before implementation, then the full suite passed all 150 tests and the production build passed. Checked the production preview at 320, 375, 390, and 430 CSS pixels: the logo stayed centered, both asset slots retained their proportions, there was no horizontal overflow, and the first onboarding image and primary action remained visible. All four Next actions reached the correct screen and then Welcome. A temporary static fixture of the real initial App markup and compiled production CSS held the splash for geometry checks and its screenshot; the running app's timer was tested separately. The fixture was removed after verification.
+
+Ignored local proof: `test-results/splash-phone.jpg`, `test-results/onboarding-share-first.jpg`, `test-results/splash-phone-checks.json`, `test-results/splash-onboarding-checks.json`, and `test-results/splash-motion-reference.json`. Native iPhone Safari and native OS reduced-motion settings were not toggled in this pass. A hosted deployment was not tested in this pass.
 
 ## Restored joint-session scenario navigation — November 23, 2026
 

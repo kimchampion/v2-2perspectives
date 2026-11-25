@@ -4,6 +4,7 @@ import { reflectionPaths } from './content.js';
 import { createSessionState, sessionReducer, validateResponse } from './session.js';
 import { handoffReturnScreen } from './navigation.js';
 import { Onboarding, Welcome } from './screens/Onboarding.jsx';
+import Splash, { SPLASH_DURATION } from './screens/Splash.jsx';
 import { CreatePerson, ScenarioPicker, SessionChoices, SessionInvitation, JoinCodeForm, JointStatus } from './screens/Setup.jsx';
 import Conversation from './screens/Conversation.jsx';
 import { createSession, SESSION_START_TIMEOUT } from './lib/sessionClient.js';
@@ -14,7 +15,7 @@ import { watchPhoneViewport } from './phone-viewport.js';
 
 export default function App() {
   const [state, dispatch] = useReducer(sessionReducer, undefined, () => createSessionState());
-  const [screen, setScreen] = useState('onboarding');
+  const [screen, setScreen] = useState('splash');
   const [onboardingIndex, setOnboardingIndex] = useState(0);
   const [acknowledged, setAcknowledged] = useState(false);
   const [welcomeError, setWelcomeError] = useState('');
@@ -47,6 +48,11 @@ export default function App() {
   }, [screen, active, setupIndex, onboardingIndex]);
 
   useEffect(() => () => sessionRequest.current?.abort(), []);
+  useEffect(() => {
+    if (screen !== 'splash') return;
+    const timer = setTimeout(() => setScreen('onboarding'), SPLASH_DURATION);
+    return () => clearTimeout(timer);
+  }, [screen]);
   useEffect(() => watchPhoneViewport(shellRef.current), []);
   useEffect(() => {
     setServerWaiting(false);
@@ -261,7 +267,8 @@ export default function App() {
   }
   const title = screen === 'session-mode' ? 'Start Session' : screen === 'person' ? setupMode === 'join' ? 'Your persona' : `Person ${setupIndex + 1} of 2` : screen === 'joint-wait' ? 'Joint session' : privateView && screen !== 'handoff' ? 'Your Perspective' : ['compare', 'reflection'].includes(screen) ? 'Discussion' : '';
   const chosenPath = modal?.kind === 'reflection' && reflectionPaths.find((path) => path.id === modal.path);
-  const body = screen === 'onboarding' ? <Onboarding index={onboardingIndex} onChange={setOnboardingIndex} onFinish={() => setScreen('welcome')} />
+  const body = screen === 'splash' ? <Splash />
+    : screen === 'onboarding' ? <Onboarding index={onboardingIndex} onChange={setOnboardingIndex} onFinish={() => setScreen('welcome')} />
     : screen === 'welcome' ? <Welcome acknowledged={acknowledged} onAcknowledge={(value) => { setAcknowledged(value); setWelcomeError(''); }} onBegin={begin} error={welcomeError} />
     : screen === 'session-mode' ? <SessionChoices pending={creatingSession} waiting={serverWaiting} error={sessionError} onCreate={createSharedSession} onJoin={askToJoin} onLocal={continueLocally} />
     : screen === 'session-code' ? <SessionInvitation code={state.code} onContinue={() => { setSetupIndex(0); setActive(0); setScreen('person'); }} />
@@ -274,7 +281,7 @@ export default function App() {
 
   return <div ref={shellRef} className={`app-shell ${screen === 'onboarding' ? 'is-onboarding' : screen === 'reflection' ? 'is-reflection' : ''}`}>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    {screen !== 'onboarding' && <Header title={title} onBack={!['welcome', 'handoff', 'ended', 'joint-wait'].includes(screen) ? goBack : undefined} onHelp={() => setModal({ kind: 'help' })} />}
+    {!['splash', 'onboarding'].includes(screen) && <Header title={title} onBack={!['welcome', 'handoff', 'ended', 'joint-wait'].includes(screen) ? goBack : undefined} onHelp={() => setModal({ kind: 'help' })} />}
     <main id="main-content" ref={mainRef} tabIndex={-1} className={`phone-main screen-${screen}`}>
       <PageNotice.Provider value={<>
         {jointMode && joint.session && !['connected', 'ended'].includes(joint.connection) && screen !== 'joint-wait' && <div className="joint-connection-notice" role="status"><p>{joint.error || (joint.slow ? 'The session server may be waking up. Your draft stays on this device.' : 'Reconnecting to your partner. Your draft stays on this device.')}</p>{joint.error && <button type="button" className="text-button" onClick={joint.retry}>Try reconnecting</button>}<button type="button" className="text-button" onClick={leaveJoint}>Return to start</button></div>}

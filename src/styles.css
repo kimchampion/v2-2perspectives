@@ -70,6 +70,39 @@ legend { margin-bottom: 8px; }
 .help-button { width: max(44px,calc(44 * var(--font-unit))); height: max(44px,calc(44 * var(--font-unit))); border: 0; background: transparent; display: grid; place-items: center; }
 .help-button > span { width: calc(23 * var(--font-unit)); height: calc(23 * var(--font-unit)); border: 2px solid currentColor; border-radius: 50%; font-size: calc(18 * var(--font-unit)); font-weight: 600; line-height: 1.1; text-align: center; }
 .phone-main { display: flex; flex-direction: column; flex: 1; min-height: 0; padding: 0 18px; }
+.phone-main.screen-splash { padding: 0; }
+.splash-screen .page-content { display: grid; place-items: center; max-height: none; padding: 0; margin: 0; overflow: hidden; animation: none; }
+.splash-logo { width: 58%; max-width: 233.12px; height: auto; overflow: visible; }
+.splash-scale-filled, .splash-scale-outline { transform-box: fill-box; transform-origin: 50% 50%; }
+/* Read from the Figma splash timeline: six tracks sharing one two-second clock. */
+.splash-bubble-filled { animation: splash-filled-y 2s ease-in-out both, splash-filled-opacity 2s ease-out both; }
+.splash-bubble-outline { animation: splash-outline-y 2s ease-in-out both, splash-outline-opacity 2s ease-out both; }
+.splash-scale-filled { animation: splash-filled-scale 2s ease-in-out both; }
+.splash-scale-outline { animation: splash-outline-scale 2s ease-in-out both; }
+@keyframes splash-filled-y {
+  0% { transform: translateY(12px); animation-timing-function: ease-out; }
+  24% { transform: translateY(0); }
+  60% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+@keyframes splash-outline-y {
+  0%, 9% { transform: translateY(12px); animation-timing-function: ease-out; }
+  33% { transform: translateY(0); }
+  67.5% { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+@keyframes splash-filled-scale {
+  0% { transform: scale(.9); animation-timing-function: ease-out; }
+  21% { transform: scale(1.025); }
+  32%, 100% { transform: scale(1); }
+}
+@keyframes splash-outline-scale {
+  0%, 9% { transform: scale(.9); animation-timing-function: ease-out; }
+  30% { transform: scale(1.025); }
+  41%, 100% { transform: scale(1); }
+}
+@keyframes splash-filled-opacity { 0% { opacity: 0; } 14%, 100% { opacity: 1; } }
+@keyframes splash-outline-opacity { 0%, 9% { opacity: 0; } 23%, 100% { opacity: 1; } }
 .page-screen { flex: 1; min-height: 0; min-width: 0; display: grid; grid-template-rows: minmax(48px,1fr); }
 .page-screen.has-page-actions { grid-template-rows: minmax(48px,1fr) auto; }
 .page-content { position: relative; min-height: 0; max-height: 636px; overflow-y: auto; overflow-x: hidden; scroll-padding-block: 8px; padding: 0 8px 8px; margin-inline: -8px; animation: enter 160ms ease-out; }

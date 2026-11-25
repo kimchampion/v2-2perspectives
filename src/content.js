@@ -1,6 +1,6 @@
 export const onboarding = [
-  { title: 'See both sides', text: 'Explore how the same situation can feel different to two people. Use guided prompts to understand each perspective and prepare for a constructive conversation.', image: 'onboarding-1.png', alt: 'Two people sitting together, each holding a phone.' },
   { title: 'Share your perspective', text: 'Choose a scenario and read what happened from your point of view. Focus on what the character needed and felt in that moment.', image: 'onboarding-2.png', alt: 'A person imagining a shared road trip while looking at their phone.' },
+  { title: 'See both sides', text: 'Explore how the same situation can feel different to two people. Use guided prompts to understand each perspective and prepare for a constructive conversation.', image: 'onboarding-1.png', alt: 'Two people sitting together, each holding a phone.' },
   { title: 'Compare and reflect', text: 'Review both perspectives side by side. Notice where your experiences were different, where they overlapped, and what may need more discussion.', image: 'onboarding-3.png', alt: 'Two people talking and listening to each other.' },
   { title: 'Plan for next time', text: 'Choose a small action or agreement you can both try in the future. You can also pause the conversation and return to it later.', image: 'onboarding-4.png', alt: 'Two people leaning toward each other with a shared understanding.' },
 ];
