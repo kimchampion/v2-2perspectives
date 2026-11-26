@@ -1,6 +1,6 @@
 import { LanguageProvider, useLanguage } from './Language.jsx';
 import { useEffect, useReducer, useRef, useState } from 'react';
-import { Action, Dialog, ErrorMessage, GroundRules, Header, PageNotice } from './components.jsx';
+import { Action, Dialog, EndSessionDialog, ErrorMessage, GroundRules, Header, PageNotice } from './components.jsx';
 import { reflectionPaths } from './content.js';
 import { createSessionState, sessionReducer, validateResponse } from './session.js';
 import { handoffReturnScreen } from './navigation.js';
@@ -13,6 +13,7 @@ import useJointSession from './useJointSession.js';
 import Reflection, { ReflectionPrompt } from './screens/Reflection.jsx';
 import Ending from './screens/Ending.jsx';
 import { watchPhoneViewport } from './phone-viewport.js';
+import { exitApp } from './app-exit.js';
 
 export default function App({ initialLanguage = 'en' }) {
   return <LanguageProvider initialLanguage={initialLanguage}><AppContent /></LanguageProvider>;
@@ -23,6 +24,10 @@ function AppContent() {
   const [state, dispatch] = useReducer(sessionReducer, undefined, () => createSessionState());
   const [screen, setScreen] = useState('splash');
   const [onboardingIndex, setOnboardingIndex] = useState(0);
+  const [reviewingOnboarding, setReviewingOnboarding] = useState(false);
+  const [exiting, setExiting] = useState(false);
+  const [closeRequested, setCloseRequested] = useState(false);
+  const [sharedEndUnconfirmed, setSharedEndUnconfirmed] = useState(false);
   const [acknowledged, setAcknowledged] = useState(false);
   const [welcomeError, setWelcomeError] = useState('');
   const [active, setActive] = useState(0);
@@ -44,16 +49,24 @@ function AppContent() {
   const sessionRequest = useRef(null);
   const mainRef = useRef(null);
   const shellRef = useRef(null);
+  const reviewOrigin = useRef(null);
+  const exitRequest = useRef(null);
   const privateView = ['handoff', 'perspective', 'response'].includes(screen);
-  const inSession = ['person', 'scenario', 'handoff', 'perspective', 'response', 'compare', 'reflection', 'joint-wait'].includes(screen);
 
   useEffect(() => {
+    const origin = !reviewingOnboarding && reviewOrigin.current;
+    const returning = origin && origin.screen === screen && origin.active === active && origin.setupIndex === setupIndex;
     window.scrollTo({ top: 0, behavior: 'instant' });
-    shellRef.current?.scrollTo({ top: 0, behavior: 'instant' });
-    mainRef.current?.focus({ preventScroll: true });
-  }, [screen, active, setupIndex, onboardingIndex]);
+    shellRef.current?.scrollTo({ top: returning ? origin.shellTop : 0, behavior: 'instant' });
+    if (returning) {
+      mainRef.current?.querySelector('.page-content')?.scrollTo({ top: origin.contentTop, behavior: 'instant' });
+      mainRef.current?.querySelector('.scenario-rail')?.scrollTo({ left: origin.railLeft, behavior: 'instant' });
+      shellRef.current?.querySelector('.help-button')?.focus({ preventScroll: true });
+    } else mainRef.current?.focus({ preventScroll: true });
+    if (!reviewingOnboarding) reviewOrigin.current = null;
+  }, [screen, active, setupIndex, onboardingIndex, reviewingOnboarding]);
 
-  useEffect(() => () => sessionRequest.current?.abort(), []);
+  useEffect(() => () => { sessionRequest.current?.abort(); exitRequest.current?.abort(); }, []);
   useEffect(() => {
     if (screen !== 'splash') return;
     const timer = setTimeout(() => setScreen('language'), SPLASH_DURATION);
@@ -76,6 +89,7 @@ function AppContent() {
     setActive(snapshot.participantIndex);
     const changedRound = previous?.round !== snapshot.round;
     if (snapshot.phase === 'ended') {
+      setReviewingOnboarding(false); reviewOrigin.current = null;
       creatorToken.current = null; setSetupMode(null); setPendingJoinCode(''); setModal(null); setResponseError(''); setScreen('ended');
     } else if (snapshot.phase === 'lobby') {
       if (changedRound || previous?.phase !== 'lobby') { setModal(null); setResponseError(''); setScreen('joint-wait'); }
@@ -113,7 +127,49 @@ function AppContent() {
 
   function acceptRules() { setModal(null); setScreen('session-mode'); }
 
+  function cancelExit() {
+    exitRequest.current?.abort();
+    exitRequest.current = null;
+    setExiting(false);
+  }
+
+  async function requestExit() {
+    if (exitRequest.current) return;
+    const request = new AbortController();
+    exitRequest.current = request;
+    setExiting(true);
+    try {
+      await exitApp({
+        signal: request.signal,
+        endSharedSession: jointMode && joint.session?.phase !== 'ended'
+          ? signal => joint.command('end-session', {}, { signal }) : undefined,
+        clearLocal: ({ sharedEndConfirmed }) => {
+          cancelCreation();
+          submissionRequest.current = null; setJointBusy(false);
+          joint.stop(); setJointMode(false); jointNavigation.current = null; creatorToken.current = null;
+          dispatch({ type: 'END' }); setSetupMode(null); setPendingJoinCode('');
+          setAcknowledged(false); setWelcomeError(''); setResponseError(''); setModal(null);
+          setActive(0); setSetupIndex(0); setResumeScreen('perspective');
+          reviewOrigin.current = null; setReviewingOnboarding(false);
+          setSharedEndUnconfirmed(!sharedEndConfirmed); setCloseRequested(true); setScreen('ended');
+        },
+      });
+    } finally {
+      if (exitRequest.current === request) { exitRequest.current = null; setExiting(false); }
+    }
+  }
+
+  function chooseHelpAction(choice) {
+    if (choice === 'rules') setModal({ kind: 'rules' });
+    else if (choice === 'end') setModal({ kind: 'end' });
+    else if (choice === 'onboarding') {
+      reviewOrigin.current = { screen, active, setupIndex, shellTop: shellRef.current?.scrollTop || 0, contentTop: mainRef.current?.querySelector('.page-content')?.scrollTop || 0, railLeft: mainRef.current?.querySelector('.scenario-rail')?.scrollLeft || 0 };
+      setOnboardingIndex(0); setModal(null); setReviewingOnboarding(true);
+    }
+  }
+
   function startSession(code, codeSource, hostToken) {
+    cancelExit(); setCloseRequested(false); setSharedEndUnconfirmed(false);
     submissionRequest.current = null; setJointBusy(false);
     joint.stop(); setJointMode(false); jointNavigation.current = null;
     creatorToken.current = hostToken || null;
@@ -174,6 +230,8 @@ function AppContent() {
     joint.begin({ code, participant, hostToken: code === state.code ? creatorToken.current : undefined });
   }
   function leaveJoint() {
+    cancelExit(); cancelCreation(); setReviewingOnboarding(false); reviewOrigin.current = null;
+    setCloseRequested(false); setSharedEndUnconfirmed(false);
     submissionRequest.current = null; setJointBusy(false);
     joint.stop(); setJointMode(false); jointNavigation.current = null; creatorToken.current = null;
     dispatch({ type: 'RESET' }); setSetupMode(null);
@@ -225,6 +283,7 @@ function AppContent() {
     else setScreen('reflection');
   }
   async function clearSession(destination) {
+    cancelExit();
     if (jointMode) {
       try {
         await joint.command(destination === 'scenario' ? 'restart-scenario' : 'end-session');
@@ -276,7 +335,7 @@ function AppContent() {
   const body = screen === 'splash' ? <Splash />
     : screen === 'language' ? <ChooseLanguage onContinue={() => { setOnboardingIndex(0); setScreen('onboarding'); }} />
     : screen === 'onboarding' ? <Onboarding index={onboardingIndex} onChange={setOnboardingIndex} onFinish={() => setScreen('welcome')} />
-    : screen === 'welcome' ? <Welcome acknowledged={acknowledged} onAcknowledge={(value) => { setAcknowledged(value); setWelcomeError(''); }} onBegin={begin} error={welcomeError} />
+    : screen === 'welcome' ? <Welcome acknowledged={acknowledged} onAcknowledge={(value) => { setAcknowledged(value); setWelcomeError(''); }} onBegin={begin} onExit={requestExit} error={welcomeError} />
     : screen === 'session-mode' ? <SessionChoices pending={creatingSession} waiting={serverWaiting} error={sessionError} onCreate={createSharedSession} onJoin={askToJoin} onLocal={continueLocally} />
     : screen === 'session-code' ? <SessionInvitation code={state.code} onContinue={() => { setSetupIndex(0); setActive(0); setScreen('person'); }} />
     : screen === 'person' ? <CreatePerson key={setupIndex} participant={state.participants[setupIndex]} otherName={state.participants[1 - setupIndex].name} onChange={(values) => dispatch({ type: 'SET_PARTICIPANT', participant: setupIndex, values })} onContinue={continuePerson} />
@@ -284,22 +343,23 @@ function AppContent() {
     : screen === 'scenario' ? <ScenarioPicker selected={state.scenarioId} participant={state.participants[jointMode ? active : 0]} participants={state.participants} onSelect={(id) => dispatch({ type: 'SELECT_SCENARIO', id })} onContinue={startResponses} />
     : ['handoff', 'perspective', 'response', 'compare'].includes(screen) ? <Conversation key={`${screen}-${active}`} screen={screen} state={state} active={active} joint={jointMode} busy={jointBusy} onReady={handoffReady} onChange={updateResponse} onSubmit={submitResponse} error={responseError} onNext={() => screen === 'perspective' ? setScreen(state.status === 'revealed' ? 'compare' : 'response') : compareNext()} />
     : screen === 'reflection' ? <Reflection state={state} onChoose={chooseReflection} onEnd={() => setModal({ kind: 'end' })} onNewScenario={() => setModal({ kind: 'restart', destination: 'scenario' })} />
-    : <Ending onBeginAgain={leaveJoint} />;
+    : <Ending onBeginAgain={leaveJoint} closeRequested={closeRequested} sharedEndUnconfirmed={sharedEndUnconfirmed} />;
 
-  return <div ref={shellRef} lang={language} className={`app-shell ${['language', 'onboarding'].includes(screen) ? 'is-onboarding' : screen === 'reflection' ? 'is-reflection' : ''}`}>
+  return <div ref={shellRef} lang={language} className={`app-shell ${reviewingOnboarding || ['language', 'onboarding'].includes(screen) ? 'is-onboarding' : screen === 'reflection' ? 'is-reflection' : ''}`}>
     <a className="skip-link" href="#main-content">{t("Skip to content")}</a>
-    {!['splash', 'language', 'onboarding'].includes(screen) && <Header title={title} onBack={!['welcome', 'handoff', 'ended', 'joint-wait'].includes(screen) ? goBack : undefined} onHelp={() => setModal({ kind: 'help' })} />}
-    <main id="main-content" ref={mainRef} tabIndex={-1} className={`phone-main screen-${screen}`}>
-      <PageNotice.Provider value={<>
+    {!reviewingOnboarding && !['splash', 'language', 'onboarding'].includes(screen) && <Header key={`${screen}-${active}-${setupIndex}`} title={title} onBack={!['welcome', 'handoff', 'ended', 'joint-wait'].includes(screen) ? goBack : undefined} onHelpSelect={chooseHelpAction} />}
+    <main id="main-content" ref={mainRef} tabIndex={-1} className={`phone-main screen-${reviewingOnboarding ? 'onboarding' : screen}`}>
+      <PageNotice.Provider value={reviewingOnboarding ? null : <>
         {jointMode && joint.session && !['connected', 'ended'].includes(joint.connection) && screen !== 'joint-wait' && <div className="joint-connection-notice" role="status"><p>{joint.error ? errorText(joint.error) : joint.slow ? t("The session server may be waking up. Your draft stays on this device.") : t("Reconnecting to your partner. Your draft stays on this device.")}</p>{joint.error && <button type="button" className="text-button" onClick={joint.retry}>{t("Try reconnecting")}</button>}<button type="button" className="text-button" onClick={leaveJoint}>{t("Return to start")}</button></div>}
         {responseError && screen !== 'response' && <ErrorMessage>{responseError}</ErrorMessage>}
-      </>}>{body}</PageNotice.Provider>
+      </>}>{reviewingOnboarding ? <Onboarding reviewing index={onboardingIndex} onChange={setOnboardingIndex} onFinish={() => setReviewingOnboarding(false)} /> : body}</PageNotice.Provider>
     </main>
+    {!reviewingOnboarding && <>
     {modal?.kind === 'rules' && <Dialog title={t("A few things to remember.")} onClose={closeRules}><GroundRules />{modal.begin && <Action className="dialog-primary" onClick={acceptRules}>{t("I agree · continue")}</Action>}</Dialog>}
     {modal?.kind === 'join-entry' && <Dialog title={t("Join a session")} onClose={() => setModal(null)}><JoinCodeForm initialCode={pendingJoinCode} onJoin={joinWithCode} /></Dialog>}
     {chosenPath && <Dialog title={t("Reflection")} onClose={() => setModal(null)}><ReflectionPrompt path={chosenPath} /></Dialog>}
-    {modal?.kind === 'help' && <Dialog title={t("A little room for another view.")} onClose={() => setModal(null)}><p>{t("Explore a fictional situation, share one response each, then read both responses together.")}</p><p className="small-copy">{jointMode ? t("Your nickname, avatar, and submitted response are temporarily shared for this joint session. Drafts stay on your device. Keep this page open to reconnect; refreshing or a server restart can end the session.") : t("You can take turns on one device or join your partner on separate devices. Drafts stay in this page’s memory and are cleared on refresh or when you end.")}</p><div className="help-actions"><button type="button" className="outline-button" onClick={() => setModal({ kind: 'rules' })}>{t("Ground rules")}</button>{inSession ? <><button type="button" className="outline-button" onClick={() => setModal({ kind: 'restart', destination: 'welcome' })}>{t("Start over")}</button><Action onClick={() => setModal({ kind: 'end' })}>{t("End session")}</Action></> : <button type="button" className="outline-button" onClick={() => { cancelCreation(); setModal(null); setOnboardingIndex(0); setScreen('onboarding'); }}>{t("View introduction")}</button>}</div></Dialog>}
-    {modal?.kind === 'end' && <Dialog title={t("End this session?")} onClose={() => setModal(null)}><p>{t(jointMode ? 'Ending clears both people’s nicknames, choices, responses, reflections, and drawings and ends the shared session on both devices.' : 'Ending clears both people’s nicknames, choices, responses, reflections, and drawings on this device.')}</p><div className="dialog-actions"><button type="button" className="outline-button" onClick={() => setModal(null)}>{t("Keep exploring")}</button><Action onClick={() => clearSession('ended')}>{t("End session")}</Action></div></Dialog>}
+    {modal?.kind === 'end' && <EndSessionDialog onClose={() => { cancelExit(); setModal(null); }} onEnd={requestExit} busy={exiting} />}
     {modal?.kind === 'restart' && <Dialog title={modal.destination === 'scenario' ? t("Choose a new scenario?") : t("Start over?")} onClose={() => setModal(null)}><p>{t(modal.destination === 'scenario' ? jointMode ? 'Both responses, drawings, and your reflection choice will be cleared. You’ll keep your avatars. The creator will choose the next scenario.' : 'Both responses, drawings, and your reflection choice will be cleared. You’ll keep your avatars. Choose a fresh scenario.' : jointMode ? 'Both people’s nicknames, choices, responses, reflections, and drawings will be cleared. This ends the shared session on both devices.' : 'Both people’s nicknames, choices, responses, reflections, and drawings will be cleared.')}</p><div className="dialog-actions"><button type="button" className="outline-button" onClick={() => setModal(null)}>{t("Keep this session")}</button><Action onClick={() => clearSession(modal.destination)}>{modal.destination === 'scenario' ? t("Choose a new scenario") : t("Start over")}</Action></div></Dialog>}
+    </>}
   </div>;
 }

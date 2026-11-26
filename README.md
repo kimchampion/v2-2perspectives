@@ -36,7 +36,7 @@ Tests cover production asset paths, keyboard grid navigation and semantics, sess
 
 Immediately after the splash, use the centered **Language / Idioma** dropdown to choose English or neutral Latin American Spanish, then choose **Continue / Continuar**. All four onboarding screens use that language on the first visit, including their instructions, image descriptions, page controls, and buttons. The choice also translates the rest of the interface, all five scenarios and perspectives, avatar labels, drawing controls, errors, help, and reflection prompts. The brand remains Two Perspectives. Nicknames and written responses stay exactly as entered; the app does not translate participant content.
 
-English is the default and Continue works without changing the dropdown. Each device chooses its own language in React memory, independently of its partner. Ending or restarting an activity keeps the language choice until the page is refreshed. There is no translation service or saved preference. The document language updates for assistive technology. Help → View introduction / Ver introducción revisits onboarding in the current language. The welcome screen no longer repeats the selector.
+English is the default and Continue works without changing the dropdown. Each device chooses its own language in React memory, independently of its partner. Ending or restarting an activity keeps the language choice until the page is refreshed. There is no translation service or saved preference. The document language updates for assistive technology. The question-mark menu's Onboarding / Introducción option revisits onboarding in the current language, then returns to the current activity. The welcome screen no longer repeats the selector.
 
 ## Render testing
 
@@ -59,9 +59,13 @@ The GitHub Pages workflow installs both root and server test dependencies, runs 
 5. After both submissions, both responses appear together. Each comparison puts the partner’s response first. Both participants use the same layout: avatar above nickname on the left, drawing on the right, and written response across the full width below. Avatars include each participant's submitted expression. Your own response is marked **You**. Missing parts show “[nickname] did not create a drawing” or “[nickname] did not create a response.” Whitespace-only entries count as empty. These messages are displayed in the comparison and are not saved into the participant’s draft.
 6. Reflect and explore Repair, Pause, Agreement, Set aside, or Later. A joint reflection choice is shared with both devices. Either person can choose a new scenario after reveal, clearing both responses and returning the creator to scenario selection, or end the session for both. No agreement is required.
 
-Hiding the page during a private screen conceals it behind a handoff. Continuing returns to the perspective or draft that was open. Choosing a new scenario clears responses and the reflection choice while retaining avatars. **Start over** and **End session** clear all participant data. Refreshing clears everything.
+Hiding the page during a private screen conceals it behind a handoff. Continuing returns to the perspective or draft that was open. Choosing a new scenario clears responses and the reflection choice while retaining avatars. **End session** clears all participant data. Refreshing clears everything.
 
-The final screen offers **Begin again** and an outlined **Close app** button. Close app requests closing the current tab. If the browser keeps it open, the page announces “You can now close this tab.” Begin again remains available and starts with empty participant data. Browsers may restrict [closing tabs with scripts](https://developer.mozilla.org/en-US/docs/Web/API/Window/close).
+The question mark opens a compact menu with **Ground Rules**, **Onboarding**, and **End Session**. Ground Rules opens “A few things to remember.” Onboarding temporarily replaces the activity without mounting private response content. **Return to activity**, or Next on its last page, restores the current screen, participant choices, drafts/drawings, and page position. Shared-session updates continue; a new reflection modal waits until review closes, and a session ended by the partner clears the activity immediately. The menu supports arrow keys, Home/End, Enter/Space, Escape, Tab, and outside-click dismissal.
+
+Welcome's secondary **Not Interested** action exits directly without requiring acknowledgment. **End Session** opens the compact “Let’s do this another time” confirmation; Close cancels it. Confirming requests a shared end when applicable, clears local participant data, and requests closing this tab. Shared commands retain their bounded acknowledgments and can be canceled; stale/canceled exits cannot clear a newer activity. If shared ending cannot be confirmed, the cleared end screen says so rather than promising partner cleanup.
+
+The final screen offers **Begin again** and an outlined **Close app** button. If the browser keeps the tab open after exit, the page announces “You can now close this tab” above the artwork. Begin again remains available and starts with empty participant data. Only the person choosing exit requests closing their own tab; a partner receives the cleared end screen. Browsers may restrict [closing tabs with scripts](https://developer.mozilla.org/en-US/docs/Web/API/Window/close).
 
 ## Keyboard navigation
 
@@ -108,6 +112,7 @@ The original song catalog, preset symbols, four-card journey, wording checker, a
 | `src/SelectionGrid.jsx` | Shared grid roles, roving focus, activation, and visibility |
 | `src/grid-navigation.js` | Row/column and Home/End focus movement |
 | `src/navigation.js` | Safe return from a private handoff |
+| `src/app-exit.js` | Cancellable exit sequencing, local cleanup before closure, and browser-close fallback |
 | `src/phone-viewport.js` | Stable frame keyboard sizing, panning, dismissal, and zoom guards |
 | `src/public-assets.js` | Public artwork URLs under the configured deployment path |
 | `src/data.js` | Seed scenarios, including Shared Rides, and fallback palette |

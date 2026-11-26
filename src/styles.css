@@ -65,6 +65,12 @@ legend { margin-bottom: 8px; }
 .phone-header { flex: 0 0 auto; min-height: var(--header-height); padding: max(4px, env(safe-area-inset-top)) 18px 4px; display: grid; grid-template-columns: 76px minmax(0,1fr) 44px; align-items: center; gap: 4px; }
 .header-title { font-size: calc(14 * var(--font-unit)); text-align: center; font-weight: 600; line-height: 1.2; }
 .header-right { display: flex; justify-content: end; }
+.help-menu { position: relative; z-index: 5; }
+.session-menu { position: absolute; top: calc(100% + 8px); right: 0; width: max-content; min-width: 160px; max-width: min(calc(100vw - 36px),calc(240 * var(--font-unit))); padding: 4px 0; border: 1px solid var(--border); border-radius: 14px; background: white; box-shadow: 0 4px 16px #201a2826; }
+.session-menu button { display: block; width: 100%; min-height: 48px; padding: 14px 16px; border: 0; border-radius: 0; background: transparent; text-align: left; font-size: calc(16 * var(--font-unit)); line-height: 1.35; }
+.session-menu button:first-child { border-bottom: 1px solid var(--border); }
+.session-menu button:focus-visible { background: #f0eaf3; outline-offset: -4px; }
+.session-menu button:active { background: #f0eaf3; }
 .back-button { min-height: 44px; display: flex; align-items: center; gap: 5px; border: 0; padding: 0; background: transparent; font-size: calc(14 * var(--font-unit)); }
 .back-button > span { font-size: calc(31 * var(--font-unit)); line-height: 1; transform: translateY(-1px); }
 .help-button { width: max(44px,calc(44 * var(--font-unit))); height: max(44px,calc(44 * var(--font-unit))); border: 0; background: transparent; display: grid; place-items: center; }
@@ -317,6 +323,7 @@ legend { margin-bottom: 8px; }
 .close-button { display: inline-flex; align-items: center; gap: 8px; min-width: 75px; min-height: 44px; padding: 5px 0 5px 8px; font-size: calc(14 * var(--font-unit)); font-weight: 500; border: 0; background: transparent; }
 .close-button span { font-size: calc(26 * var(--font-unit)); font-weight: 300; line-height: 1; }
 .native-dialog h2 { font-size: calc(24 * var(--font-unit)); line-height: 1.2; font-weight: 500; color: #080808; margin-bottom: 24px; }
+.exit-dialog h2 { font-weight: 700; }
 .native-dialog > p { font-size: calc(17 * var(--font-unit)); }
 .native-dialog > p + p { margin-top: 16px; }
 .ground-rules { display: flex; flex-direction: column; gap: 24px; }

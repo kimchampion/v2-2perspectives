@@ -1,4 +1,4 @@
-# Local verification — updated November 25, 2026
+# Local verification — updated November 26, 2026
 
 This record covers the phone UI in this checkout. The original project was used only as a read-only reference. Source repository: [kimchampion/v2-2perspectives](https://github.com/kimchampion/v2-2perspectives). Historical checks below identify their preview environments; joint-session checks use a real loopback Node server.
 
@@ -8,14 +8,28 @@ Latest full-suite verification with Node v24.22.1:
 
 | Command | Result |
 | --- | --- |
-| `npm test` | 162 passed, 0 failed, 0 skipped |
+| `npm test` | 175 passed, 0 failed, 0 skipped |
 | `npm run build` | Passed with Vite 7.3.7 |
 
-The November 25 full run includes language selection before onboarding, English/Spanish localization, the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
+The November 26 pre-push full run includes the session menu/exit flow, non-destructive onboarding review, language selection before onboarding, English/Spanish localization, the initial splash, requested onboarding order, restored joint-lobby actions, thoughts-first response flow, and page-layout/keyboard checks, including real loopback server integration tests. Earlier limited runs and permission declines below are historical records.
 
 The suite covers session validation/privacy, transient joint-server integration, request cancellation, avatar catalogs, grid navigation/rendering, setup, scenario copy, deployment asset paths, and page/footer/keyboard behavior. Controlled HTTP failures/cancellation and the local Socket.IO stub are unit fixtures, not live deployed-service verification. Joint-server integration cases run real HTTP and Socket.IO clients on loopback ports. CI installs both root and server dependencies before the full suite.
 
 Before an earlier requested GitHub push, the production build and all 120 tests outside the joint-server file passed. Permission to repeat loopback integration was declined at that stage. The user also reported testing in two browsers. These earlier checks are superseded by the November 18 full-suite result. Hosted deployment is separate from a Git push.
+
+## Session menu, exit, and onboarding review — November 25, 2026
+
+Added Not Interested as Welcome's secondary action; it exits without requiring acknowledgment or participant setup. The question mark now opens only Ground Rules, Onboarding, and End Session in a compact anchored menu. Ground Rules reuses its existing dialog. The new end dialog matches the supplied Close/title/primary-action pattern and uses “Let’s do this another time”. Confirmed exit attempts a bounded shared end, clears local participant data, then requests closing this tab. Browser refusal leaves a cleared end view with manual closing guidance above the artwork. Failed shared-end confirmation has separate guidance and does not claim the partner's data was cleared. The partner's tab is never closed by the initiator.
+
+Onboarding review is independent of the underlying activity screen. It renders instead of the activity, preserving React-owned personas, scenario choice, text, drawings, submissions, and reflection state. Return to activity or the fourth Next restores the current valid view and focus; private content remains unmounted while reviewing. Shared phase updates continue in memory. Reflection dialogs wait until review closes; a shared end dismisses review and clears data. A focused read-only code review identified a lost horizontal scenario position. Reproduced scrollLeft changing from 1258.75 to 0, then corrected capture/restore and verified 1258.75 on return with the selected card intact. A separate comparison check restored scrollTop 201.875 exactly. The final code recheck found no remaining actionable issues.
+
+Thirteen new regression tests failed before the corresponding implementation and passed afterward. They cover exit cleanup order, real asynchronous shared acknowledgment sequencing, shared-end rejection, browser-close rejection, pre/during-flight cancellation and stale actions, menu semantics/labels, bilingual UI, Welcome's secondary action, the compact modal/busy state, review return action, and end guidance. The optional AbortSignal is forwarded through the joint command to the existing bounded requestSession implementation. The final full suite passed 175 tests and the ordinary production build passed on Node v24.22.1. git diff --check passed. No server protocol, stored-data, dependency, or catalog-request changes were introduced.
+
+In the local production preview, checked the three menu routes, keyboard opening at the first/last item, Escape and Tab dismissal, outside-click dismissal, and trigger focus restoration. Ground Rules and end-modal Close returned to the same activity. Completed one-device setup, selected the last scenario, entered a written draft and pointer drawing, reviewed all four onboarding pages, and confirmed the same text/drawing/tab afterward. During review no textarea, canvas, or draft text was mounted. The first-submit handoff remained private; comparison retained the response and drawing. Confirmed local exit removed participant names and responses. Spanish Not Interested exited directly with no acknowledgment or setup. This browser refused scripted closure and displayed the manual closing guidance, exercising the real fallback.
+
+With a real Node server bound to 127.0.0.1:3001 and two browser tabs, the partner joined while the creator reviewed onboarding; returning retained the connected lobby. A creator draft remained local/private while reviewing and while the partner submitted. It returned unchanged, and both responses appeared only after the creator explicitly submitted. A partner's shared Repair choice did not interrupt review; its modal appeared after returning. Canceling the end modal retained reflection. Confirmed shared exit cleared names/responses on both tabs and left the partner's tab open on Ending. A temporary VITE_SESSION_SERVER override confined this pass to loopback; the final ordinary build restored the configured build environment. The temporary server was stopped afterward. Failure-notice and in-flight cancellation coverage is from unit/SSR fixtures, not a deployed-service failure test.
+
+Menu and confirmation layouts fit 320, 375, 390, and 430 CSS pixels without horizontal overflow; the Spanish menu and dialog also fit simulated 200% root text at 320 and 430px. The final bold modal title was rechecked at 320px. Native device accessibility settings, touch drawing, physical iPhone Safari, and a hosted release were not checked in this pass. Temporary fixtures were removed and viewport overrides reset. Ignored evidence: test-results/session-menu.jpg, end-session-confirmation.jpg, session-exit-fallback.jpg, and session-menu-checks.json. All 175 tests and the production build were rerun successfully on November 26 before the requested GitHub push.
 
 ## Language selection before onboarding — November 25, 2026
 

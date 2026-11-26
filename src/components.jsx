@@ -1,5 +1,5 @@
 import { useLanguage } from './Language.jsx';
-import { Children, Fragment, createContext, useContext, useEffect, useId, useRef } from 'react';
+import { Children, Fragment, createContext, useContext, useEffect, useId, useRef, useState } from 'react';
 import { publicAsset } from './public-assets.js';
 
 export const PageNotice = createContext(null);
@@ -25,13 +25,62 @@ export function Page({ children, actions, pagination, className = '', label = 'P
   </section>;
 }
 
-export function Header({ title = '', onBack, onHelp }) {
+export function Header({ title = '', onBack, onHelpSelect }) {
   const { t } = useLanguage();
   return <header className="phone-header">
     <div>{onBack && <button type="button" className="back-button" onClick={onBack}><span aria-hidden="true">‹</span>{' '}{t("Back")}</button>}</div>
     <span className="header-title">{t(title)}</span>
-    <div className="header-right">{onHelp && <button type="button" className="help-button" aria-label={t("Open help and session options")} onClick={onHelp}><span aria-hidden="true">?</span></button>}</div>
+    <div className="header-right">{onHelpSelect && <HelpMenu onChoose={onHelpSelect} />}</div>
   </header>;
+}
+
+export function SessionMenu({ id, menuRef, onChoose, onKeyDown }) {
+  const { t } = useLanguage();
+  return <div id={id} ref={menuRef} className="session-menu" role="menu" aria-label={t('Help and session options')} onKeyDown={onKeyDown}>
+    <button type="button" role="menuitem" tabIndex={-1} onClick={() => onChoose?.('rules')}>{t('Ground Rules')}</button>
+    <button type="button" role="menuitem" tabIndex={-1} onClick={() => onChoose?.('onboarding')}>{t('Onboarding')}</button>
+    <button type="button" role="menuitem" tabIndex={-1} onClick={() => onChoose?.('end')}>{t('End Session')}</button>
+  </div>;
+}
+
+function HelpMenu({ onChoose }) {
+  const { t } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const root = useRef(null);
+  const trigger = useRef(null);
+  const menu = useRef(null);
+  const initialIndex = useRef(0);
+  const menuId = useId();
+  useEffect(() => {
+    if (!open) return;
+    menu.current?.querySelectorAll('[role="menuitem"]')[initialIndex.current]?.focus();
+    const outside = event => { if (!root.current?.contains(event.target)) setOpen(false); };
+    document.addEventListener('pointerdown', outside, true);
+    return () => document.removeEventListener('pointerdown', outside, true);
+  }, [open]);
+  function close() {
+    setOpen(false);
+    trigger.current?.focus({ preventScroll: true });
+  }
+  function menuKey(event) {
+    const items = Array.from(menu.current.querySelectorAll('[role="menuitem"]'));
+    const index = items.indexOf(document.activeElement);
+    const next = event.key === 'ArrowDown' ? (index + 1) % items.length
+      : event.key === 'ArrowUp' ? (index - 1 + items.length) % items.length
+        : event.key === 'Home' ? 0 : event.key === 'End' ? items.length - 1 : null;
+    if (next !== null) { event.preventDefault(); items[next]?.focus(); }
+    else if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); close(); }
+    else if (event.key === 'Tab') close();
+  }
+  return <div ref={root} className="help-menu" onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
+    <button ref={trigger} type="button" className="help-button" aria-label={t('Open help and session options')} aria-haspopup="menu" aria-expanded={open} aria-controls={open ? menuId : undefined}
+      onClick={() => { initialIndex.current = 0; setOpen(value => !value); }}
+      onKeyDown={event => {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); initialIndex.current = event.key === 'ArrowUp' ? 2 : 0; setOpen(true); }
+        else if (event.key === 'Escape' && open) { event.preventDefault(); close(); }
+      }}><span aria-hidden="true">?</span></button>
+    {open && <SessionMenu id={menuId} menuRef={menu} onKeyDown={menuKey} onChoose={choice => { close(); onChoose(choice); }} />}
+  </div>;
 }
 
 export function Action({ children, className = '', ...props }) {
@@ -99,4 +148,11 @@ export function GroundRules() {
     <div><h3>{t("Your pace, your choice.")}</h3><p>{t("Pause, restart, or leave whenever you like. This isn’t counseling or conflict resolution.")}</p></div>
     <div><h3>{t("Just here, just now.")}</h3><p>{t("Drafts stay on your device. A joint session temporarily shares your nickname, avatar, and submitted response with your partner. Ending clears this session. Refreshing cannot restore it. Same-device privacy is a turn-taking convention, not secure storage.")}</p></div>
   </div>;
+}
+
+export function EndSessionDialog({ onClose, onEnd, busy = false }) {
+  const { t } = useLanguage();
+  return <Dialog title={t('Let’s do this another time')} onClose={onClose} className="exit-dialog">
+    <Action className="dialog-primary" onClick={onEnd} disabled={busy}>{t(busy ? 'Ending session…' : 'End Session')}</Action>
+  </Dialog>;
 }

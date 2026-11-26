@@ -11,21 +11,21 @@ export function ChooseLanguage({ onContinue }) {
   </Page>;
 }
 
-export function Onboarding({ index, onChange, onFinish }) {
+export function Onboarding({ index, onChange, onFinish, reviewing = false }) {
   const { t } = useLanguage();
   const page = onboarding[index];
   return <Page key={index} className="onboarding-screen" aria-label={t('Introduction {number} of 4', { number: index + 1 })} label={page.title}
     pagination={<nav className="page-dots" aria-label={t("Introduction pages")}>{onboarding.map((item, i) => <button type="button" key={item.title} aria-label={t('Introduction {number}: {title}', { number: i + 1, title: t(item.title) })} aria-current={i === index ? 'step' : undefined} onClick={() => onChange(i)}><span /></button>)}</nav>}
     actions={<>
       <Action onClick={() => index === 3 ? onFinish() : onChange(index + 1)}>{t("Next")}</Action>
-      <button type="button" className="text-button skip-button" onClick={onFinish}>{t("Skip for Now")}</button>
+      <button type="button" className="text-button skip-button" onClick={onFinish}>{t(reviewing ? 'Return to activity' : 'Skip for Now')}</button>
     </>}>
     <div className="onboarding-hero"><Artwork name={page.image} alt={page.alt} className="onboarding-image" fetchPriority="high" /></div>
     <div className="onboarding-copy"><h1>{t(page.title)}</h1><p>{t(page.text)}</p></div>
   </Page>;
 }
 
-export function Welcome({ acknowledged, onAcknowledge, onBegin, error }) {
+export function Welcome({ acknowledged, onAcknowledge, onBegin, onExit, error }) {
   const { t } = useLanguage();
   const formId = useId();
   const formRef = useRef(null);
@@ -35,7 +35,10 @@ export function Welcome({ acknowledged, onAcknowledge, onBegin, error }) {
     formRef.current?.scrollIntoView({ block: 'end' });
   }
   useEffect(() => { if (error) showAcknowledgment(); }, [error]);
-  return <Page className="welcome-screen" label={t("Welcome")} actions={<Action type="submit" form={formId}>{t("Let’s Begin")}</Action>}>
+  return <Page className="welcome-screen" label={t("Welcome")} actions={<>
+    <Action type="submit" form={formId}>{t("Let’s Begin")}</Action>
+    <button type="button" className="text-button" onClick={onExit}>{t('Not Interested')}</button>
+  </>}>
     <h1>{t("One story.")}<br />{t("Two perspectives.")}</h1>
     <p className="welcome-description">{t("Conflict isn’t a good or bad thing. Two Perspectives creates an experience for empathy building and discussion.")}</p>
     <ul className="welcome-details" aria-label={t("About the experience")}><li>{t("2 people")}</li><li>{t("10–15 minutes")}</li><li>{t("No right answers")}</li></ul>

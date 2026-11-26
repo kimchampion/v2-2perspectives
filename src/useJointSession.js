@@ -95,7 +95,7 @@ export default function useJointSession() {
     joining.current?.abort(); clearTimers(); sessionSocket.disconnect();
     setSession(null); setError(''); status('idle');
   }, [clearTimers, status]);
-  const command = useCallback(async (event, payload = {}) => {
+  const command = useCallback(async (event, payload = {}, { signal } = {}) => {
     const identity = credentials.current;
     if (!identity || connectionRef.current !== 'connected' || !current.current) throw new Error('Reconnect before continuing. Your draft is still on this device.');
     const round = current.current.round;
@@ -105,7 +105,7 @@ export default function useJointSession() {
     const endRequest = event === 'end-session' ? {} : null;
     if (endRequest) pendingEnd.current = endRequest;
     try {
-      const result = await requestSession(event, { ...payload, round });
+      const result = await requestSession(event, { ...payload, round }, { signal });
       if (stale() && !ownEnd() && !ownRestart()) throw new DOMException('This action belongs to an earlier session or scenario.', 'AbortError');
       if (credentials.current === identity) receive(result.session);
       return result;
